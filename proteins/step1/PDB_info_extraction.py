@@ -1,53 +1,74 @@
-import biopandas.pdb as bioPDB
+import Bio.PDB as bioPDB
 import os
 import pandas as pd
-import download_proteins, select_proteins
+from proteins.step1.download_pdbs import download_pdbs
+from config import Config
+from proteins.step1.select_pdbs import select_proteins, select_rna
 
-# input folder
-protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\proteins_files"  # maybe put it in environment variables accessible from os module
 
+def pdb_info_extraction(
+    polymer_entity_type=Config.POLIMER_ENTITY_TYPE,
+    pdbs_folder=Config.PROTEINS_FOLDER,
+    output_path=Config.OUTPUT_FOLDER,
+):
+    print(polymer_entity_type)
+    print(pdbs_folder)
+    print(output_path)
+    # input folder
+    # protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\proteins_files"  # maybe put it in environment variables accessible from os module
+    # rna_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\rna_files"
 
-# Build a query that select all needed proteins
-proteins_list = select_proteins()  # query output
+    if polymer_entity_type in ["PROTEINS", "Proteins", "proteins"]:
 
-# download pdb files from a list
-download_proteins(proteins_list=proteins_list, protein_folder=protein_folder)
+        # Build a query that select all needed proteins
+        proteins_list = select_proteins()
 
-proteins = dict()
+        # download pdb files from a list
+        download_pdbs(pdbs_list=proteins_list, output_path=pdbs_folder)
 
-for protein_file in os.scandir(protein_folder):
-    # for each protein_code in proteins_list
-    if protein_file.is_file():
-        protein_path = protein_file.path
-        if protein_path.endswith(".pdb"):
-            protein_code = protein_path.split("\\")[-1].split(".")[0]
+    elif polymer_entity_type in ["RNA", "rna"]:
 
-            # parser is the fuction that scans and extracts information of a file with a predifine format
-            # we define parser as permissive (will not give any error) and quite = true so we don't have warnings
-            parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
-            # safe data extracted from parser
-            data = parser.get_structure(protein_code, protein_path)
-            name = data.header["name"]
-            keywords = data.header["keywords"]
-            function = data.header["head"]
-            journal = data.header["journal"]
-            compound = ""
-            # Compound is a dictionary that we want to transform to a list
-            for k, v in data.header["compound"].items():
-                for k2, v2 in v.items():
-                    compound = compound + k + "_" + k2 + ":" + v2 + ";"
+        # Build a query that select all needed rna
+        rna_list = select_rna()
 
-            proteins[protein_code] = {
-                "code": protein_code,
-                "name": name,
-                "keywords": keywords,
-                "function": function,
-                "journal": journal,
-                "compound": compound,
-            }
+        # download pdb files from a list
+        download_pdbs(pdbs_list=rna_list, output_path=pdbs_folder)
+    else:
+        raise TypeError("Invalid select type")
 
-df = pd.DataFrame.from_dict(proteins).transpose()
+    proteins = dict()
 
-df.to_excel(
-    r"C:\Users\cactus\Dropbox\Docking\bee_proteins\info proteins.xlsx", index=False
-)
+    for protein_file in os.scandir(pdbs_folder):
+        # for each protein_code in proteins_list
+        if protein_file.is_file():
+            protein_path = protein_file.path
+            if protein_path.endswith(".pdb"):
+                protein_code = protein_path.split("\\")[-1].split(".")[0]
+
+                # parser is the fuction that scans and extracts information of a file with a predifine format
+                # we define parser as permissive (will not give any error) and quite = true so we don't have warnings
+                parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
+                # safe data extracted from parser
+                data = parser.get_structure(protein_code, protein_path)
+                name = data.header["name"]
+                keywords = data.header["keywords"]
+                function = data.header["head"]
+                journal = data.header["journal"]
+                compound = ""
+                # Compound is a dictionary that we want to transform to a list
+                for k, v in data.header["compound"].items():
+                    for k2, v2 in v.items():
+                        compound = compound + k + "_" + k2 + ":" + v2 + ";"
+
+                proteins[protein_code] = {
+                    "code": protein_code,
+                    "name": name,
+                    "keywords": keywords,
+                    "function": function,
+                    "journal": journal,
+                    "compound": compound,
+                }
+
+    df = pd.DataFrame.from_dict(proteins, orient="index")
+
+    df.to_excel(output_path.join("info proteins.xlsx"), index=False)
