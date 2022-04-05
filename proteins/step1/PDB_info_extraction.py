@@ -10,6 +10,8 @@ protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\pro
 # Build a query that select all needed proteins
 proteins_list = []  # query output
 
+# rcsb_entity_source_organism.ncbi_scientific_name" "operator" "exact_match" "value" "Apis mellifera"
+
 # download pdb files from a list
 download_proteins(proteins_list=proteins_list, protein_folder=protein_folder)
 
@@ -20,6 +22,7 @@ download_proteins(proteins_list=proteins_list, protein_folder=protein_folder)
 proteins = dict()
 
 for protein_file in os.scandir(protein_folder):
+    # for each protein_code in proteins_list
     if protein_file.is_file():
         protein_path = protein_file.path
         if protein_path.endswith(".pdb"):
