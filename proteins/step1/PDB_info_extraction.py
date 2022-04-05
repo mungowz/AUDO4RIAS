@@ -2,22 +2,17 @@ import biopandas.pdb as bioPDB
 import os
 import pandas as pd
 import download_proteins
+import build_query
 
 # input folder
 protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\proteins_files"  # maybe put it in environment variables accessible from os module
 
 
 # Build a query that select all needed proteins
-proteins_list = []  # query output
-
-# rcsb_entity_source_organism.ncbi_scientific_name" "operator" "exact_match" "value" "Apis mellifera"
+proteins_list = build_query()  # query output
 
 # download pdb files from a list
 download_proteins(proteins_list=proteins_list, protein_folder=protein_folder)
-
-
-### maybe this could work to downlow protein sdtructures from RCSB from RCSBpdb
-# pdbl.retrieve_pdb_file('1bh1', pdir = protein_files, file_format = 'pdb')
 
 proteins = dict()
 
