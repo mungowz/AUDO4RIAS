@@ -2,7 +2,7 @@ from biopandas.pdb import PandasPdb
 import os
 
 
-def download_proteins(proteins_list, protein_folder):
+def download_proteins(proteins_list=[], protein_folder=None):
 
     # PandasPdb object
     ppdb = PandasPdb()

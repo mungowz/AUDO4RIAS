@@ -1,15 +1,14 @@
 import biopandas.pdb as bioPDB
 import os
 import pandas as pd
-import download_proteins
-import build_query
+import download_proteins, select_proteins
 
 # input folder
 protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\proteins_files"  # maybe put it in environment variables accessible from os module
 
 
 # Build a query that select all needed proteins
-proteins_list = build_query()  # query output
+proteins_list = select_proteins()  # query output
 
 # download pdb files from a list
 download_proteins(proteins_list=proteins_list, protein_folder=protein_folder)
