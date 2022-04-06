@@ -3,7 +3,7 @@ import os
 import pandas as pd
 from proteins.step1.download_pdbs import download_pdbs
 from config import Config
-from proteins.step1.select_pdbs import select_proteins, select_rna
+from proteins.step1.select_pdbs import select_proteins, select_ribosome
 
 
 def pdb_info_extraction(
@@ -26,13 +26,13 @@ def pdb_info_extraction(
         # download pdb files from a list
         download_pdbs(pdbs_list=proteins_list, output_path=pdbs_folder)
 
-    elif polymer_entity_type in ["RNA", "rna"]:
+    elif polymer_entity_type in ["RIBOSOME", "Ribosome", "ribosome"]:
 
-        # Build a query that select all needed rna
-        rna_list = select_rna()
+        # Build a query that select all needed ribosome
+        ribosome_list = select_ribosome()
 
         # download pdb files from a list
-        download_pdbs(pdbs_list=rna_list, output_path=pdbs_folder)
+        download_pdbs(pdbs_list=ribosome_list, output_path=pdbs_folder)
     else:
         raise TypeError("Invalid select type")
 

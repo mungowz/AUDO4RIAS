@@ -19,14 +19,14 @@ def select_proteins():
     return proteins_list
 
 
-def select_ribosome():
+def select_ribosome(maximum_length=60):
     text = (
         Attr("rcsb_entity_source_organism.scientific_name")
         .exact_match("Apis mellifera")
         .and_("struct_keywords.pdbx_keywords")
         .contains_words("RIBOSOME")
         .and_("entity_poly.rcsb_sample_sequence_length")
-        .less(60)
+        .less(maximum_length)
     )
 
     ribosome_list = text.exec().iquery()
