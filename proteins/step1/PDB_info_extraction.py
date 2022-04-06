@@ -37,6 +37,7 @@ def pdb_info_extraction(
         raise TypeError("Invalid select type")
 
     proteins = dict()
+    parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
 
     for protein_file in os.scandir(pdbs_folder):
         # for each protein_code in proteins_list
@@ -47,9 +48,10 @@ def pdb_info_extraction(
 
                 # parser is the fuction that scans and extracts information of a file with a predifine format
                 # we define parser as permissive (will not give any error) and quite = true so we don't have warnings
-                parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
+
                 # safe data extracted from parser
                 data = parser.get_structure(protein_code, protein_path)
+
                 name = data.header["name"]
                 keywords = data.header["keywords"]
                 function = data.header["head"]
@@ -70,5 +72,10 @@ def pdb_info_extraction(
                 }
 
     df = pd.DataFrame.from_dict(proteins, orient="index")
-
-    df.to_excel(output_path.join("info proteins.xlsx"), index=False)
+    with pd.ExcelWriter(os.path.join(output_path, "info_proteins.xlsx")) as writer:
+        df.to_excel(
+            writer,
+            sheet_name="pdbs_selected",
+            index=False,
+        )
+        writer.save()
