@@ -51,8 +51,6 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
                     # add to dict
                     chid_sequence[chid] = hv[chid].getSequence()
                     proteins_dict[atoms.getTitle()] = chid_sequence
-                else:
-                    print(atoms.getTitle() + ": chains are equal!")
 
         for chid, seq in proteins_dict[atoms.getTitle()].items():
 
@@ -71,4 +69,4 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
         # remove old pdb file
         print("Deleting " + protein_path)
         os.remove(pdb_file)
-    print(proteins_dict)
+    return [proteins_dict]
