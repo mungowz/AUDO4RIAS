@@ -9,7 +9,7 @@ from proteins.step1.select_pdbs import select_proteins, select_ribosome
 def pdb_info_extraction(
     polymer_entity_type=Config.POLIMER_ENTITY_TYPE,
     pdbs_folder=Config.PROTEINS_FOLDER,
-    output_path=Config.OUTPUT_FOLDER,
+    output_path=Config.EXCEL_FOLDER,
 ):
     print(polymer_entity_type)
     print(pdbs_folder)
