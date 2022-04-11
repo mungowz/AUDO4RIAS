@@ -10,7 +10,10 @@ def prepare_receptors(
             pdb_path = pdb_file.path
             if pdb_path.endswith(".pdb"):
                 pdb_code = pdb_path.split("\\")[-1].split(".")[0] + ".pdbqt"
-                output_filename = os.path.join(output_folder, pdb_code)
+
+                # this output filename is not the exactly default output filename from prepare_receptor command, needed review
+                output_filename = os.path.join(output_filename, pdb_code)
+
                 command = (
                     "prepare_receptor -r "
                     + pdb_path
