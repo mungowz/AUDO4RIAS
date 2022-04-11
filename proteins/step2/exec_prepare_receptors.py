@@ -9,9 +9,12 @@ def prepare_receptors(
         if pdb_file.is_file():
             pdb_path = pdb_file.path
             if pdb_path.endswith(".pdb"):
-                pdb_code = pdb_path.split("\\")[-1].split(".")[0] + ".pdbqt"
+                pdb_code = (
+                    "protein_" + pdb_path.split("\\")[-1].split(".")[0] + ".pdbqt"
+                )
 
-                # this output filename is not the exactly default output filename from prepare_receptor command, needed review
+                # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
+                # Needed review
                 output_filename = os.path.join(output_filename, pdb_code)
 
                 command = (
@@ -21,5 +24,8 @@ def prepare_receptors(
                     + output_filename
                 )
 
-            # produce .pdbqt file for each proteins
+            # produce .pdbqt file for each pdb file
             os.system(command=command)
+
+            # 3r72: The coordinate for one atom was wrong and the atom was floating around too far away to create a bond
+            # Needed review.
