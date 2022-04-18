@@ -10,15 +10,12 @@ for pdb_file in os.scandir(input_folder):
                 pdb_code = (
                     "ligand_" + pdb_path.split("\\")[-1].split(".")[0] + ".pdbqt"
                 )
-            
-                # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
-                # Needed review
-                output_filename = os.path.join(output_filename, pdb_code)
 
                 command = (
-                    "prepare_ligand.py -l "
+                    "prepare_ligand4.py -l "
                     + pdb_path
-                    + output_filename
+                    + "-v -o"
+                    + pdb_code
                 )
 
             # produce .pdbqt file for each pdb file
