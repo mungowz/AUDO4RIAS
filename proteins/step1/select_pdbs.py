@@ -6,6 +6,8 @@ from rcsbsearch import Attr
 def select_proteins():
 
     # unavailable pdbs from rcsb.org
+    # 7ASD: removed because its pdb format is unavailable on rcsb.org. Maybe we can try to download pdb zipped format and unzip
+    # 3R72: The coordinate for one atom was wrong and the atom was floating around too far away to create a bond. Assumed we have already the correct pdb in our input folder.
     pdbs_unavailable = ["7ASD", "3R72"]
 
     scientific_name = Attr("rcsb_entity_source_organism.scientific_name").exact_match(
