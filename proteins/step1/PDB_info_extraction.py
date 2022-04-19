@@ -7,18 +7,18 @@ from proteins.step1.select_pdbs import select_proteins, select_ribosome
 
 
 def pdb_info_extraction(
-    polymer_entity_type=Config.POLIMER_ENTITY_TYPE,
+    query_type=Config.QUERY_TYPE,
     pdbs_folder=Config.PROTEINS_FOLDER,
     output_path=Config.EXCEL_FOLDER,
 ):
-    print(polymer_entity_type)
+    print(query_type)
     print(pdbs_folder)
     print(output_path)
     # input folder
     # protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\proteins_files"  # maybe put it in environment variables accessible from os module
     # rna_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\rna_files"
 
-    if polymer_entity_type in ["PROTEINS", "Proteins", "proteins"]:
+    if query_type in ["PROTEINS", "Proteins", "proteins"]:
 
         # Build a query that select all needed proteins
         proteins_list = select_proteins()
@@ -26,7 +26,7 @@ def pdb_info_extraction(
         # download pdb files from a list
         download_pdbs(pdbs_list=proteins_list, output_path=pdbs_folder)
 
-    elif polymer_entity_type in ["RIBOSOME", "Ribosome", "ribosome"]:
+    elif query_type in ["RIBOSOME", "Ribosome", "ribosome"]:
 
         # Build a query that select all needed ribosome
         ribosome_list = select_ribosome()

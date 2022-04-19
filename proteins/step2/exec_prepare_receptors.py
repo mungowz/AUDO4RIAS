@@ -14,8 +14,7 @@ def prepare_receptors(
                 )
 
                 # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
-                # Needed review
-                output_filename = os.path.join(output_filename, pdb_code)
+                output_filename = os.path.join(output_folder, pdb_code)
 
                 command = (
                     "prepare_receptor -r "
@@ -28,4 +27,4 @@ def prepare_receptors(
             os.system(command=command)
 
             # 3r72: The coordinate for one atom was wrong and the atom was floating around too far away to create a bond
-            # Needed review.
+            # We assume that it is already correct in our input files
