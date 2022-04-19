@@ -1,11 +1,13 @@
 from prody import *
 import os
 from config import Config
+from proteins.step2.extract_remark350_monomeric import extract_remark350_monomeric
 
 
 def split_chains(input_folder=Config.PROTEINS_FOLDER):
-    print("Splitting chains...")
+    print("Splitting monomeric protein chains...")
     proteins_dict = {}
+    monomeric_proteins = []
     for pdb_file in os.scandir(input_folder):
         if not pdb_file.is_file():
             continue
@@ -17,6 +19,10 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
         print("Parsing {pdb_file}...".format(pdb_file=pdb_file))
         print(protein_path)
 
+        # extract "monomeric" keyword
+        if not extract_remark350_monomeric(protein_path):
+            continue
+        monomeric_proteins.append(protein_path.split("\\")[-1].split(".")[0])
         # parse pdb file, get AtomGroup object
         atoms = parsePDB(protein_path)
 
@@ -69,4 +75,4 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
         # remove old pdb file
         print("Deleting " + protein_path)
         os.remove(pdb_file)
-    return [proteins_dict]
+    return [proteins_dict, monomeric_proteins]
