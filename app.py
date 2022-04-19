@@ -4,7 +4,11 @@ from proteins.step2.split_chains import split_chains
 from proteins.step3.create_gridbox import create_gridbox
 
 if __name__ == "__main__":
+    # proteins
+    # step 1: select and download pdbs; extract pdb info and save into an excel file.
     pdb_info_extraction()
+    # step 2: split chains and remove waters, non-standard residues and alternative locations.
     split_chains()
     prepare_receptors()
+    # step 3: create a gridbox for each pdbqt file
     create_gridbox()
