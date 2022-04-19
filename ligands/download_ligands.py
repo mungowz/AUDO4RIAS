@@ -1,6 +1,0 @@
-from extract_3D_structures import extract_3D_structures_EU, extract_3D_structures_pubchem
-from sdf_to_pdb import sdf_to_pdb
-
-extract_3D_structures_EU()
-extract_3D_structures_pubchem()
-sdf_to_pdb()

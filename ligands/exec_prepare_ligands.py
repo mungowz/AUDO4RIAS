@@ -12,12 +12,12 @@ for pdb_file in os.scandir(input_folder):
                 )
 
                 command = (
-                    "prepare_ligand4.py -l "
+                    "prepare_ligand -l "
                     + pdb_path
                     + "-v -o"
                     + pdb_code
                 )
 
             # produce .pdbqt file for each pdb file
-            os.system(command=command)
+            os.system(command = command)
 
