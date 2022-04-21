@@ -3,9 +3,9 @@ from proteins.step2.exec_prepare_receptors import prepare_receptors
 from proteins.step2.split_chains import split_chains
 from proteins.step2.split_repeated_residues import split_repeated_residues
 from proteins.step3.create_gridbox import create_gridbox
-from ligands.extract_3D_structures import extract_3D_structures
-from ligands.delete_duplicates import delete_duplicates
+from ligands.extract_3D_structures import extract_3d_structures
 from ligands.sdf_to_pdb import sdf_to_pdb
+from ligands.exec_prepare_ligands import exec_prepare_ligands
 
 
 if __name__ == "__main__":
@@ -23,12 +23,11 @@ if __name__ == "__main__":
 
     # ligands
     # extract ligand structure but in sdf
-    #extract_3D_structures()
-
-    # delete duplicate into ligands folder
-    delete_duplicates()
+    extract_3d_structures()
 
     #convert sdf files into pdb
     #sdf_to_pdb()
 
+    # convert pdb file to pdbqt
+    #exec_prepare_ligands()
 
