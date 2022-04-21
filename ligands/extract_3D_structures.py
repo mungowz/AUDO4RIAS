@@ -9,9 +9,10 @@ def extract_3d_structures(
     input_folder=Config.EXCEL_FOLDER,
     output_folder=Config.LIGANDS_SDF_FOLDER,
 ):
-
+    #remove file saved previously into output folder
     for file in os.scandir(output_folder):
         os.remove(file)
+
     sheet = "Total_3D_structures"
     excel_path = input_folder + "\ligands_pubchem.xlsx"
     df = pd.read_excel(io=excel_path, sheet_name=sheet)
@@ -23,7 +24,7 @@ def extract_3d_structures(
     for substance in df["EU_database"]:
         structure = pcp.get_compounds(substance, "name", record_type="3d")
         if structure:
-            if not substance in ligands_list:
+            if substance not in ligands_list:
                 ligands_list.append(substance)
                 ligands_path = output_folder + "/" + substance + ".sdf"
                 pcp.download(
@@ -34,13 +35,14 @@ def extract_3d_structures(
                         ligands_code=substance, output_file=ligands_path
                     )
                 )
+                os.rename(ligands_path, ligands_path.replace(" ", "_"))
         if not structure:
             substance = re.sub("(\(.*\))", "", substance).lstrip("-")
             structure = pcp.get_compounds(
                 substance, "name", record_type="3d"
             )
             if structure:
-                if not substance in ligands_list:
+                if not substance not in ligands_list:
                     ligands_list.append(substance)
                     ligands_no_parenthesis_list.append(substance)
                     ligands_path = output_folder + "/" + substance + ".sdf"
@@ -57,7 +59,7 @@ def extract_3d_structures(
                             ligands_code=substance, output_file=ligands_path
                         )
                     )
-                    # os.rename
+                    os.rename(ligands_path, ligands_path.replace(" ", "_"))
             if not structure:
                 ligands_problem_list.append(substance)
 
@@ -65,7 +67,7 @@ def extract_3d_structures(
     for substance in df["Substance_Pubchem"]:
         structure = pcp.get_compounds(substance, "name", record_type="3d")
         if structure:
-            if not substance in ligands_list:
+            if substance not in ligands_list:
                 ligands_list.append(substance)
                 ligands_path = output_folder + "/" + substance + ".sdf"
                 pcp.download(
@@ -81,6 +83,7 @@ def extract_3d_structures(
                         ligands_code=substance, output_file=ligands_path
                     )
                 )
+                os.rename(ligands_path, ligands_path.replace(" ", "_"))
         if not structure:
             ligands_problem_list.append(substance)
 
