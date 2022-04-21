@@ -16,6 +16,37 @@ def prepare_receptors(
                 # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
                 output_filename = os.path.join(output_folder, pdb_code)
 
+                # Usage: prepare_receptor4.py -r filename
+                #       Description of command...
+                #   -r   receptor_filename
+                #            supported file types include pdb,mol2,pdbq,pdbqs,pdbqt, possibly pqr,cif
+                # Optional parameters:
+                #  [-A]  type(s) of repairs to make:
+                #            'bonds_hydrogens': build bonds and add hydrogens
+                #            'bonds': build a single bond from each atom with no bonds to its closest neighbor
+                #            'hydrogens': add hydrogens
+                #            'checkhydrogens': add hydrogens only if there are none already
+                #            'None': do not make any repairs
+                #            (default is 'None')
+                #  [-U]  cleanup type:
+                #            'nphs': merge charges and remove non-polar hydrogens
+                #            'lps': merge charges and remove lone pairs
+                #            'waters': remove water residues
+                #            'nonstdres': remove chains composed entirely of residues of
+                #            types other than the standard 20 amino acids
+                #            'deleteAltB': remove XX@B atoms and rename XX@A atoms->XX
+                #            (default is 'nphs_lps_waters_nonstdres')
+                #  [-e]  delete every nonstd residue from any chain
+                #            'True': any residue whose name is not in this list:
+                #               ['CYS','ILE','SER','VAL','GLN','LYS','ASN',
+                #                   'PRO','THR','PHE','ALA','HIS','GLY','ASP',
+                #                   'LEU', 'ARG', 'TRP', 'GLU', 'TYR','MET',
+                #                   'HID', 'HSP', 'HIE', 'HIP', 'CYX', 'CSS']
+                #               will be deleted from any chain.
+                #               NB: there are no  nucleic acid residue names at all
+                #               in the list and no metals.
+                #            (default is False which means not to do this)
+                #
                 command = (
                     "prepare_receptor -r "
                     + pdb_path
