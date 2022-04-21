@@ -10,8 +10,8 @@ def extract_3d_structures(
     output_folder=Config.LIGANDS_SDF_FOLDER,
 ):
 
-    ## for file in os.scandir():
-    # os.remove(file)
+    for file in os.scandir(output_folder):
+        os.remove(file)
     sheet = "Total_3D_structures"
     excel_path = input_folder + "\ligands_pubchem.xlsx"
     df = pd.read_excel(io=excel_path, sheet_name=sheet)
