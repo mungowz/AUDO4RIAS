@@ -2,7 +2,6 @@ import re
 import pandas as pd
 import pubchempy as pcp
 from config import Config
-from ligands.searchTree import SearchTree
 import os
 
 
@@ -16,49 +15,73 @@ def extract_3d_structures(
     sheet = "Total_3D_structures"
     excel_path = input_folder + "\ligands_pubchem.xlsx"
     df = pd.read_excel(io=excel_path, sheet_name=sheet)
-    file_tree = SearchTree()
-    file_tree.insert("")
+    ligands_list = list()
+    ligands_no_parenthesis_list = list()
+    ligands_problem_list = list()
 
+    #extract ligands from EU database
     for substance in df["EU_database"]:
         structure = pcp.get_compounds(substance, "name", record_type="3d")
         if structure:
-            file_name = substance + ".sdf"
-            if not file_tree.exists(file_name):
-                file_tree.insert(file_name)
-                path = output_folder + "/" + file_name
+            if not substance in ligands_list:
+                ligands_list.append(substance)
+                ligands_path = output_folder + "/" + substance + ".sdf"
                 pcp.download(
-                    "SDF", path, substance, "name", record_type="3d", overwrite=True
+                    "SDF", ligands_path, substance, "name", record_type="3d", overwrite=True
                 )
-                # add comments <ligands_name> downloaded!
-                # correct indentation
-            if not structure:
-                substance_no_parenthesis = re.sub("(\(.*\))", "", substance).lstrip("-")
-                structure = pcp.get_compounds(
-                    substance_no_parenthesis, "name", record_type="3d"
+                print(
+                    "{ligands_code}.sdf downloaded! (Stored in {output_file})\n".format(
+                        ligands_code=substance, output_file=ligands_path
+                    )
                 )
-                if structure:
-                    if not file_tree.exist(file_name):
-                        file_tree.insert(file_name)
-                        file_name = substance_no_parenthesis + ".sdf"
-                        path = output_folder + "/" + file_name
-
-                        pcp.download(
-                            "SDF",
-                            path,
-                            substance_no_parenthesis,
-                            "name",
-                            record_type="3d",
-                            overwrite=True,
+        if not structure:
+            substance = re.sub("(\(.*\))", "", substance).lstrip("-")
+            structure = pcp.get_compounds(
+                substance, "name", record_type="3d"
+            )
+            if structure:
+                if not substance in ligands_list:
+                    ligands_list.append(substance)
+                    ligands_no_parenthesis_list.append(substance)
+                    ligands_path = output_folder + "/" + substance + ".sdf"
+                    pcp.download(
+                        "SDF",
+                        ligands_path,
+                        substance,
+                        "name",
+                        record_type="3d",
+                        overwrite=True,
+                    )
+                    print(
+                        "{ligands_code}.sdf downloaded! (Stored in {output_file})\n".format(
+                            ligands_code=substance, output_file=ligands_path
                         )
-                        # os.rename
+                    )
+                    # os.rename
+            if not structure:
+                ligands_problem_list.append(substance)
 
+    #extract ligands from Pubchem database
     for substance in df["Substance_Pubchem"]:
         structure = pcp.get_compounds(substance, "name", record_type="3d")
         if structure:
-            file_name = substance + ".sdf"
-            if not file_tree.exists(file_name):
-                file_tree.insert(file_name)
-                path = output_folder + "/" + file_name
+            if not substance in ligands_list:
+                ligands_list.append(substance)
+                ligands_path = output_folder + "/" + substance + ".sdf"
                 pcp.download(
-                    "SDF", path, substance, "name", record_type="3d", overwrite=True
+                    "SDF", 
+                    ligands_path, 
+                    substance, 
+                    "name", 
+                    record_type="3d", 
+                    overwrite=True
                 )
+                print(
+                    "{ligands_code}.sdf downloaded! (Stored in {output_file})\n".format(
+                        ligands_code=substance, output_file=ligands_path
+                    )
+                )
+        if not structure:
+            ligands_problem_list.append(substance)
+
+    return[ligands_list, ligands_problem_list, ligands_no_parenthesis_list]
