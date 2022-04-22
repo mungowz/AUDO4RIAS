@@ -23,8 +23,8 @@ if __name__ == "__main__":
     print("---------------- PROTEINS ----------------")
     print("################# STEP 2 #################")
     print("------------------------------------------")
-    split_chains()
     split_repeated_residues()
+    split_chains()
     prepare_receptors()
 
     # step 3: create a gridbox for each pdbqt file
