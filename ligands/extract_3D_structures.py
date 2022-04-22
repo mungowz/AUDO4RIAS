@@ -1,5 +1,6 @@
 import re
 import pandas as pd
+import xlsxwriter
 import pubchempy as pcp
 from config import Config
 import os
@@ -9,6 +10,7 @@ def extract_3d_structures(
     input_folder=Config.EXCEL_FOLDER,
     output_folder=Config.LIGANDS_SDF_FOLDER,
 ):
+    # input menu to choose whether previously downloaded ligands should be deleted
     loop = True
     while loop:
         user_choise = input("You want to delete the sdf files already saved? (Yes/No)\n")
@@ -27,8 +29,11 @@ def extract_3d_structures(
     sheet = "Total_3D_structures"
     excel_path = input_folder + "\ligands_pubchem.xlsx"
     df = pd.read_excel(io=excel_path, sheet_name=sheet)
+    # list of downloaded ligands 
     ligands_list = list()
+    # list of manipulated downloaded ligands 
     ligands_no_parenthesis_list = list()
+    # list of ligands that could not be downloaded
     ligands_problem_list = list()
 
     #extract ligands from EU database
@@ -48,8 +53,10 @@ def extract_3d_structures(
                             ligands_code=substance, output_file=ligands_path
                         )
                     )
+                    # replaces the space with the underscore in the name of the .sdf file
                     os.rename(ligands_path, ligands_path.replace(" ", "_"))
         if not structure:
+            # remove the brackets that could create problems in the name of the ligand
             substance = re.sub("(\(.*\))", "", substance).lstrip("-")
             structure = pcp.get_compounds(
                 substance, "name", record_type="3d"
@@ -74,6 +81,7 @@ def extract_3d_structures(
                                 ligands_code=substance, output_file=ligands_path
                             )
                         )
+                        # replaces the space with the underscore in the name of the .sdf file
                         os.rename(ligands_path, ligands_path.replace(" ", "_"))
             if not structure:
                 ligands_problem_list.append(substance)
@@ -100,23 +108,25 @@ def extract_3d_structures(
                             ligands_code=substance, output_file=ligands_path
                         )
                     )
+                    # replaces the space with the underscore in the name of the .sdf file
                     os.rename(ligands_path, ligands_path.replace(" ", "_"))
         if not structure:
             ligands_problem_list.append(substance)
 
-    df_ligands = pd.DataFrame(ligands_list)
-    ligands_writer = pd.ExcelWriter('ligands_output.xlsx', engine='xlsxwriter')
-    df_ligands.to_excel(ligands_writer, sheet_name='ligands', index=False)
-    ligands_writer.save()
-
-    df_ligands_no_parenthesis = pd.DataFrame(ligands_no_parenthesis_list)
-    ligands_no_parenthesis_writer = pd.ExcelWriter('ligands_output.xlsx', engine='xlsxwriter')
-    df_ligands_no_parenthesis.to_excel(ligands_no_parenthesis_writer, sheet_name='ligands_no_parenthesis', index=False)
-    ligands_no_parenthesis_writer.save()
-
-    df_ligands_problem = pd.DataFrame(ligands_problem_list)
-    ligands_problem_writer = pd.ExcelWriter('ligands_output.xlsx', engine='xlsxwriter')
-    df_ligands_problem.to_excel(ligands_problem_writer, sheet_name='ligands_problem', index=False)
-    ligands_problem_writer.save()
+    # write an output excel file which contains information about sdf ligands output
+    workbook = xlsxwriter.Workbook(output_folder + "ligands_sdf_output.xlsx")
+    worksheet_ligands = workbook.add_worksheet("ligands")
+    worksheet_no_parenthesis = workbook.add_worksheet("ligands_no_parenthesis")
+    worksheet_problem = workbook.add_worksheet("ligands_problem")
+    # write dowloaded ligands 
+    for row_num, data in enumerate(ligands_list):
+        worksheet_ligands.write(row_num, 0, data)
+    # write dowloaded ligands that have been manipulated
+    for row_num, data in enumerate(ligands_no_parenthesis_list):
+        worksheet_no_parenthesis.write(row_num, 0, data)
+    # write ligands which could not be downloaded
+    for row_num, data in enumerate(ligands_problem_list):
+        worksheet_problem.write(row_num, 0, data)
+    workbook.close()
 
     return[ligands_list, ligands_problem_list, ligands_no_parenthesis_list]
