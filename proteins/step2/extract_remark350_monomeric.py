@@ -9,7 +9,6 @@ def extract_remark350_monomeric(
     keywords = [
         "AUTHOR DETERMINED BIOLOGICAL UNIT: MONOMERIC",
         "BIOLOGICAL UNIT: MONOMERIC",
-        "MONOMERIC",
     ]
 
     if pdb_path.endswith(".gz"):
