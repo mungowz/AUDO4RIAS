@@ -28,11 +28,8 @@ if __name__ == "__main__":
     # extract ligand structure but in sdf
     extract_3d_structures()
 
-    # rename ligand files
-    rename_ligands()
-
     # convert sdf files into pdb
-    sdf_to_pdbqt()
+    #sdf_to_pdbqt()
 
     # convert pdb file to pdbqt, not necessary
     # exec_prepare_ligands()
