@@ -11,30 +11,22 @@ def pdb_info_extraction(
     pdbs_folder=Config.PROTEINS_FOLDER,
     output_path=Config.EXCEL_FOLDER,
 ):
-    print(query_type)
-    print(pdbs_folder)
-    print(output_path)
-    # input folder
-    # protein_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\proteins_files"  # maybe put it in environment variables accessible from os module
-    # rna_folder = r"C:\Users\Maax\computational-docking\Computational-Docking\proteins\rna_files"
 
-    if query_type in ["PROTEINS", "Proteins", "proteins"]:
+    print("\nQUERY_TYPE: " + query_type)
+    print("PROTEINS FOLDER: " + pdbs_folder)
+    print("EXCEL FOLDER: " + output_path)
 
-        # Build a query that select all needed proteins
-        proteins_list = select_proteins()
+    print("\n1.1 - Selecting proteins...")
+    # Build a query that select all needed proteins
+    proteins_list = select_proteins()
 
-        # download pdb files from a list
-        download_pdbs(pdbs_list=proteins_list, output_path=pdbs_folder)
+    print("Proteins selected:")
+    print(proteins_list)
+    print("Number of Proteins selected: " + str(len(proteins_list)))
 
-    #   elif query_type in ["RIBOSOME", "Ribosome", "ribosome"]:
-    #
-    #        # Build a query that select all needed ribosome
-    #        ribosome_list = select_ribosome()
-    #
-    #        # download pdb files from a list
-    #        download_pdbs(pdbs_list=ribosome_list, output_path=pdbs_folder)
-    else:
-        raise TypeError("Invalid select type")
+    print("\n1.2 - Dowloading proteins...")
+    # download pdb files from a list
+    download_pdbs(pdbs_list=proteins_list, output_path=pdbs_folder)
 
     proteins = dict()
     parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
@@ -71,6 +63,7 @@ def pdb_info_extraction(
                     "compound": compound,
                 }
 
+    print("\n1.3 - Storing information into an excel file...")
     df = pd.DataFrame.from_dict(proteins, orient="index")
     with pd.ExcelWriter(os.path.join(output_path, "info_proteins.xlsx")) as writer:
         df.to_excel(
@@ -79,3 +72,4 @@ def pdb_info_extraction(
             index=False,
         )
         writer.save()
+    print("Stored into " + os.path.join(output_path, "info_proteins.xlsx"))

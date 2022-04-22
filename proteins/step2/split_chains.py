@@ -5,7 +5,7 @@ from proteins.step2.extract_remark350_monomeric import extract_remark350_monomer
 
 
 def split_chains(input_folder=Config.PROTEINS_FOLDER):
-    print("Splitting monomeric protein chains...")
+    print("\n2.1 - Splitting monomeric protein chains...")
     proteins_dict = {}
     monomeric_proteins = []
     for pdb_file in os.scandir(input_folder):
@@ -16,7 +16,7 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
         if not protein_path.endswith(".pdb"):
             continue
 
-        print("Parsing {pdb_file}...".format(pdb_file=pdb_file))
+        print("\nParsing {pdb_file}...".format(pdb_file=pdb_file))
         print(protein_path)
 
         # extract "monomeric" keyword
@@ -75,4 +75,5 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
         # remove old pdb file
         print("Deleting " + protein_path)
         os.remove(pdb_file)
+    print("2.1 - Done.")
     return [proteins_dict, monomeric_proteins]

@@ -14,6 +14,7 @@ def create_gridbox(
 ):
     ppdb = PandasPdb()
 
+    print("3.1 - Creating gridbox for each pdbqt file...")
     for protein_file in os.scandir(input_folder):
         if protein_file.is_file():
             protein_path = protein_file.path
@@ -64,3 +65,7 @@ def create_gridbox(
                 output = open(output_path, "w")
                 output.write(gridbox)
                 output.close()
+
+                print(
+                    "Gridbox created for " + protein_code + "! Stored in " + output_path
+                )

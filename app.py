@@ -14,22 +14,39 @@ if __name__ == "__main__":
 
     # proteins
     # step 1: select and download pdbs; extract pdb info and save into an excel file.
-    # pdb_info_extraction()
+    print("---------------- PROTEINS ----------------")
+    print("################# STEP 1 #################")
+    print("------------------------------------------")
+    pdb_info_extraction()
 
-    # step 2: split chains and remove waters, repeated and non-standard residues and alternative locations.
-    # split_chains()
-    #   split_repeated_residues()
-    # prepare_receptors()
+    # step 2: split chains and remove waters, repeated and non-standard residues and alternative locations, convert .pdb files into .pdbqt files.
+    print("---------------- PROTEINS ----------------")
+    print("################# STEP 2 #################")
+    print("------------------------------------------")
+    split_chains()
+    split_repeated_residues()
+    prepare_receptors()
 
     # step 3: create a gridbox for each pdbqt file
-    # create_gridbox()
+    print("---------------- PROTEINS ----------------")
+    print("################# STEP 3 #################")
+    print("------------------------------------------")
+    create_gridbox()
 
+    print("----------- PROTEINS: COMPLETED ----------")
     # ligands
-    # extract ligand structure but in sdf
-    extract_3d_structures()
+    # step 1: extract ligand structure but in sdf
+    print("---------------- LIGANDS -----------------")
+    print("################# STEP 1 #################")
+    print("------------------------------------------")
+    # extract_3d_structures()
 
-    # convert sdf files into pdb
-    #sdf_to_pdbqt()
+    # step 2: convert sdf files into pdbqt
+    print("---------------- LIGANDS -----------------")
+    print("################# STEP 2 #################")
+    print("------------------------------------------")
+    # sdf_to_pdbqt()
 
-    # convert pdb file to pdbqt, not necessary
+    # step 3: convert pdb file to pdbqt, not necessary
     # exec_prepare_ligands()
+    print("----------- LIGANDS: COMPLETED -----------")
