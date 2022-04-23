@@ -1,15 +1,16 @@
+from xml.etree.ElementInclude import include
 from rcsbsearch import Attr
 from config import Config
 
-# query to select Apis mellifera proteins:
-#   - no peptides
-#   - no RNA
-def select_proteins(query_type=Config.QUERY_TYPE, maximum_length=40):
+
+def select_proteins(
+    query_type=Config.QUERY_TYPE, maximum_length=40, include_mutants=False
+):
 
     # unavailable pdbs from rcsb.org
     # 7ASD: removed because its pdb format is unavailable on rcsb.org. Maybe we can try to download pdb zipped format and unzip
     # 3R72: The coordinate for one atom was wrong and the atom was floating around too far away to create a bond. Assumed we have already the correct pdb in our input folder.
-    pdbs_unavailable = ["7ASD", "3R72"]
+    pdbs_unavailable = ["3R72"]
 
     if query_type == "DEFAULT":
         scientific_name = Attr(
@@ -33,7 +34,14 @@ def select_proteins(query_type=Config.QUERY_TYPE, maximum_length=40):
     else:
         raise TypeError("Invalid query type...")
 
-    proteins_list = (scientific_name & ~keywords & length).exec().iquery()
+    mutants = Attr("entity_poly.rcsb_mutation_count").greater(0)
+    if include_mutants is False:
+        proteins_list = (scientific_name & ~keywords & length).exec().iquery()
+    else:
+        proteins_list = (
+            (scientific_name & ~keywords & length & ~mutants).exec().iquery()
+        )
+
     proteins_list = remove_unavailable_pdbs(
         pdbs_unavailable=pdbs_unavailable, pdbs_list=proteins_list
     )
