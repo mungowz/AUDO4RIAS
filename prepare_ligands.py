@@ -15,10 +15,9 @@ if __name__ == "__main__":
             \t[-v] | [--verbose]: verbose output (default is False)\n \
             \t[-e] | [--excel-file]: define an excel file as input file to select needed ligands\n \
             \t[-E] | [--excel-folder]: define a folder where excel files has to be stored or are stored\n \
-            \t[-s], | [--sdf-folder]: define a folder where sdf files has to be stored or are stored\n \
-            \t[-p], | [--pdbqt-folder]: define a folder where pdbqt files has to be stored or are stored\n \
-            \t[-P], | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
-            \t[-s], | [--sdf-folder]: define a folder where sdf files has to be stored or are stored\n \
+            \t[-s] | [--sdf-folder]: define a folder where sdf files has to be stored or are stored\n \
+            \t[-p] | [--pdbqt-folder]: define a folder where pdbqt files has to be stored or are stored\n \
+            \t[-P] | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
             \t[-k] | [--keep-ligands]: keep ligands stored into sdf folder (default is False)\n \
             \t[-h] | [--help]: print usage"
         )
@@ -63,8 +62,7 @@ if __name__ == "__main__":
         if o in ("-v", "--verbose"):
             # set verbose to true
             verbose = True
-            if verbose:
-                print("set verbose to ", verbose)
+            print("set verbose to ", verbose)
         if o in ("-e", "--excel-file"):
             # verify path ? (existance, permissions)
             # set path to excel file = a

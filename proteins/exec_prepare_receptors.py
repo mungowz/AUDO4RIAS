@@ -1,19 +1,19 @@
 import os
-from config import Config
 
 
-def prepare_receptors(
-    input_folder=Config.PROTEINS_FOLDER, output_folder=Config.PDBQT_PROTEINS_FOLDER
-):
-    print("\n3.1 - Converting .pdb files into .pdbqt files using prepare_receptor...")
-    for pdb_file in os.scandir(input_folder):
+def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
+    if verbose:
+        print(
+            "\n3.1 - Converting .pdb files into .pdbqt files using prepare_receptor..."
+        )
+    for pdb_file in os.scandir(pdb_folder):
         if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
             continue
 
         pdb_code = "protein_" + pdb_file.path.split("\\")[-1].split(".")[0] + ".pdbqt"
 
         # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
-        output_filename = os.path.join(output_folder, pdb_code)
+        output_filename = os.path.join(pdbqt_folder, pdb_code)
 
         # Usage: prepare_receptor4.py -r filename
         #       Description of command...
@@ -53,9 +53,13 @@ def prepare_receptors(
             + output_filename
         )
 
+        if verbose:
+            print("Executing: " + command)
         # produce .pdbqt file for each pdb file
         os.system(command=command)
 
         # 3r72: The coordinate for one atom was wrong and the atom was floating around too far away to create a bond
         # We assume that it is already correct in our input files
-    print("2.3 - Done.")
+
+    if verbose:
+        print("2.3 - Done.")

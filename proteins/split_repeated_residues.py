@@ -1,18 +1,18 @@
 from biopandas.pdb import PandasPdb
 import os
-from config import Config
 
 
-def split_repeated_residues(
-    input_folder=Config.PROTEINS_FOLDER, output_folder=Config.PROTEINS_FOLDER
-):
-    print("\n2.1 - Splitting repeated residues...")
+def split_repeated_residues(pdb_folder, verbose, output_folder=None):
+    if output_folder is None:
+        output_folder = pdb_folder
+    if verbose:
+        print("\n2.1 - Splitting repeated residues...")
     ppdb = PandasPdb()
-    for pdb_file in os.scandir(input_folder):
+    for pdb_file in os.scandir(pdb_folder):
         if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
             continue
         pdb_code = pdb_file.path.split("\\")[-1].split(".")[0]
-        output_path = output_folder + "/" + pdb_code + ".pdb"
+        output_path = os.path.join(output_folder, pdb_code + ".pdb")
 
         # read pdb file with biopandas
         ppdb.read_pdb(pdb_file.path)
@@ -26,4 +26,5 @@ def split_repeated_residues(
         ppdb.df["ATOM"]["alt_loc"] = ""
         ppdb.to_pdb(path=output_path, records=None, gz=False, append_newline=True)
 
-    print("2.1 - Done.")
+    if verbose:
+        print("2.1 - Done.")

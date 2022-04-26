@@ -1,11 +1,7 @@
-from xml.etree.ElementInclude import include
 from rcsbsearch import Attr
-from config import Config
 
 
-def select_proteins(
-    query_type=Config.QUERY_TYPE, maximum_length=40, include_mutants=False
-):
+def select_proteins(query_type, maximum_length, include_mutants):
 
     # unavailable pdbs from rcsb.org
     # 7ASD: removed because its pdb format is unavailable on rcsb.org. Maybe we can try to download pdb zipped format and unzip

@@ -1,21 +1,14 @@
-import Bio.PDB as bioPDB
 import os
-import pandas as pd
-import openpyxl
 from biopandas.pdb import PandasPdb
 import math
-from config import Config
 
-# margin in anstroms to have some space between the max and min atom coordinates for the ligand
-def create_gridbox(
-    input_folder=Config.PROTEINS_FOLDER,
-    output_folder=Config.GRIDBOX_OUTPUT,
-    margin=3,
-):
+# margin in angstroms to have some space between the max and min atom coordinates for the ligand
+def create_gridbox(pdb_folder, gridbox_output_folder, margin, verbose):
     ppdb = PandasPdb()
 
-    print("3.1 - Creating gridbox for each pdbqt file...")
-    for protein_file in os.scandir(input_folder):
+    if verbose:
+        print("3.1 - Creating gridbox for each pdbqt file...")
+    for protein_file in os.scandir(pdb_folder):
         if protein_file.is_file():
             protein_path = protein_file.path
             # Now we use PandasPDB from the package biopandas to extract a table with the atom coordinates.
@@ -60,12 +53,16 @@ def create_gridbox(
                 # to create the text with the grid box values, first we create the file name with the prot code + extension
                 file_name = f"protein_{protein_code}_grid.txt"
                 # Then we define the path of the output
-                output_path = f"{output_folder}/{file_name}"
+                output_path = f"{gridbox_output_folder}/{file_name}"
                 # if protein_code == '1fcq':
                 output = open(output_path, "w")
                 output.write(gridbox)
                 output.close()
 
-                print(
-                    "Gridbox created for " + protein_code + "! Stored in " + output_path
-                )
+                if verbose:
+                    print(
+                        "Gridbox created for "
+                        + protein_code
+                        + "! Stored in "
+                        + output_path
+                    )

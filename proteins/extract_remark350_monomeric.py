@@ -1,10 +1,10 @@
-from config import Config
-from proteins.step1.decompress_gz import decompress
+from utils import decompress
+import os
 
 
 def extract_remark350_monomeric(
     pdb_path,
-    output_folder=Config.PROTEINS_FOLDER,
+    pdb_folder,
 ):
     keywords = [
         "AUTHOR DETERMINED BIOLOGICAL UNIT: MONOMERIC",
@@ -13,7 +13,7 @@ def extract_remark350_monomeric(
 
     if pdb_path.endswith(".gz"):
         protein_code = pdb_path.split("\\")[-1].split(".")[0]
-        output_path = output_folder + "/" + protein_code
+        output_path = os.path.join(pdb_folder, protein_code)
         # unzip .gz file
         decompress(pdb_path, output_path)
 

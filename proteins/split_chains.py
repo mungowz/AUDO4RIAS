@@ -1,14 +1,17 @@
 from prody import *
 import os
-from config import Config
-from proteins.step2.extract_remark350_monomeric import extract_remark350_monomeric
+from proteins.extract_remark350_monomeric import extract_remark350_monomeric
 
 
-def split_chains(input_folder=Config.PROTEINS_FOLDER):
-    print("\n2.2 - Splitting chains of monomeric biological unit...")
+def split_chains(pdb_folder, verbose):
+    if not verbose:
+        confProDy(verbosity="none")
+    if verbose:
+        print("\n2.2 - Splitting chains of monomeric biological unit...")
+
     proteins_dict = {}
     monomeric_proteins = []
-    for pdb_file in os.scandir(input_folder):
+    for pdb_file in os.scandir(pdb_folder):
         if not pdb_file.is_file():
             continue
 
@@ -16,17 +19,19 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
         if not protein_path.endswith(".pdb"):
             continue
 
-        print("\nParsing {pdb_file}...".format(pdb_file=pdb_file))
-        print(protein_path)
+        if verbose:
+            print("\nParsing {pdb_file}...".format(pdb_file=pdb_file))
+            print(protein_path)
 
         # extract "monomeric" keyword
-        if not extract_remark350_monomeric(protein_path):
+        if not extract_remark350_monomeric(protein_path, pdb_folder=pdb_folder):
             continue
         monomeric_proteins.append(protein_path.split("\\")[-1].split(".")[0])
         # parse pdb file, get AtomGroup object
         atoms = parsePDB(protein_path)
 
-        print("Getting HierarchicalView for {pdb_file}".format(pdb_file=pdb_file))
+        if verbose:
+            print("Getting HierarchicalView for {pdb_file}".format(pdb_file=pdb_file))
         # generate Hierarchical View for AtomGroup object
         hv = atoms.getHierView()
         chids = list(set(atoms.getChids()))
@@ -62,10 +67,10 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
 
             # build new pdb filename
             filename = os.path.join(
-                input_folder, atoms.getTitle() + "_{chid}".format(chid=chid)
+                pdb_folder, atoms.getTitle() + "_{chid}".format(chid=chid)
             )
-
-            print(filename)
+            if verbose:
+                print(filename)
             # parse a specific chain from a pdb file
             new_atoms = parsePDB(protein_path, chain=chid)
 
@@ -73,7 +78,9 @@ def split_chains(input_folder=Config.PROTEINS_FOLDER):
             writePDB(filename, new_atoms)
 
         # remove old pdb file
-        print("Deleting " + protein_path)
+        if verbose:
+            print("Deleting " + protein_path)
         os.remove(pdb_file)
-    print("2.2 - Done.")
+    if verbose:
+        print("2.2 - Done.")
     return [proteins_dict, monomeric_proteins]
