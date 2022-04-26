@@ -1,13 +1,11 @@
 import os
-
-from sympy import O
 from config import Config
 
 
 def exec_prepare_ligands(
-    input_folder=Config.LIGANDS_PDB_FOLDER, output_folder=Config.LIGANDS_PDBQT_FOLDER
+    pdb_folder=Config.LIGANDS_PDB_FOLDER, pdbqt_folder=Config.LIGANDS_PDBQT_FOLDER
 ):
-    for pdb_file in os.scandir(input_folder):
+    for pdb_file in os.scandir(pdb_folder):
         if pdb_file.is_file():
             pdb_path = pdb_file.path
             if pdb_path.endswith(".pdb"):
@@ -15,7 +13,7 @@ def exec_prepare_ligands(
                 pdb_output = pdb_code + ".pdbqt"
 
                 # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
-                output_filename = os.path.join(output_folder, pdb_code)
+                output_filename = os.path.join(pdbqt_folder, pdb_code)
 
                 #   command = 'prepare_ligand -l "' + pdb_path + '" -o "' + pdb_output + '"'
                 command = 'obabel "' + pdb_path + '" -O "' + pdb_code + '"'
