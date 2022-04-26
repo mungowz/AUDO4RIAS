@@ -3,13 +3,12 @@ import pandas as pd
 import xlsxwriter
 import pubchempy as pcp
 import os
+from utils import remove_files
 
 
 def extract_3d_structures(excel_path, sdf_folder, excel_folder, verbose):
 
-    for file in os.scandir(sdf_folder):
-        if file.is_file() and file.path.endswith(".sdf"):
-            os.remove(file)
+    remove_files(sdf_folder, ".sdf")
 
     # select ligands from an excel file
     ### By default, ./excel_files/ligands_pubchem.xlsx ###
