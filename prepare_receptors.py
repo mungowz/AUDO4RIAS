@@ -4,6 +4,7 @@ from proteins.create_gridbox import create_gridbox
 from proteins.exec_prepare_receptors import prepare_receptors
 from proteins.split_chains import split_chains
 from proteins.split_repeated_residues import split_repeated_residues
+from utils import remove_files
 
 
 if __name__ == "__main__":
@@ -64,6 +65,11 @@ if __name__ == "__main__":
     margin = 3
     include_mutants = False
     maximum_length = 40
+
+    # initialize folders
+    remove_files(pdb_folder, ".pdb")
+    remove_files(pdbqt_folder, ".pdbqt")
+    remove_files(gridbox_output_folder, ".txt")
 
     for o, a in opt_list:
         if o in ("-v", "--verbose"):

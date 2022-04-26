@@ -63,6 +63,7 @@ def create_gridbox(pdb_folder, gridbox_output_folder, margin, verbose):
                     print(
                         "Gridbox created for "
                         + protein_code
-                        + "! Stored in "
+                        + "! (Stored in "
                         + output_path
+                        + ")"
                     )
