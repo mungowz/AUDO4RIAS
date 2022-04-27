@@ -23,7 +23,7 @@ if __name__ == "__main__":
             \t[-q] | [--query-type]: define the query for proteins selection in ['DEFAULT', 'ALTERNATIVE'] (default is DEFAULT)\
             \t[-l] | [--maximum-length]: define maximum sequence length for proteins selection (default is 40)\
             \t[-i] | [--include-mutants]: include mutants for proteins selection (default is False)\
-            \t[-m] | [--margin]: define margin in angstroms to create protein gridbox for dockinf (default is 3)\
+            \t[-m] | [--margin]: define margin in angstroms to create protein gridbox for docking (default is 3)\
             \t[-h] | [--help]: print usage"
         )
 

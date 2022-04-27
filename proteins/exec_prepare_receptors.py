@@ -49,7 +49,7 @@ def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
         command = (
             "prepare_receptor -r "
             + pdb_file.path
-            + " -A checkhydrogens -o "
+            + " -A checkhydrogens -e -o "
             + output_filename
         )
 
