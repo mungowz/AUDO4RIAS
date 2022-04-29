@@ -31,7 +31,7 @@ def select_proteins(query_type, maximum_length, include_mutants):
         raise TypeError("Invalid query type...")
 
     mutants = Attr("entity_poly.rcsb_mutation_count").greater(0)
-    if include_mutants is False:
+    if include_mutants is True:
         proteins_list = (scientific_name & ~keywords & length).exec().iquery()
     else:
         proteins_list = (

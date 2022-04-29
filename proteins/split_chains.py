@@ -1,6 +1,6 @@
 from prody import *
 import os
-from proteins.extract_remark350_monomeric import extract_remark350_monomeric
+from proteins.extract_remarks import extract_remark350_monomeric
 
 
 def split_chains(pdb_folder, verbose):
@@ -50,7 +50,7 @@ def split_chains(pdb_folder, verbose):
 
         # for each chain in hierarchical view
         for chid in chids:
-            if chid == "A" or not hv[chid].getSequence():
+            if chid == "A" or hv[chid].getSequence() == "":
                 continue
 
             # for each chid-seq in {chain-sequence} for a given code

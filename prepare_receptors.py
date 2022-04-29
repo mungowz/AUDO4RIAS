@@ -4,6 +4,7 @@ from proteins.create_gridbox import create_gridbox
 from proteins.exec_prepare_receptors import prepare_receptors
 from proteins.split_chains import split_chains
 from proteins.split_repeated_residues import split_repeated_residues
+from proteins.extract_remarks import check_warnings
 from utils import remove_files
 
 
@@ -96,7 +97,7 @@ if __name__ == "__main__":
                 print("set pdb folder to ", pdb_folder)
         if o in ("-i", "--include-mutants"):
             # include mutants in proteins selection
-            include_mutants = a
+            include_mutants = True
             if verbose:
                 print("set include-mutants option to ", include_mutants)
 
@@ -132,6 +133,7 @@ if __name__ == "__main__":
     )
 
     if verbose:
+        check_warnings(pdb_folder=pdb_folder)
         print("---------------- PROTEINS ----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
