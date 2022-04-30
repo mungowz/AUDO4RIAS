@@ -5,8 +5,8 @@ from proteins.exec_prepare_receptors import prepare_receptors
 from proteins.split_chains import split_chains
 from proteins.split_repeated_residues import split_repeated_residues
 from proteins.extract_remarks import check_warnings
-from utils import remove_files
-
+from utils import check_pdb_folder, remove_files, isWritable
+from pathlib import Path
 
 if __name__ == "__main__":
     import sys
@@ -21,6 +21,7 @@ if __name__ == "__main__":
             \t[-E] | [--excel-folder]: define a folder where excel files has to be stored or are stored\n \
             \t[-p] | [--pdbqt-folder]: define a folder where pdbqt files has to be stored or are stored\n \
             \t[-P] | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
+            \t[-k] | [--keep-pdb-files]: keep pdb files stored into pdb_folder(must be specified after [-P] | [--keep-pdb-files])\
             \t[-q] | [--query-type]: define the query for proteins selection in ['DEFAULT', 'ALTERNATIVE'] (default is DEFAULT)\
             \t[-l] | [--maximum-length]: define maximum sequence length for proteins selection (default is 40)\
             \t[-i] | [--include-mutants]: include mutants for proteins selection (default is False)\
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     try:
         opt_list, args = getopt.getopt(
             sys.argv[1:],
-            "E:p:P:im:q:l:hv",
+            "E:p:P:im:q:l:hvk",
             [
                 "excel-folder",
                 "pdbqt-folder",
@@ -40,6 +41,7 @@ if __name__ == "__main__":
                 "include-mutants",
                 "margin",
                 "query-type",
+                "keep-pdb-files",
                 "maximum_length",
                 "help",
                 "verbose",
@@ -66,35 +68,47 @@ if __name__ == "__main__":
     margin = 3
     include_mutants = False
     maximum_length = 40
-
-    # initialize folders
-    remove_files(pdb_folder, ".pdb")
-    remove_files(pdbqt_folder, ".pdbqt")
-    remove_files(gridbox_output_folder, ".txt")
+    keep_pdb_files = False
 
     for o, a in opt_list:
         if o in ("-v", "--verbose"):
             verbose = True
             print("set verbose to ", verbose)
         if o in ("-E", "--excel-folder"):
-            # verify path ? (permissions)
-            # set path to sdf folder = a
+            # verify path (permissions)
+            if not isWritable(a):
+                print("Specify a valid directory or modify dir permission!")
+                exit(1)
+            # set path to excel folder = a
             excel_folder = a
             if verbose:
                 print("set excel folder to ", excel_folder)
         if o in ("-P", "--pdbqt-folder"):
-            # verify path ? (permissions)
+            # verify path (permissions)
+            if not isWritable(a):
+                print("ERROR: Specify a valid directory or modify dir permission!")
+                exit(1)
             # set path to pdbqt folder = a
             pdbqt_folder = a
             if verbose:
                 print("set pdqbt folder to ", pdbqt_folder)
 
         if o in ("-p", "--pdb-folder"):
-            # verify path ? (permissions)
+            # verify path (permissions)
+            if not isWritable(a):
+                print("ERROR: Specify a valid directory or modify dir permission!")
+                exit(1)
             # set path to pdb folder = a
             pdb_folder = a
             if verbose:
                 print("set pdb folder to ", pdb_folder)
+
+        if o in ("-k", "--keep-pdb-files"):
+            # check if there is at least a pdb file
+            keep_pdb_files = True
+            if verbose:
+                print("set keep-pdb-files option to ", True)
+
         if o in ("-i", "--include-mutants"):
             # include mutants in proteins selection
             include_mutants = True
@@ -119,18 +133,40 @@ if __name__ == "__main__":
         if o in ("-h", "--help"):
             usage()
             exit(0)
-    if verbose:
-        print("---------------- PROTEINS ----------------")
-        print("################# STEP 1 #################")
-        print("------------------------------------------")
-    pdb_info_extraction(
-        query_type=query_type,
-        maximum_length=maximum_length,
-        include_mutants=include_mutants,
-        pdb_folder=pdb_folder,
-        excel_folder=excel_folder,
-        verbose=verbose,
-    )
+
+    # initialize folders
+    if pdb_folder == Config.PROTEINS_FOLDER:
+        Path(Config.PROTEINS_FOLDER).mkdir(parents=True, exist_ok=True)
+    if pdbqt_folder == Config.PDBQT_PROTEINS_FOLDER:
+        Path(Config.PDBQT_PROTEINS_FOLDER).mkdir(parents=True, exist_ok=True)
+    if gridbox_output_folder == Config.GRIDBOX_OUTPUT_FOLDER:
+        Path(Config.GRIDBOX_OUTPUT_FOLDER).mkdir(parents=True, exist_ok=True)
+
+    remove_files(pdbqt_folder, ".pdbqt")
+    remove_files(gridbox_output_folder, ".txt")
+
+    if keep_pdb_files is False:
+        remove_files(pdb_folder, ".pdb")
+        if verbose:
+            print("---------------- PROTEINS ----------------")
+            print("################# STEP 1 #################")
+            print("------------------------------------------")
+        pdb_info_extraction(
+            query_type=query_type,
+            maximum_length=maximum_length,
+            include_mutants=include_mutants,
+            pdb_folder=pdb_folder,
+            excel_folder=excel_folder,
+            verbose=verbose,
+        )
+    else:
+        if not check_pdb_folder(pdb_folder=pdb_folder):
+            print("ERROR: There's no pdb file into pdb folder")
+            exit(2)
+        if verbose:
+            print("---------------- PROTEINS ----------------")
+            print("############# SKIPPED STEP 1 #############")
+            print("------------------------------------------")
 
     if verbose:
         check_warnings(pdb_folder=pdb_folder)
