@@ -1,7 +1,7 @@
 from config import Config
 from ligands.extract_3D_structures import extract_3d_structures
 from ligands.sdf_to_pdbqt import sdf_to_pdbqt
-from ligands.exec_prepare_ligands import exec_prepare_ligands
+from pathlib import Path
 
 if __name__ == "__main__":
     import sys
@@ -106,19 +106,28 @@ if __name__ == "__main__":
             usage()
             exit(0)
 
+    # initialize folders
+    if sdf_folder == Config.LIGANDS_SDF_FOLDER:
+        Path(Config.LIGANDS_SDF_FOLDER).mkdir(parents=True, exist_ok=True)
+    if pdbqt_folder == Config.LIGANDS_PDBQT_FOLDER:
+        Path(Config.LIGANDS_PDBQT_FOLDER).mkdir(parents=True, exist_ok=True)
+    if excel_folder == Config.EXCEL_FOLDER:
+        Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
+
     ## cannot specify keep ligands and excel_file ##
     if not keep_ligands:
         if verbose:
             print("---------------- LIGANDS -----------------")
             print("################# STEP 1 #################")
             print("------------------------------------------")
-
+        
         extract_3d_structures(
             excel_path=excel_file,
             sdf_folder=sdf_folder,
             excel_folder=excel_folder,
             verbose=verbose,
         )
+
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 2 #################")
