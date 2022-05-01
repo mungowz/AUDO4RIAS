@@ -50,7 +50,7 @@ if __name__ == "__main__":
     print("------------------------------------------")
 
     # initialize variables
-    excel_file = Config.EXCEL_FOLDER + "/ligands_pubchem.xlsx"
+    excel_file = Config.EXCEL_FOLDER + "/pest_group_MOA.xlsx"
     excel_folder = Config.EXCEL_FOLDER
     sdf_folder = Config.LIGANDS_SDF_FOLDER
     pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
