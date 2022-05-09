@@ -7,7 +7,7 @@ def split_chains(pdb_folder, verbose):
     if not verbose:
         confProDy(verbosity="none")
     if verbose:
-        print("\n2.2 - Splitting chains of monomeric biological unit...")
+        print("\n2.3 - Splitting chains of monomeric biological unit...")
 
     proteins_dict = {}
     monomeric_proteins = []
@@ -82,5 +82,5 @@ def split_chains(pdb_folder, verbose):
             print("Deleting " + protein_path)
         os.remove(pdb_file)
     if verbose:
-        print("2.2 - Done.")
+        print("2.3 - Done.")
     return [proteins_dict, monomeric_proteins]

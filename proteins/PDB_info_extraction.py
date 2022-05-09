@@ -6,7 +6,7 @@ from proteins.select_pdbs import select_proteins
 
 
 def pdb_info_extraction(
-    query_type, maximum_length, include_mutants, pdb_folder, excel_folder, verbose
+    query_type, minimum_length, include_mutants, pdb_folder, excel_folder, verbose
 ):
 
     if verbose:
@@ -17,7 +17,7 @@ def pdb_info_extraction(
     # Build a query that select all needed proteins
     proteins_list = select_proteins(
         query_type=query_type,
-        maximum_length=maximum_length,
+        minimum_length=minimum_length,
         include_mutants=include_mutants,
     )
     if verbose:

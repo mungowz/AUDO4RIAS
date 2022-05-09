@@ -1,7 +1,7 @@
 from rcsbsearch import Attr
 
 
-def select_proteins(query_type, maximum_length, include_mutants):
+def select_proteins(query_type, minimum_length, include_mutants):
 
     # unavailable pdbs from rcsb.org
     # 7ASD: removed because its pdb format is unavailable on rcsb.org. Maybe we can try to download pdb zipped format and unzip
@@ -17,7 +17,7 @@ def select_proteins(query_type, maximum_length, include_mutants):
             "INHIBITOR, TOXIN, RNA, PEPTIDE, RIBOSOME"
         )
         length = Attr("entity_poly.rcsb_sample_sequence_length").greater_or_equal(
-            maximum_length
+            minimum_length
         )
     elif query_type == "ALTERNATIVE":
         scientific_name = Attr(
@@ -25,7 +25,7 @@ def select_proteins(query_type, maximum_length, include_mutants):
         ).exact_match("Apis mellifera")
         keywords = Attr("struct_keywords.pdbx_keywords").contains_words("RIBOSOME")
         length = Attr("entity_poly.rcsb_sample_sequence_length").greater_or_equal(
-            maximum_length
+            minimum_length
         )
     else:
         raise TypeError("Invalid query type...")

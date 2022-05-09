@@ -5,6 +5,7 @@ from proteins.exec_prepare_receptors import prepare_receptors
 from proteins.split_chains import split_chains
 from proteins.split_repeated_residues import split_repeated_residues
 from proteins.extract_remarks import check_warnings
+from proteins.clear_hetatm import clear_hetatm
 from utils import check_pdb_folder, remove_files, isWritable
 from pathlib import Path
 
@@ -23,7 +24,7 @@ if __name__ == "__main__":
             \t[-P] | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
             \t[-k] | [--keep-pdb-files]: keep pdb files stored into pdb_folder(must be specified after [-P] | [--keep-pdb-files])\
             \t[-q] | [--query-type]: define the query for proteins selection in ['DEFAULT', 'ALTERNATIVE'] (default is DEFAULT)\
-            \t[-l] | [--maximum-length]: define maximum sequence length for proteins selection (default is 40)\
+            \t[-l] | [--minimum-length]: define minimum sequence length for proteins selection (default is 40)\
             \t[-i] | [--include-mutants]: include mutants for proteins selection (default is False)\
             \t[-m] | [--margin]: define margin in angstroms to create protein gridbox for docking (default is 3)\
             \t[-h] | [--help]: print usage"
@@ -42,7 +43,7 @@ if __name__ == "__main__":
                 "margin",
                 "query-type",
                 "keep-pdb-files",
-                "maximum_length",
+                "minimum_length",
                 "help",
                 "verbose",
             ],
@@ -67,7 +68,7 @@ if __name__ == "__main__":
     verbose = False
     margin = 3
     include_mutants = False
-    maximum_length = 40
+    minimum_length = 40
     keep_pdb_files = False
 
     for o, a in opt_list:
@@ -125,10 +126,10 @@ if __name__ == "__main__":
             if verbose:
                 print("set query-type to ", query_type)
 
-        if o in ("-l", "--maximum-length"):
-            maximum_length = a
+        if o in ("-l", "--minimum-length"):
+            minimum_length = a
             if verbose:
-                print("set maximum sequence to ", maximum_length)
+                print("set minimum sequence length to ", minimum_length)
 
         if o in ("-h", "--help"):
             usage()
@@ -148,12 +149,12 @@ if __name__ == "__main__":
     if keep_pdb_files is False:
         remove_files(pdb_folder, ".pdb")
         if verbose:
-            print("---------------- PROTEINS ----------------")
+            print("\n---------------- PROTEINS ----------------")
             print("################# STEP 1 #################")
             print("------------------------------------------")
         pdb_info_extraction(
             query_type=query_type,
-            maximum_length=maximum_length,
+            minimum_length=minimum_length,
             include_mutants=include_mutants,
             pdb_folder=pdb_folder,
             excel_folder=excel_folder,
@@ -164,22 +165,23 @@ if __name__ == "__main__":
             print("ERROR: There's no pdb file into pdb folder")
             exit(2)
         if verbose:
-            print("---------------- PROTEINS ----------------")
+            print("\n---------------- PROTEINS ----------------")
             print("############# SKIPPED STEP 1 #############")
             print("------------------------------------------")
 
     if verbose:
         check_warnings(pdb_folder=pdb_folder)
-        print("---------------- PROTEINS ----------------")
+        print("\n---------------- PROTEINS ----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
 
     split_repeated_residues(pdb_folder=pdb_folder, verbose=verbose)
+    clear_hetatm(pdb_folder=pdb_folder, verbose=verbose)
     split_chains(pdb_folder=pdb_folder, verbose=verbose)
     prepare_receptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose)
 
     if verbose:
-        print("---------------- PROTEINS ----------------")
+        print("\n---------------- PROTEINS ----------------")
         print("################# STEP 3 #################")
         print("------------------------------------------")
     create_gridbox(
@@ -190,4 +192,4 @@ if __name__ == "__main__":
     )
 
     if verbose:
-        print("----------- PROTEINS: COMPLETED ----------")
+        print("\n----------- PROTEINS: COMPLETED ----------")
