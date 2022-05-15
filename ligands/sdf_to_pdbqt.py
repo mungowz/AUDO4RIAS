@@ -10,9 +10,8 @@ def sdf_to_pdbqt(sdf_folder, pdbqt_folder, verbose):
             command = "obabel " + sdf_file.path + " -O " + pdbqt_path
             if verbose:
                 print(
-                    "{ligand_name} converted from sdf into pdbqt! (Stored in {output_file})".format(
+                    "{ligand_name} converted from sdf into pdbqt! (Stored in {output_file})\n".format(
                         ligand_name=ligand_name, output_file=pdbqt_path
                     )
                 )
-                print("Executing: " + command + "\n")
             os.system(command=command)

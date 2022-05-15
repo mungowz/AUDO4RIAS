@@ -19,7 +19,7 @@ if __name__ == "__main__":
             \t[-p] | [--pdbqt-folder]: define a folder where pdbqt files has to be stored or are stored\n \
             \t[-P] | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
             \t[-k] | [--keep-ligands]: keep ligands stored into sdf folder (default is False)\n \
-            \t[-h] | [--help]: print usage"
+            \t[-h] | [--help]: print usage" 
         )
 
     # process command arguments
@@ -63,12 +63,14 @@ if __name__ == "__main__":
             # set verbose to true
             verbose = True
             print("set verbose to ", verbose)
+
         if o in ("-e", "--excel-file"):
             # verify path ? (existance, permissions)
             # set path to excel file = a
             excel_file = a
             if verbose:
                 print("set excel filepath to ", excel_file)
+
         if o in ("-E", "--excel-folder"):
             # verify path ? (permissions)
             # set path to sdf folder = a
@@ -96,12 +98,14 @@ if __name__ == "__main__":
             pdb_folder = a
             if verbose:
                 print("set pdb folder to ", pdb_folder)
+
         if o in ("-k", "--keep-ligands"):
             # check if -s or default sdf folder contains sdf files (?)
             # keep ligands stored into sdf folder
             keep_ligands = True
             if verbose:
                 print("set keep-ligands option to ", keep_ligands)
+
         if o in ("-h", "--help"):
             usage()
             exit(0)
@@ -115,26 +119,30 @@ if __name__ == "__main__":
         Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
 
     ## cannot specify keep ligands and excel_file ##
-    if not keep_ligands:
-        if verbose:
-            print("---------------- LIGANDS -----------------")
-            print("################# STEP 1 #################")
-            print("------------------------------------------")
+    #if not keep_ligands:
+    if verbose:
+        print("---------------- LIGANDS -----------------")
+        print("################# STEP 1 #################")
+        print("------------------------------------------")
         
-        extract_3d_structures(
-            excel_path=excel_file,
-            sdf_folder=sdf_folder,
-            excel_folder=excel_folder,
-            verbose=verbose,
-        )
+    extract_3d_structures(
+        excel_path=excel_file,
+        sdf_folder=sdf_folder,
+        excel_folder=excel_folder,
+        keep_ligands=keep_ligands,
+        verbose=verbose
+    )
 
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
-    sdf_to_pdbqt(sdf_folder=sdf_folder, pdbqt_folder=pdbqt_folder, verbose=verbose)
-
-    #   exec_prepare_ligands(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder)
+    
+    sdf_to_pdbqt(
+            sdf_folder=sdf_folder, 
+            pdbqt_folder=pdbqt_folder, 
+            verbose=verbose,
+        )
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")

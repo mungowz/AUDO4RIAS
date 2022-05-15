@@ -6,9 +6,10 @@ import os
 from utils import remove_files
 
 
-def extract_3d_structures(excel_path, sdf_folder, excel_folder, verbose):
+def extract_3d_structures(excel_path, sdf_folder, excel_folder, verbose, keep_ligands):
 
-    remove_files(sdf_folder, ".sdf")
+    if not keep_ligands:
+        remove_files(sdf_folder, ".sdf")
 
     # select ligands from an excel file
     ### By default, ./excel_files/pest_group_MOA.xlsx ###
@@ -21,36 +22,36 @@ def extract_3d_structures(excel_path, sdf_folder, excel_folder, verbose):
 
     # extract ligands from Pubchem
     for substance in df["docking_ligand"]:
-        structure = pcp.get_compounds(substance, "name", record_type="3d")
-        if structure:
-            if substance not in ligands_set:
+        ligands_path = os.path.join(sdf_folder, substance + ".sdf")
+        file_name = ligands_path
+        if not os.path.exists(file_name.replace(" ", "_")):
+            structure = pcp.get_compounds(substance, "name", record_type="3d")
+            if structure:
                 ligands_set.add(substance)
-                ligands_path = os.path.join(sdf_folder, substance + ".sdf")
-                file_name = ligands_path
-                if not os.path.exists(file_name.replace(" ", "_")):
-                    pcp.download(
-                        "SDF",
-                        ligands_path,
-                        substance,
-                        "name",
-                        record_type="3d",
-                        overwrite=True,
-                    )
-                    if verbose:
-                        print(
-                            "{ligands_code} downloaded! (Stored in {output_file})\n".format(
-                                ligands_code=substance, output_file=ligands_path
-                            )
-                        )
-                    # replaces the space with the underscore in the name of the .sdf file
-                    os.rename(ligands_path, ligands_path.replace(" ", "_"))
-        if not structure:
-            print(
-                "{ligand_name} chemical name not matching with PubChem OR conformer generation is disallowed. Please check\n".format(
-                    ligand_name=substance
+                pcp.download(
+                    "SDF",
+                    ligands_path,
+                    substance,
+                    "name",
+                    record_type="3d",
+                    overwrite=True,
                 )
-            )
-            ligands_problem_set.add(substance)
+                if verbose:
+                    print(
+                        "{ligands_code} downloaded! (Stored in {output_file})\n".format(
+                            ligands_code=substance, output_file=ligands_path
+                        )
+                    )
+                # replaces the space with the underscore in the name of the .sdf file
+                os.rename(ligands_path, ligands_path.replace(" ", "_"))
+            if not structure:
+                if verbose:
+                    print(
+                        "{ligand_name} chemical name not matching with PubChem OR conformer generation is disallowed. Please check\n".format(
+                            ligand_name=substance
+                        )
+                    )
+                ligands_problem_set.add(substance)
 
     # write an output excel file which contains information about sdf ligands output
     workbook = xlsxwriter.Workbook(
