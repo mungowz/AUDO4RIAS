@@ -4,11 +4,11 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
-    PROTEINS_FOLDER = os.path.join(basedir, "proteins\proteins_files")
+    PROTEINS_FOLDER = os.path.join(basedir, "proteins" + os.sep + "proteins_files")
     QUERY_TYPE = "DEFAULT" or "ALTERNATIVE"
     EXCEL_FOLDER = os.path.join(basedir, "excel_files")
-    GRIDBOX_OUTPUT_FOLDER = os.path.join(basedir, "proteins\gridbox_output")
-    PDBQT_PROTEINS_FOLDER = os.path.join(basedir, "proteins\pdbqt")
-    LIGANDS_SDF_FOLDER = os.path.join(basedir, "ligands\sdf")
-    LIGANDS_PDB_FOLDER = os.path.join(basedir, "ligands\pdb")
-    LIGANDS_PDBQT_FOLDER = os.path.join(basedir, "ligands\pdbqt")
+    GRIDBOX_OUTPUT_FOLDER = os.path.join(basedir, "proteins"+ os.sep + "gridbox_output")
+    PDBQT_PROTEINS_FOLDER = os.path.join(basedir, "proteins"+ os.sep + "pdbqt")
+    LIGANDS_SDF_FOLDER = os.path.join(basedir, "ligands" + os.sep + "sdf")
+    LIGANDS_PDB_FOLDER = os.path.join(basedir, "ligands"+ os.sep +  "pdb")
+    LIGANDS_PDBQT_FOLDER = os.path.join(basedir, "ligands" + os.sep + "pdbqt")
