@@ -26,7 +26,7 @@ def split_chains(pdb_folder, verbose):
         # extract "monomeric" keyword
         if not extract_remark350_monomeric(protein_path, pdb_folder=pdb_folder):
             continue
-        monomeric_proteins.append(protein_path.split("\\")[-1].split(".")[0])
+        monomeric_proteins.append(protein_path.split(os.sep)[-1].split(".")[0])
         # parse pdb file, get AtomGroup object
         atoms = parsePDB(protein_path)
 

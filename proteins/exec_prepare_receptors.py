@@ -10,7 +10,7 @@ def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
         if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
             continue
 
-        pdb_code = "protein_" + pdb_file.path.split("\\")[-1].split(".")[0] + ".pdbqt"
+        pdb_code = "protein_" + pdb_file.path.split(os.sep)[-1].split(".")[0] + ".pdbqt"
 
         # WARNING: this output filename is not the exactly default output filename from prepare_receptor command
         output_filename = os.path.join(pdbqt_folder, pdb_code)

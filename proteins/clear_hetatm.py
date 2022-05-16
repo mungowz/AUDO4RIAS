@@ -26,7 +26,7 @@ def clear_hetatm(pdb_folder, verbose):
 
         if verbose:
             print(
-                "@" + pdb_file.path.split("\\")[-1] + ": detected invalid hetatm chains"
+                "@" + pdb_file.path.split(os.sep)[-1] + ": detected invalid hetatm chains"
             )
             print(invalid_hetatm_chains)
         # for each record in HETATM dataframe of a given pdb, drop records in which chain_id is set to a chain in invalid_hetatm_chains
@@ -39,7 +39,7 @@ def clear_hetatm(pdb_folder, verbose):
             if verbose:
                 print(
                     "@"
-                    + pdb_file.path.split("\\")[-1]
+                    + pdb_file.path.split(os.sep)[-1]
                     + ": record at row "
                     + line_idx
                     + " removed"

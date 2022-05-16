@@ -12,7 +12,7 @@ def extract_remark350_monomeric(
     ]
 
     #    if pdb_path.endswith(".gz"):
-    #        protein_code = pdb_path.split("\\")[-1].split(".")[0]
+    #        protein_code = pdb_path.split(os.sep)[-1].split(".")[0]
     #        output_path = os.path.join(pdb_folder, protein_code)
     #        # unzip .gz file
     #        decompress(pdb_path, output_path)
@@ -75,7 +75,7 @@ def check_warnings(pdb_folder):
                     # put a warning
                     print(
                         "\nWARNING: @"
-                        + pdb_file.path.split("\\")[-1]
+                        + pdb_file.path.split(os.sep)[-1]
                         + ":BIOMOLECULE: "
                         + biomolecule
                         + "\n"

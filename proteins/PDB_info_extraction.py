@@ -36,7 +36,7 @@ def pdb_info_extraction(
         if protein_file.is_file():
             protein_path = protein_file.path
             if protein_path.endswith(".pdb"):
-                protein_code = protein_path.split("\\")[-1].split(".")[0]
+                protein_code = protein_path.split(os.sep)[-1].split(".")[0]
 
                 # parser is the fuction that scans and extracts information of a file with a predifine format
                 # we define parser as permissive (will not give any error) and quite = true so we don't have warnings
@@ -72,6 +72,6 @@ def pdb_info_extraction(
             sheet_name="pdbs_selected",
             index=False,
         )
-        writer.save()
+        # writer.save()
     if verbose:
         print("Stored into " + os.path.join(excel_folder, "info_proteins.xlsx"))

@@ -11,7 +11,7 @@ def split_repeated_residues(pdb_folder, verbose, output_folder=None):
     for pdb_file in os.scandir(pdb_folder):
         if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
             continue
-        pdb_code = pdb_file.path.split("\\")[-1].split(".")[0]
+        pdb_code = pdb_file.path.split(os.sep)[-1].split(".")[0]
         output_path = os.path.join(output_folder, pdb_code + ".pdb")
 
         # read pdb file with biopandas

@@ -15,7 +15,7 @@ def create_gridbox(pdb_folder, gridbox_output_folder, margin, verbose):
             # We used the files that end with .pdb
             if protein_path.endswith(".pdb"):
                 # extract the protein_code from path name
-                protein_code = protein_path.split("\\")[-1].split(".")[0]
+                protein_code = protein_path.split(os.sep)[-1].split(".")[0]
 
                 ppdb.read_pdb(protein_path)
                 # With this lines we are extracting the code number from the proteins.
