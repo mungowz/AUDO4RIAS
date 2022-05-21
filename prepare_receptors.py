@@ -167,7 +167,7 @@ if __name__ == "__main__":
             exit(2)
         if verbose:
             print("\n---------------- PROTEINS ----------------")
-            print("############# SKIPPED STEP 1 #############")
+            print("############# SKIPPED STEP 1.1 #############")
             print("------------------------------------------")
 
     if verbose:

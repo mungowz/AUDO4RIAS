@@ -65,7 +65,7 @@ if __name__ == '__main__':
 
     # process command arguments
     try:
-        opt_list, args = getopt.getopt(sys.argv[1:], 'r:vo:A:Cp:U:eM:d:wh')
+        opt_list, args = getopt.getopt(sys.argv[1:], 'r:vo:A:C:p:U:eM:d:wh')
 
     except getopt.GetoptError, msg:
         print 'prepare_receptor4.py: %s' %msg
@@ -112,12 +112,7 @@ if __name__ == '__main__':
             repairs = a
             if verbose: print 'set repairs to ', a
         if o in ('-C', '--C'):
-            if a.lower() in ["kollman", "gasteiger"]:
-                charges_to_add = a
-            else:
-                print 'invalid charges to add'
-                usage()
-                sys.exit()
+            charges_to_add = a
             if verbose: print 'set charges_to_add to ', a
         if o in ('-p', '--p'):
             if not preserve_charge_types:

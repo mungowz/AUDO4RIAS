@@ -60,7 +60,7 @@ def prepare_receptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman
         command = (
             "prepare_receptor -r "
             + pdb_file.path
-            + " -A checkhydrogens -C " + charges_to_add+ " -e -o "
+            + " -A checkhydrogens -C " + charges_to_add + " -e -o "
             + output_filename
         )
 
