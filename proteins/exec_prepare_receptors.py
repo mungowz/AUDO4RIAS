@@ -2,7 +2,7 @@ import os
 
 
 def prepare_receptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'):
-    command = "chmod u+x ../replace_pr4py.sh; ./replace_pr4py.sh"
+    command = "chmod u+x replace_pr4py.sh; ./replace_pr4py.sh"
     if verbose:
         print("\n3.1 - Replacing ADFRsuite prepare_receptor4.py script...")
         command += " -v"
