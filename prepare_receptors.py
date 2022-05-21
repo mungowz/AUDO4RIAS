@@ -70,6 +70,7 @@ if __name__ == "__main__":
     include_mutants = False
     minimum_length = 40
     keep_pdb_files = False
+    charges_to_add = 'Kollman'
 
     for o, a in opt_list:
         if o in ("-v", "--verbose"):
@@ -178,7 +179,8 @@ if __name__ == "__main__":
     split_repeated_residues(pdb_folder=pdb_folder, verbose=verbose)
     clear_hetatm(pdb_folder=pdb_folder, verbose=verbose)
     split_chains(pdb_folder=pdb_folder, verbose=verbose)
-    prepare_receptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose)
+
+    prepare_receptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose, charges_to_add=charges_to_add)
 
     if verbose:
         print("\n---------------- PROTEINS ----------------")
