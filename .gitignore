@@ -11,4 +11,5 @@ __pycache__/
 *.pdb
 protein_*.txt
 *.pdbqt
-
+docking
+*.sdf
