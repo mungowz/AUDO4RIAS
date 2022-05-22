@@ -6,7 +6,7 @@ from proteins.split_chains import split_chains
 from proteins.split_repeated_residues import split_repeated_residues
 from proteins.extract_remarks import check_warnings
 from proteins.clear_hetatm import clear_hetatm
-from utils import check_pdb_folder, remove_files, isWritable
+from utils import check_files_in_folder, remove_files, isWritable
 from pathlib import Path
 
 if __name__ == "__main__":
@@ -162,7 +162,7 @@ if __name__ == "__main__":
             verbose=verbose,
         )
     else:
-        if not check_pdb_folder(pdb_folder=pdb_folder):
+        if not check_files_in_folder(folder=pdb_folder, docted_extension=".pdb"):
             print("ERROR: There's no pdb file into pdb folder")
             exit(2)
         if verbose:
