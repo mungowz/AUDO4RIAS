@@ -1,0 +1,15 @@
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+__pycache__/
+*.pyc
+*$py.class
+*.pdb
+protein_*.txt
+*.pdbqt
+docking
+*.sdf

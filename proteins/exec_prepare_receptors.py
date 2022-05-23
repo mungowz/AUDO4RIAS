@@ -1,10 +1,17 @@
 import os
 
 
-def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
+def prepare_receptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'):
+    command = "chmod u+x replace_pr4py.sh; ./replace_pr4py.sh"
+    if verbose:
+        print("\n3.1 - Replacing ADFRsuite prepare_receptor4.py script...")
+        command += " -v"
+
+    os.system(command=command)
+
     if verbose:
         print(
-            "\n3.1 - Converting .pdb files into .pdbqt files using prepare_receptor..."
+            "\n3.2 - Converting .pdb files into .pdbqt files using prepare_receptor..."
         )
     for pdb_file in os.scandir(pdb_folder):
         if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
@@ -20,6 +27,10 @@ def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
         #   -r   receptor_filename
         #            supported file types include pdb,mol2,pdbq,pdbqs,pdbqt, possibly pqr,cif
         # Optional parameters:
+        #  [-C]  charges to add type:
+        #            'gasteiger': addition of gasteiger charges"
+        #            'Kollman': addition of Kollman charges"
+        #            (default is 'None' which means preserve all input charges ie do not add new charges)"
         #  [-A]  type(s) of repairs to make:
         #            'bonds_hydrogens': build bonds and add hydrogens
         #            'bonds': build a single bond from each atom with no bonds to its closest neighbor
@@ -49,7 +60,7 @@ def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
         command = (
             "prepare_receptor -r "
             + pdb_file.path
-            + " -A checkhydrogens -e -o "
+            + " -A checkhydrogens -C " + charges_to_add + " -e -o "
             + output_filename
         )
 
@@ -62,4 +73,4 @@ def prepare_receptors(pdb_folder, pdbqt_folder, verbose):
         # We assume that it is already correct in our input files
 
     if verbose:
-        print("2.3 - Done.")
+        print("3.2 - Done.")

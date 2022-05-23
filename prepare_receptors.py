@@ -6,7 +6,7 @@ from proteins.split_chains import split_chains
 from proteins.split_repeated_residues import split_repeated_residues
 from proteins.extract_remarks import check_warnings
 from proteins.clear_hetatm import clear_hetatm
-from utils import check_pdb_folder, remove_files, isWritable
+from utils import check_files_in_folder, remove_files, isWritable
 from pathlib import Path
 
 if __name__ == "__main__":
@@ -70,6 +70,7 @@ if __name__ == "__main__":
     include_mutants = False
     minimum_length = 40
     keep_pdb_files = False
+    charges_to_add = 'Kollman'
 
     for o, a in opt_list:
         if o in ("-v", "--verbose"):
@@ -161,12 +162,12 @@ if __name__ == "__main__":
             verbose=verbose,
         )
     else:
-        if not check_pdb_folder(pdb_folder=pdb_folder):
+        if not check_files_in_folder(folder=pdb_folder, docted_extension=".pdb"):
             print("ERROR: There's no pdb file into pdb folder")
             exit(2)
         if verbose:
             print("\n---------------- PROTEINS ----------------")
-            print("############# SKIPPED STEP 1 #############")
+            print("############# SKIPPED STEP 1.1 #############")
             print("------------------------------------------")
 
     if verbose:
@@ -178,7 +179,8 @@ if __name__ == "__main__":
     split_repeated_residues(pdb_folder=pdb_folder, verbose=verbose)
     clear_hetatm(pdb_folder=pdb_folder, verbose=verbose)
     split_chains(pdb_folder=pdb_folder, verbose=verbose)
-    prepare_receptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose)
+
+    prepare_receptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose, charges_to_add=charges_to_add)
 
     if verbose:
         print("\n---------------- PROTEINS ----------------")

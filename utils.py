@@ -33,8 +33,8 @@ def isWritable(path):
     return True
 
 
-def check_pdb_folder(pdb_folder):
-    for files in os.scandir(pdb_folder):
-        if files.path.endswith(".pdb"):
+def check_files_in_folder(folder, docted_extension):
+    for files in os.scandir(folder):
+        if files.path.endswith(docted_extension):
             return True
     return False

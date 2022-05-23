@@ -1,7 +1,9 @@
+import os
 from config import Config
 from ligands.extract_3D_structures import extract_3d_structures
 from ligands.sdf_to_pdbqt import sdf_to_pdbqt
 from pathlib import Path
+from utils import isWritable
 
 if __name__ == "__main__":
     import sys
@@ -50,8 +52,8 @@ if __name__ == "__main__":
     print("------------------------------------------")
 
     # initialize variables
-    excel_file = Config.EXCEL_FOLDER + "/pest_group_MOA.xlsx"
     excel_folder = Config.EXCEL_FOLDER
+    excel_file = os.path.join(excel_folder, "pest_group_MOA.xlsx")
     sdf_folder = Config.LIGANDS_SDF_FOLDER
     pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
     pdb_folder = Config.LIGANDS_PDB_FOLDER
@@ -72,28 +74,40 @@ if __name__ == "__main__":
                 print("set excel filepath to ", excel_file)
 
         if o in ("-E", "--excel-folder"):
-            # verify path ? (permissions)
-            # set path to sdf folder = a
+            # verify path (permissions)
+            if not isWritable(a):
+                print("Specify a valid directory or modify dir permission!")
+                exit(1)
+            # set path to excel folder = a
             excel_folder = a
             if verbose:
                 print("set excel folder to ", excel_folder)
 
         if o in ("-s", "--sdf-folder"):
-            # verify path ? (permissions)
+            # verify path (permissions)
+            if not isWritable(a):
+                print("Specify a valid directory or modify dir permission!")
+                exit(1)
             # set path to sdf folder = a
             sdf_folder = a
             if verbose:
                 print("set sdf folder to ", sdf_folder)
 
         if o in ("-P", "--pdbqt-folder"):
-            # verify path ? (permissions)
+            # verify path (permissions)
+            if not isWritable(a):
+                print("Specify a valid directory or modify dir permission!")
+                exit(1)
             # set path to pdbqt folder = a
             pdbqt_folder = a
             if verbose:
                 print("set pdqbt folder to ", pdbqt_folder)
 
         if o in ("-p", "--pdb-folder"):
-            # verify path ? (permissions)
+            # verify path (permissions)
+            if not isWritable(a):
+                print("Specify a valid directory or modify dir permission!")
+                exit(1)
             # set path to pdb folder = a
             pdb_folder = a
             if verbose:
