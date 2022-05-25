@@ -7,6 +7,7 @@ from proteins.split_repeated_residues import split_repeated_residues
 from proteins.extract_remarks import check_warnings
 from proteins.clear_hetatm import clear_hetatm
 from utils import check_files_in_folder, remove_files, isWritable
+from web_view import web_view
 from pathlib import Path
 
 if __name__ == "__main__":
@@ -65,6 +66,7 @@ if __name__ == "__main__":
     gridbox_output_folder = Config.GRIDBOX_OUTPUT_FOLDER
     pdbqt_folder = Config.PDBQT_PROTEINS_FOLDER
     excel_folder = Config.EXCEL_FOLDER
+    url = Config.URL
     verbose = False
     margin = 3
     include_mutants = False
@@ -176,6 +178,7 @@ if __name__ == "__main__":
         print("################# STEP 2 #################")
         print("------------------------------------------")
 
+    web_view(url)
     split_repeated_residues(pdb_folder=pdb_folder, verbose=verbose)
     clear_hetatm(pdb_folder=pdb_folder, verbose=verbose)
     split_chains(pdb_folder=pdb_folder, verbose=verbose)

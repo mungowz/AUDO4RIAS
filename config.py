@@ -4,6 +4,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 
 
 class Config(object):
+    URL = "https://www.rcsb.org/search/advanced"
     PROTEINS_FOLDER = os.path.join(basedir, "proteins" + os.sep + "proteins_files")
     QUERY_TYPE = "DEFAULT" or "ALTERNATIVE"
     EXCEL_FOLDER = os.path.join(basedir, "excel_files")
