@@ -178,7 +178,7 @@ if __name__ == "__main__":
         print("################# STEP 2 #################")
         print("------------------------------------------")
 
-    web_view(url)
+    query_url = web_view(url)
     split_repeated_residues(pdb_folder=pdb_folder, verbose=verbose)
     clear_hetatm(pdb_folder=pdb_folder, verbose=verbose)
     split_chains(pdb_folder=pdb_folder, verbose=verbose)
