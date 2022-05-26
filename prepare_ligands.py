@@ -1,7 +1,8 @@
 import os
 from config import Config
 from ligands.extract_3D_structures import extract_3d_structures
-from ligands.sdf_to_pdbqt import sdf_to_pdbqt
+from ligands.sdf_to_pdb import sdf_to_pdb
+from ligands.pdb_to_pdbqt import pdb_to_pdbqt
 from pathlib import Path
 from utils import isWritable
 
@@ -127,6 +128,8 @@ if __name__ == "__main__":
     # initialize folders
     if sdf_folder == Config.LIGANDS_SDF_FOLDER:
         Path(Config.LIGANDS_SDF_FOLDER).mkdir(parents=True, exist_ok=True)
+    if pdb_folder == Config.LIGANDS_PDB_FOLDER:
+        Path(Config.LIGANDS_PDB_FOLDER).mkdir(parents=True, exist_ok=True)
     if pdbqt_folder == Config.LIGANDS_PDBQT_FOLDER:
         Path(Config.LIGANDS_PDBQT_FOLDER).mkdir(parents=True, exist_ok=True)
     if excel_folder == Config.EXCEL_FOLDER:
@@ -138,7 +141,7 @@ if __name__ == "__main__":
         print("---------------- LIGANDS -----------------")
         print("################# STEP 1 #################")
         print("------------------------------------------")
-        
+
     extract_3d_structures(
         excel_path=excel_file,
         sdf_folder=sdf_folder,
@@ -152,11 +155,23 @@ if __name__ == "__main__":
         print("################# STEP 2 #################")
         print("------------------------------------------")
     
-    sdf_to_pdbqt(
+    sdf_to_pdb(
             sdf_folder=sdf_folder, 
-            pdbqt_folder=pdbqt_folder, 
+            pdb_folder=pdb_folder, 
             verbose=verbose,
         )
+    
+    if verbose:
+        print("---------------- LIGANDS -----------------")
+        print("################# STEP 3 #################")
+        print("------------------------------------------")
+
+    pdb_to_pdbqt(
+        pdb_folder=pdb_folder,
+        pdbqt_folder=pdbqt_folder,
+        verbose=verbose
+    )
+
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")
