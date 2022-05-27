@@ -1,25 +1,30 @@
 import Bio.PDB as bioPDB
 import os
 import pandas as pd
+from config import Config
 from proteins.download_pdbs import download_pdbs
-from proteins.select_pdbs import select_proteins
+from proteins.select_pdbs import rest_api_selection
+from web_view import web_view
 
 
 def pdb_info_extraction(
-    query_type, minimum_length, include_mutants, pdb_folder, excel_folder, verbose
+    pdb_folder, excel_folder, verbose
 ):
 
     if verbose:
-        print("\nQUERY_TYPE: " + query_type)
         print("PROTEINS FOLDER: " + pdb_folder)
         print("EXCEL FOLDER: " + excel_folder)
         print("\n1.1 - Selecting proteins...")
+
+    proteins_list = rest_api_selection(Config.URL)
+
     # Build a query that select all needed proteins
-    proteins_list = select_proteins(
-        query_type=query_type,
-        minimum_length=minimum_length,
-        include_mutants=include_mutants,
-    )
+    # proteins_list = select_proteins(
+    #     query_type=query_type,
+    #     minimum_length=minimum_length,
+    #     include_mutants=include_mutants,
+    # )
+
     if verbose:
         print("Proteins selected:")
         print(proteins_list)
