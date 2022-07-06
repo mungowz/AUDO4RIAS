@@ -134,7 +134,7 @@ if __name__ == "__main__":
         Path(Config.LIGANDS_PDBQT_FOLDER).mkdir(parents=True, exist_ok=True)
     if excel_folder == Config.EXCEL_FOLDER:
         Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
-
+    '''
     ## cannot specify keep ligands and excel_file ##
     #if not keep_ligands:
     if verbose:
@@ -160,7 +160,7 @@ if __name__ == "__main__":
             pdb_folder=pdb_folder, 
             verbose=verbose,
         )
-    
+    '''
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 3 #################")

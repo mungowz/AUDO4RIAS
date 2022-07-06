@@ -1,4 +1,3 @@
-import re
 import pandas as pd
 import xlsxwriter
 import pubchempy as pcp

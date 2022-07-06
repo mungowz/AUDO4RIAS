@@ -1,5 +1,4 @@
 import os
-#from subprocess import call
 
 
 def sdf_to_pdb(sdf_folder, pdb_folder, verbose):
