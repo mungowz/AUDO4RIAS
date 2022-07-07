@@ -141,7 +141,7 @@ if __name__ == "__main__":
         print("---------------- LIGANDS -----------------")
         print("################# STEP 1 #################")
         print("------------------------------------------")
-
+    
     extract_3d_structures(
         excel_path=excel_file,
         sdf_folder=sdf_folder,
@@ -149,7 +149,7 @@ if __name__ == "__main__":
         keep_ligands=keep_ligands,
         verbose=verbose
     )
-
+    
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 2 #################")
@@ -160,18 +160,17 @@ if __name__ == "__main__":
             pdb_folder=pdb_folder, 
             verbose=verbose,
         )
-        
+    
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 3 #################")
         print("------------------------------------------")
-
+    
     pdb_to_pdbqt(
         pdb_folder=pdb_folder,
         pdbqt_folder=pdbqt_folder,
         verbose=verbose
     )
-
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")
