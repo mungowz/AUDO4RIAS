@@ -45,7 +45,7 @@ def writeIntermolHBonds(macro):
         return 'ERROR'
 
     # write interactions into a file
-    fptr = open("interactions", 'w')
+    fptr = open("hbonds_data/interactions", 'w')
     for b in bnds:
         outstring = ''+b.donAt.full_name() + ',' + b.accAt.full_name()
         if b.hAt is not None:
@@ -80,4 +80,4 @@ def detect_hbonds(lig_filename, macro_filename):
     #writeIntermolHBonds
     writeIntermolHBonds(macro)
 
-detect_hbonds("ligand_PNG_2cb3_a_out.pdbqt", "protein_2cb3_a.pdbqt")
+detect_hbonds("hbonds_data/ligand_PNG_2cb3_a_out.pdbqt", "hbonds_data/protein_2cb3_a.pdbqt")
