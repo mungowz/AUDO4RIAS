@@ -202,6 +202,13 @@ if __name__ == "__main__":
                         
 
     print(proteins)
+    for protein in proteins.keys():
+        for residue in proteins[protein].keys():
+            factor = 1.0/sum(proteins[protein][residue].values())
+            for bond in proteins[protein][residue].keys():
+                proteins[protein][residue][bond] = str(round(proteins[protein][residue][bond] * factor, 2)) 
+
+    print(proteins)
 
 
     # we are interested in all interactions.. so how can we deal with it?
