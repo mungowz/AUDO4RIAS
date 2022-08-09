@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import BOTH, ttk
+from tkinter import font
 
 
 class View(tk.Tk):
@@ -22,7 +23,7 @@ class View(tk.Tk):
 
 
     def _make_label(self, caption, label_width):
-        return ttk.LabelFrame(
+        return ttk.Label(
             self,
             text=caption,
             width=label_width
@@ -49,7 +50,7 @@ class Start_page(View):
             self, 
             'Start page', 
             '300', 
-            '55'
+            '100'
         )
         self.frame.pack()
 
@@ -58,10 +59,7 @@ class Start_page(View):
             'Select one button:', 
             30
         )
-        menu_label.pack(
-            expand=True,
-            fill=BOTH
-        )
+        menu_label.pack()
         
         preparation_button = View._make_button(
             self, 
