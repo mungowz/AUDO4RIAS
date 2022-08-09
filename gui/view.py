@@ -1,57 +1,117 @@
-import imp
-from re import S
-from struct import pack
 import tkinter as tk
-from tkinter import ttk
+from tkinter import BOTH, ttk
 
 
 class View(tk.Tk):
 
 
-    PAD = 10
-
-    button_captions = [
-        'Preparation',
-        'Docking'
-    ]
+    large_font =("Verdana", 35)
 
 
     def __init__(self, controller):
         super().__init__()
-        
         self.controller = controller
 
 
-    def main(self):
-        self._home_page()
+    def _make_frame(self, frame_title, frame_width, frame_height):
+        dimension = frame_width + 'x' + frame_height 
+        self.geometry(dimension)
+        self.title(frame_title)
+    
+        return tk.Frame(self)
 
+
+    def _make_label(self, caption, label_width):
+        return ttk.LabelFrame(
+            self,
+            text=caption,
+            width=label_width
+        )
+
+
+    def _make_button(self, caption, button_width):
+        return ttk.Button(
+            self,
+            text=caption,
+            width=button_width,
+            command=(
+                lambda button=caption: self.controller.on_button_click(button)
+            )
+        )
+
+
+class Start_page(View):
+
+
+    def __init__(self, controller):
+        super().__init__(controller)
+        self.frame = View._make_frame(
+            self, 
+            'Start page', 
+            '300', 
+            '55'
+        )
+        self.frame.pack()
+
+        menu_label = View._make_label(
+            self, 
+            'Select one button:', 
+            30
+        )
+        menu_label.pack(
+            expand=True,
+            fill=BOTH
+        )
+        
+        preparation_button = View._make_button(
+            self, 
+            'Preparation', 
+            30
+        )
+        preparation_button.pack()
+
+        docking_button = View._make_button(
+            self, 
+            'Docking', 
+            30
+        )
+        docking_button.pack()
+
+
+    def main(self):
+        self.frame.tkraise()
         self.mainloop()
 
-    
-    def _home_page(self):
-        self.title('Home Page')
 
-        self.value_var = tk.StringVar()
-        
-        self._make_main_frame()
-        #self._make_entry()
-        self._make_button()
+class Preparation(View):
 
 
-    def _make_main_frame(self):
-        self.main_frame = ttk.Frame(self)
-        self.main_frame.pack(padx=self.PAD, pady=self.PAD)
+    def __init__(self, controller):
+        super().__init__(controller)
+        self.frame = View._make_frame(
+            self, 
+            'Preparation', 
+            '300', 
+            '55'
+        )
 
 
-    def _make_entry(self):
-        entry = ttk.Entry(self.main_frame, textvariable=self.value_var) 
-        entry.pack()
+    def main(self):
+        self.frame.tkraise()
 
 
-    def _make_button(self):
-        frame = ttk.Frame(self.main_frame)
-        frame.pack()   
+class Docking(View):
 
-        for caption in self.button_captions:
-            button = ttk.Button(frame, text=caption)
-            button.pack()
+
+    def __init__(self, controller):
+        super().__init__(controller)
+        self.frame = View._make_frame(
+            self, 
+            'Docking', 
+            '300', 
+            '55'
+        )
+
+
+    def main(self):
+        self.frame.tkraise()
