@@ -6,9 +6,9 @@ class Controller(tk.Tk):
     
     
     def __init__(self):
+        tk.Tk.__init__(self)
         self.model = Model(self)
         self.raise_page(Start_page)
-        Start_page.mainloop()
 
 
     def raise_page(self, page):

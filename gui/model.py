@@ -6,5 +6,5 @@ class Model:
 
 
     def show_frame(self, page):
-        page.tkraise()
+        page.tkraise(self.controller)
     
