@@ -1,10 +1,10 @@
 class Model:
     
 
-    def __init__(self):
-        pass
+    def __init__(self, controller):
+        self.controller = controller
 
 
     def show_frame(self, page):
-        page.main()
+        page.tkraise()
     

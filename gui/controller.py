@@ -1,23 +1,39 @@
 from gui.model import Model
-from gui.view import Start_page, Preparation, Docking
+from gui.view import Start_page, tk
 
 
-class Controller:
+class Controller(tk.Tk):
     
     
     def __init__(self):
-        self.model = Model()
-        self.view = Start_page(self)
+        self.model = Model(self)
+        self.raise_page(Start_page)
+        Start_page.mainloop()
 
 
-    def main(self):
-        self.view.main()
-
-
-    def on_button_click(self, caption):
-        if caption == 'Preparation':
-            page = Preparation(self)
-            self.model.show_frame(page)
-        if caption == 'Docking':
-            page = Docking(self)
-            self.model.show_frame(page)
+    def raise_page(self, page):
+        container = tk.Frame(self)
+        container.pack(
+            side = "top", 
+            fill = "both", 
+            expand = True
+        )
+        container.grid_rowconfigure(
+            0, 
+            weight = 1
+        )
+        container.grid_columnconfigure(
+            0, 
+            weight = 1
+        )
+        
+        frame = page(
+            container, 
+            self
+        )
+        frame.grid(
+            row = 0, 
+            column = 0, 
+            sticky ="nsew"
+        )
+        self.model.show_frame(page)

@@ -1,115 +1,166 @@
 import tkinter as tk
-from tkinter import BOTH, ttk
-from tkinter import font
+from tkinter import ttk
 
 
-class View(tk.Tk):
+LARGEFONT =("Verdana", 35)
 
 
-    large_font =("Verdana", 35)
+class Button(tk.Frame):
 
 
-    def __init__(self, controller):
-        super().__init__()
-        self.controller = controller
+	def __init__(self, root, controller, button_caption, button_font, page_to_raise):
+		super().__init__()
+		self.root = root
+		self.controller = controller
+		self.button_caption = button_caption
+		self.button_font = button_font
+		self.page_to_raise = page_to_raise
+		self.main()
 
 
-    def _make_frame(self, frame_title, frame_width, frame_height):
-        dimension = frame_width + 'x' + frame_height 
-        self.geometry(dimension)
-        self.title(frame_title)
-    
-        return tk.Frame(self)
+	def main(self):
+		button = ttk.Button(
+			self.root,
+			text=self.button_caption,
+			font=self.button_font,
+			command=lambda : self.controller.raise_page(self.page_to_raise) 
+		)
+		button.grid(
+			row=1, 
+			column=1, 
+			padx=10, 
+			pady=10
+		)
+		button.pack()
 
 
-    def _make_label(self, caption, label_width):
-        return ttk.Label(
-            self,
-            text=caption,
-            width=label_width
-        )
+
+class Label(tk.Frame):
 
 
-    def _make_button(self, caption, button_width):
-        return ttk.Button(
-            self,
-            text=caption,
-            width=button_width,
-            command=(
-                lambda button=caption: self.controller.on_button_click(button)
-            )
-        )
+	def __init__(self, root, controller, label_caption, label_font):
+		super().__init__()
+		self.root = root
+		self.controller = controller
+		self.label_caption = label_caption
+		self.label_font = label_font
+		self.main()
 
 
-class Start_page(View):
+	def main(self):
+		label = ttk.Label(
+			self.root,
+			text=self.label_caption,
+			font=self.label_font
+		)
+		label.grid(
+			row=0, 
+			column=4, 
+			padx=10, 
+			pady=10
+		)
+		label.pack()
 
 
-    def __init__(self, controller):
-        super().__init__(controller)
-        self.frame = View._make_frame(
-            self, 
-            'Start page', 
-            '300', 
-            '100'
-        )
-        self.frame.pack()
+class Start_page(tk.Frame):
+	
+	
+	def __init__(self, parent, controller):
+		super().__init__(self, parent)
+		self.controller = controller
+		
 
-        menu_label = View._make_label(
-            self, 
-            'Select one button:', 
-            30
-        )
-        menu_label.pack()
-        
-        preparation_button = View._make_button(
-            self, 
-            'Preparation', 
-            30
-        )
-        preparation_button.pack()
+	def main(self):
+		Label(
+			self, 
+			self.controller,
+			'Select one button', 
+			LARGEFONT
+		)
 
-        docking_button = View._make_button(
-            self, 
-            'Docking', 
-            30
-        )
-        docking_button.pack()
+		Button(
+			self,
+			self.controller,
+			'Preparation', 
+			LARGEFONT,
+			Preparation
+		)
+
+		Button(
+			self, 
+			self.controller,
+			'Docking',
+			LARGEFONT,
+			Docking
+		)
+		
+
+class Preparation(tk.Frame):
+	
+	
+	def __init__(self, parent, controller):
+		super().__init__(self, parent)
+		self.controller = controller
+		
+
+	def main(self):
+		Label(
+			self, 
+			self.controller,
+			'Select one button', 
+			LARGEFONT
+		)
+
+		Button(
+			self,
+			self.controller, 
+			'Ligands', 
+			LARGEFONT,
+			Ligands
+		)
+		
+		Button(
+			self,
+			self.controller, 
+			'Receptors', 
+			LARGEFONT,
+			Receptors
+		)
+		
+
+class Ligands(tk.Frame):
+	
+	
+	def __init__(self, parent, controller):
+		super().__init__(self, parent)
+		self.controller = controller
 
 
-    def main(self):
-        self.frame.tkraise()
-        self.mainloop()
+	def main(self):
+		pass
 
 
-class Preparation(View):
+class Receptors(tk.Frame):
+	
+	
+	def __init__(self, parent, controller):
+		super().__init__(self, parent)
+		self.controller = controller
+		
+
+	def main(self):
+		pass
 
 
-    def __init__(self, controller):
-        super().__init__(controller)
-        self.frame = View._make_frame(
-            self, 
-            'Preparation', 
-            '300', 
-            '55'
-        )
+class Docking(tk.Frame):
+	
+	
+	def __init__(self, parent, controller):
+		super().__init__(self, parent)
+		self.controller = controller
+		
+
+	def main(self):
+		pass		
 
 
-    def main(self):
-        self.frame.tkraise()
-
-
-class Docking(View):
-
-
-    def __init__(self, controller):
-        super().__init__(controller)
-        self.frame = View._make_frame(
-            self, 
-            'Docking', 
-            '300', 
-            '55'
-        )
-
-
-    def main(self):
-        self.frame.tkraise()
