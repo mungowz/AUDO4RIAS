@@ -8,6 +8,12 @@ class Controller(tk.Tk):
     def __init__(self):
         tk.Tk.__init__(self)
 
+        self.set_container()
+        self.model = Model(self)
+        self.raise_page(Start_page)
+
+
+    def set_container(self):
         self.container = tk.Frame(self)
         self.container.pack(
             side = "top", 
@@ -22,9 +28,6 @@ class Controller(tk.Tk):
             0, 
             weight = 1
         )
-
-        self.model = Model(self)
-        self.raise_page(Start_page)
 
 
     def raise_page(self, page):
