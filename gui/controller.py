@@ -7,7 +7,7 @@ class Controller(tk.Tk):
     
     def __init__(self):
         tk.Tk.__init__(self)
-        
+
         self.container = tk.Frame(self)
         self.container.pack(
             side = "top", 
@@ -37,5 +37,4 @@ class Controller(tk.Tk):
             column = 0, 
             sticky ="nsew"
         )
-        page.tkraise(self)
-        #self.model.show_frame(page)
+        self.model.show_frame(page)
