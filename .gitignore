@@ -13,3 +13,4 @@ protein_*.txt
 *.pdbqt
 docking
 *.sdf
+*.xlsx
