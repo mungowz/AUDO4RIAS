@@ -36,6 +36,11 @@ cp "$PR4_PATH" "$ADFR_PR4"
 if [ "$VERBOSE" = true ]; then
     echo "Copied "$PR4_PATH" into "$ADFR_PR4""
 fi
+
+# set binaries to PATH, now can use prepare_receptor and prepare_ligand
+export PATH="${ADFR}/bin:$PATH"
+source $HOME/.bashrc
+
 # set execution flag to "prepare_receptor4.py" 
 if [ "$VERBOSE" = true ]; then
     echo "Setting execution flag..."
