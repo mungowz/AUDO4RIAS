@@ -21,7 +21,7 @@ def extract_3d_structures(excel_path, sdf_folder, excel_folder, verbose, keep_li
 
     # extract ligands from Pubchem
     for substance in df["docking_ligand"]:
-        ligands_path = os.path.join(sdf_folder, substance + ".sdf")
+        ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
         if not os.path.exists(file_name.replace(" ", "_")):
             structure = pcp.get_compounds(substance, "name", record_type="3d")

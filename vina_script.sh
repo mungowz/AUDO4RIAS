@@ -1,6 +1,6 @@
 #! /bin/bash
 SCRIPTPATH="$( cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P )"
-DOCKING_FOLDER="${SCRIPTPATH}/docking"
+DOCKING_FOLDER="${SCRIPTPATH}/vina/docking"
 
 for p in proteins/pdbqt/protein_*.pdbqt; do
   tmp=${p#*_}
