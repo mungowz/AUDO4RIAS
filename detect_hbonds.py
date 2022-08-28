@@ -177,7 +177,7 @@ if __name__ == "__main__":
     import os
     # initialize variables
     macro_folder = Config.PDBQT_PROTEINS_FOLDER
-    docking_folder = Config.DOCKING_FOLDER
+    docking_folder = Config.VINA_DOCKING_FOLDER
 
     proteins = {}
 

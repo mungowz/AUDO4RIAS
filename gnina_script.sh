@@ -16,6 +16,6 @@ for p in proteins/pdbqt/protein_*.pdbqt; do
     echo Processing protein "$receptor"
     echo Processing ligand "$ligand"
     mkdir -p "${DOCKING_FOLDER}/${receptor}/${ligand}"
-    gnina --receptor "$p" --ligand "$f" --autobox_ligand "$f" --out "${DOCKING_FOLDER}/${receptor}/${ligand}/out.sdf.gz" --cnn_verbose --cnn_scoring=rescore
+    gnina --receptor "$p" --ligand "$f" --autobox_ligand "$f" --out "${DOCKING_FOLDER}/${receptor}/${ligand}/out.sdf.gz" --scoring vina --cnn_scoring=rescore --pose_sort_order Energy --cnn_verbose 
   done
 done

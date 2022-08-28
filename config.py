@@ -12,4 +12,5 @@ class Config(object):
     LIGANDS_SDF_FOLDER = os.path.join(basedir, "ligands" + os.sep + "sdf")
     LIGANDS_PDB_FOLDER = os.path.join(basedir, "ligands"+ os.sep +  "pdb")
     LIGANDS_PDBQT_FOLDER = os.path.join(basedir, "ligands" + os.sep + "pdbqt")
-    DOCKING_FOLDER = os.path.join(basedir, "docking")
+    VINA_DOCKING_FOLDER = os.path.join(basedir, "vina/docking")
+    GNINA_DOCKING_FOLDER = os.path.join(basedir, "gnina/docking")
