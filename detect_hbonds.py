@@ -1,28 +1,30 @@
+from __future__ import with_statement
+import pickle
 from MolKit import Read
 from MolKit.molecule import AtomSet, Atom
 from MolKit.interactionDescriptor import InteractionDescriptor
-
+#import json
 # written in Python2
 
 # took from Pmv -> displayCommands 
 def print_macro_residue_contacts(intDescr):
         # print "\n\nresidues in 'receptor'-> 'ligand' residues in close contact"
-        macro_res_d = intDescr.print_macro_residue_contacts(print_ctr=False)
+        macro_res_d = intDescr.print_macro_residue_contacts(print_ctr=0)
         # print "\n"
         return [macro_res_d]
 
 
 def print_ligand_residue_contacts(intDescr):
     # print "\n\nresidues in 'ligand'-> 'receptor' residues in close contact"
-    lig_res_d = intDescr.print_ligand_residue_contacts(princ_ctr=False)
+    lig_res_d = intDescr.print_ligand_residue_contacts(print_ctr=0)
     # print "\n"
     return [lig_res_d]
 
 
 def print_hydrogen_bonds(intDescr):
-    print "\n\nhydrogen bonds (donor residue->acceptor residue(s))"
-    hbonds_d = intDescr.print_hb_residue(print_ctr=False)
-    print "\n"
+    # print "\n\nhydrogen bonds (donor residue->acceptor residue(s))"
+    hbonds_d = intDescr.print_hb_residue(print_ctr=0)
+    # print "\n"
     return [hbonds_d]
 
 
@@ -189,6 +191,7 @@ if __name__ == "__main__":
             lig_folder = os.path.join(docking_folder, protein_code)
             macro_path = os.path.join(root, macro)
 
+            # check if can access protein code docking folder and if exists corresponding vina docking output
             proteins[protein_code] = {}
             # for each vina result stored in docking/<protein>/<ligand>/out.pdbqt
             for r, d, f in os.walk(lig_folder):
@@ -199,9 +202,19 @@ if __name__ == "__main__":
                         # detect interactions
                         interaction = detect_interactions(lig_path, macro_path)
                         proteins[protein_code] = merge(proteins[protein_code], interaction)
-                        
+            output_file = os.path.join(lig_folder, protein_code + ".p")
+            print(output_file)
+
+            with open(output_file, 'wb+') as fp:
+                pickle.dump(proteins[protein_code], fp, protocol=pickle.HIGHEST_PROTOCOL)
+                print('should save')
+            
 
     print(proteins)
+    with open('vina/data.p', 'wb+') as fp:
+        pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
+    
+
     for protein in proteins.keys():
         for residue in proteins[protein].keys():
             factor = 1.0/sum(proteins[protein][residue].values())
@@ -209,7 +222,9 @@ if __name__ == "__main__":
                 proteins[protein][residue][bond] = str(round(proteins[protein][residue][bond] * factor, 2)) 
 
     print(proteins)
-
+    with open('vina/data_normalized.p', 'wb+') as fp:
+        pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
+    
 
     # we are interested in all interactions.. so how can we deal with it?
     # sum(d.values()) to sum all values of a dictionary i.g. sum all residues involved in hbonds
