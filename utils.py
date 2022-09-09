@@ -4,7 +4,6 @@ import tempfile
 import errno
 import re
 
-
 def remove_files(folder, docted_extension):
     for file in os.scandir(folder):
         if file.is_file() and file.path.endswith(docted_extension):
@@ -38,3 +37,4 @@ def check_files_in_folder(folder, docted_extension):
         if files.path.endswith(docted_extension):
             return True
     return False
+

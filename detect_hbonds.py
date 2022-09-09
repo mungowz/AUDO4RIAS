@@ -3,6 +3,7 @@ import pickle
 from MolKit import Read
 from MolKit.molecule import AtomSet, Atom
 from MolKit.interactionDescriptor import InteractionDescriptor
+import pdb
 #import json
 # written in Python2
 
@@ -88,9 +89,21 @@ def detect_interactions(lig_filename, macro_filename, contact_states, debug=Fals
         'hydrogen_bonds',
         'close_contacts'
     ]
+    residues = {}
+    # inspect close contacts (res involved in hbonds included)
+    for bond in close_res_d:
+        if debug: print("LIGAND: "+lig_filename.split(os.sep)[-2])
+        for res,v in bond.items():
+            if res.name not in residues.keys():
+                residues[res.name] = {}
+            if res.name not in contact_states.keys():
+                contact_states[res.name] = {}
+
+            contact_states[res.name].update({lig_filename.split(os.sep)[-2]: "close_contact"})    
+            residues[res.name]['close_contacts'] = residues[res.name].get('close_contacts', 0) + 1
+            #pdb.set_trace()
 
     # inspect hbonds_d
-    residues = {}
     for bond in hbonds_d:
         for don,acc in bond.items():
 
@@ -125,22 +138,13 @@ def detect_interactions(lig_filename, macro_filename, contact_states, debug=Fals
                     
                     contact_states[res.name].update({lig_filename.split(os.sep)[-2] : "hydrogen_bond"})    
                     residues[res.name]['hydrogen_bonds'] = residues[res.name].get('hydrogen_bonds', 0) + 1
+            #pdb.set_trace()
 
             if debug:
                 print("before close_contacts")
                 print(residues)
     
-    # inspect close contacts (res involved in hbonds included)
-    for bond in close_res_d:
-        if debug: print("LIGAND: "+lig_filename.split(os.sep)[-2])
-        for res,v in bond.items():
-            if res.name not in residues.keys():
-                residues[res.name] = {}
-            if res.name not in contact_states.keys():
-                contact_states[res.name] = {}
 
-            contact_states[res.name].update({lig_filename.split(os.sep)[-2]: "close_contact"})    
-            residues[res.name]['close_contacts'] = residues[res.name].get('close_contacts', 0) + 1
 
     if debug:
         print("before eliminating; ")
@@ -219,8 +223,8 @@ if __name__ == "__main__":
                         # detect interactions
                         interaction = detect_interactions(lig_path, macro_path, contact_states[protein_code])
                         proteins[protein_code] = merge(proteins[protein_code], interaction)
-            print(contact_states)
-            print("\n\n\n\n\n\n")
+            # print(contact_states)
+            # print("\n\n\n\n\n\n")
 
             output_file = os.path.join(lig_folder, protein_code + ".p")
             contact_states_file =  os.path.join(lig_folder, protein_code + "_contacts.p")
@@ -230,11 +234,12 @@ if __name__ == "__main__":
             with open(contact_states_file, 'wb+') as fp2:
                 pickle.dump(contact_states[protein_code], fp2, protocol=pickle.HIGHEST_PROTOCOL)
 
-    print(contact_states)
-    print(proteins)
+    # print(contact_states)
+    with open('vina/contacts.p', 'wb+') as fp:
+        pickle.dump(contact_states, fp, protocol=pickle.HIGHEST_PROTOCOL)
+    # print(proteins)
     with open('vina/data.p', 'wb+') as fp:
         pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
-    
 
     for protein in proteins.keys():
         for residue in proteins[protein].keys():
@@ -242,7 +247,7 @@ if __name__ == "__main__":
             for bond in proteins[protein][residue].keys():
                 proteins[protein][residue][bond] = str(round(proteins[protein][residue][bond] * factor, 2)) 
 
-    print(proteins)
+    # print(proteins)
     with open('vina/data_normalized.p', 'wb+') as fp:
         pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
     
