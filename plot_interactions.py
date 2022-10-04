@@ -108,7 +108,7 @@ def build_heatmap(title, contact_states, ligands, residues):
 
     fig, ax = plt.subplots()
     annot = ax.annotate("", xy=(0,0), xytext=(20,20),textcoords="offset points",
-                    bbox=dict(boxstyle="round", fc="w"),
+                    bbox=dict(boxstyle="round", fc="w", alpha=1),
                     arrowprops=dict(arrowstyle="->"))
     annot.set_visible(False)
 
@@ -122,7 +122,7 @@ def build_heatmap(title, contact_states, ligands, residues):
             contact = "no bond"
         text += contact
         annot.set_text(text)
-        annot.get_bbox_patch().set_alpha(0.4)
+        annot.get_bbox_patch().set_alpha(1)
 
 
     def hover(event):

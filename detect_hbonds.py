@@ -3,8 +3,6 @@ import pickle
 from MolKit import Read
 from MolKit.molecule import AtomSet, Atom
 from MolKit.interactionDescriptor import InteractionDescriptor
-import pdb
-#import json
 # written in Python2
 
 # took from Pmv -> displayCommands 
@@ -74,21 +72,14 @@ def detect_interactions(lig_filename, macro_filename, contact_states, debug=Fals
     macro.bindingSite = True # ??
 
     # show output on stdout
-    hbonds_d = print_hydrogen_bonds(intDescr) # hydrogen bonds (i think closeContacts = res_no_hb + res_hb)
-    close_res_d = print_macro_residue_contacts(intDescr) # close contacts macro -> ligand
+    hbonds_d = print_hydrogen_bonds(intDescr) # hydrogen bonds (close contacts = res_no_hb + res_hb)
+    close_res_d = print_macro_residue_contacts(intDescr) # close contacts (macro -> ligand)
     
     
     if debug: print(hbonds_d)
     if debug: print(close_res_d)
     if debug: intDescr.print_report()
 
-    #writeIntermolHBonds
-    # writeIntermolHBonds(macro, lig, hbonds)
-
-    keylist = [
-        'hydrogen_bonds',
-        'close_contacts'
-    ]
     residues = {}
     # inspect close contacts (res involved in hbonds included)
     for bond in close_res_d:
@@ -101,7 +92,6 @@ def detect_interactions(lig_filename, macro_filename, contact_states, debug=Fals
 
             contact_states[res.name].update({lig_filename.split(os.sep)[-2]: "close_contact"})    
             residues[res.name]['close_contacts'] = residues[res.name].get('close_contacts', 0) + 1
-            #pdb.set_trace()
 
     # inspect hbonds_d
     for bond in hbonds_d:
@@ -138,14 +128,11 @@ def detect_interactions(lig_filename, macro_filename, contact_states, debug=Fals
                     
                     contact_states[res.name].update({lig_filename.split(os.sep)[-2] : "hydrogen_bond"})    
                     residues[res.name]['hydrogen_bonds'] = residues[res.name].get('hydrogen_bonds', 0) + 1
-            #pdb.set_trace()
 
             if debug:
                 print("before close_contacts")
                 print(residues)
     
-
-
     if debug:
         print("before eliminating; ")
         print(residues)
@@ -186,12 +173,6 @@ def merge(A, B, debug=False):
         print("\n\n\n")
     return A
 
-#def append_distinct(list, element):
-#        if element in list:
-#            return
-#        list.append(element)
-
-
 from config import Config
 
 if __name__ == "__main__":
@@ -210,7 +191,7 @@ if __name__ == "__main__":
             lig_folder = os.path.join(docking_folder, protein_code)
             macro_path = os.path.join(root, macro)
 
-            # check if can access protein code docking folder and if exists corresponding vina docking output
+            # TO DO: check if can access protein code docking folder and if exists corresponding vina docking output
             proteins[protein_code] = {}
             contact_states[protein_code] = {}
 
@@ -229,11 +210,14 @@ if __name__ == "__main__":
             output_file = os.path.join(lig_folder, protein_code + ".p")
             contact_states_file =  os.path.join(lig_folder, protein_code + "_contacts.p")
 
+
+            # we can: dict -> dataframe with pandas -> csv (data not serialized, much space required)
             with open(output_file, 'wb+') as fp1: 
                 pickle.dump(proteins[protein_code], fp1, protocol=pickle.HIGHEST_PROTOCOL)
             with open(contact_states_file, 'wb+') as fp2:
                 pickle.dump(contact_states[protein_code], fp2, protocol=pickle.HIGHEST_PROTOCOL)
 
+    # we can: dict -> dataframe with pandas -> csv (data not serialized, much space required)
     # print(contact_states)
     with open('vina/contacts.p', 'wb+') as fp:
         pickle.dump(contact_states, fp, protocol=pickle.HIGHEST_PROTOCOL)
@@ -254,19 +238,33 @@ if __name__ == "__main__":
 
     # we are interested in all interactions.. so how can we deal with it?
     # sum(d.values()) to sum all values of a dictionary i.g. sum all residues involved in hbonds
-    #{ "protein": 
-    #   [
-    #       { "residue": 
-    #           { "hydrogen bonds" : value, 
-    #              "close_contacts" : value,
-    #           }
-    #       },
-    #       ...
-    #   ]
-    #}
+    #
+    # proteins: dict for storing info about number of bonds [close contacts, hydrogen bonds]
+    # {
+    #    { "protein": 
+    #        { "residue": 
+    #            { "hydrogen bonds" : value, 
+    #               "close_contacts" : value,
+    #            }
+    #        },
+    #        ...
+    #    },
+    #    ...
+    # }
 
 
-    # contact_states: 
+    # contact_states: dict to store for each residue-ligand of each protein the contact type [close contact, hydrogen bond]
+    # {  
+    #    { "protein":
+    #        { "residue":
+    #            { "ligand": [close_contact, hydrogen_bond, no_bond],
+    #               ...
+    #            }
+    #        },
+    #        ...
+    #    },
+    #    ...
+    # }
     #
     #
 
