@@ -37,7 +37,7 @@ class Widget(QWidget):
         return self.url
 
 
-def web_view(url):
+def webView(url):
 
     # create application
     app = QApplication(sys.argv)

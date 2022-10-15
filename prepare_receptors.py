@@ -1,13 +1,7 @@
+from MoleculesPreparation.receptorsPreparation import createGridboxes, deleteHeteroatomsChains, prepareReceptors, selectReceptors, splitChains, splitRepeatedResidues
+from MoleculesPreparation.structuresManipulation import checkWarnings
 from config import Config
-from proteins.PDB_info_extraction import pdb_info_extraction
-from proteins.create_gridbox import create_gridbox
-from proteins.exec_prepare_receptors import prepare_receptors
-from proteins.split_chains import split_chains
-from proteins.split_repeated_residues import split_repeated_residues
-from proteins.extract_remarks import check_warnings
-from proteins.clear_hetatm import clear_hetatm
-from utils import check_files_in_folder, remove_files, isWritable
-from web_view import web_view
+from Utilities.utils import checkFilesInFolder, removeFiles, isWritable
 from pathlib import Path
 
 if __name__ == "__main__":
@@ -50,14 +44,14 @@ if __name__ == "__main__":
         sys.exit(2)  # should create our own error handler
 
     # initialize environment
-    print("----------- prepare_receptors.py -----------")
+    print("--------- prepare_receptors.py -----------")
     print("######### INITIALIZE ENVIRONMENT #########")
     print("------------------------------------------")
 
     # initialize variables
-    pdb_folder = Config.PROTEINS_FOLDER
-    gridbox_output_folder = Config.GRIDBOX_OUTPUT_FOLDER
-    pdbqt_folder = Config.PDBQT_PROTEINS_FOLDER
+    pdb_folder = Config.RECEPTORS_PDB_FOLDER
+    gridbox_output_folder = Config.GRIDBOX_FOLDER
+    pdbqt_folder = Config.RECEPTORS_PDBQT_FOLDER
     excel_folder = Config.EXCEL_FOLDER
     url = Config.URL
     verbose = False
@@ -99,7 +93,6 @@ if __name__ == "__main__":
                 print("set pdb folder to ", pdb_folder)
 
         if o in ("-k", "--keep-pdb-files"):
-            # check if there is at least a pdb file
             keep_pdb_files = True
             if verbose:
                 print("set keep-pdb-files option to ", True)
@@ -114,53 +107,54 @@ if __name__ == "__main__":
             exit(0)
 
     # initialize folders
-    if pdb_folder == Config.PROTEINS_FOLDER:
-        Path(Config.PROTEINS_FOLDER).mkdir(parents=True, exist_ok=True)
-    if pdbqt_folder == Config.PDBQT_PROTEINS_FOLDER:
-        Path(Config.PDBQT_PROTEINS_FOLDER).mkdir(parents=True, exist_ok=True)
-    if gridbox_output_folder == Config.GRIDBOX_OUTPUT_FOLDER:
-        Path(Config.GRIDBOX_OUTPUT_FOLDER).mkdir(parents=True, exist_ok=True)
+    if pdb_folder == Config.RECEPTORS_PDB_FOLDER:
+        Path(Config.RECEPTORS_PDB_FOLDER).mkdir(parents=True, exist_ok=True)
+    if pdbqt_folder == Config.RECEPTORS_PDBQT_FOLDER:
+        Path(Config.RECEPTORS_PDBQT_FOLDER).mkdir(parents=True, exist_ok=True)
+    if gridbox_output_folder == Config.GRIDBOX_FOLDER:
+        Path(Config.GRIDBOX_FOLDER).mkdir(parents=True, exist_ok=True)
 
-    remove_files(pdbqt_folder, ".pdbqt")
-    remove_files(gridbox_output_folder, ".txt")
+    removeFiles(pdbqt_folder, ".pdbqt")
+    removeFiles(gridbox_output_folder, ".txt")
 
     if keep_pdb_files is False:
-        remove_files(pdb_folder, ".pdb")
+        removeFiles(pdb_folder, ".pdb")
         if verbose:
-            print("\n---------------- PROTEINS ----------------")
+            print("\n------------- RECEPTORS ----------------")
             print("################# STEP 1 #################")
             print("------------------------------------------")
-        pdb_info_extraction(
+        selectReceptors(
             pdb_folder=pdb_folder,
             excel_folder=excel_folder,
             verbose=verbose,
         )
     else:
-        if not check_files_in_folder(folder=pdb_folder, docted_extension=".pdb"):
+        # check if there is at least a pdb file
+        if not checkFilesInFolder(folder=pdb_folder, docted_extension=".pdb"):
             print("ERROR: There's no pdb file into pdb folder")
             exit(2)
         if verbose:
-            print("\n---------------- PROTEINS ----------------")
+            print("\n--------------- RECEPTORS ----------------")
             print("############# SKIPPED STEP 1.1 #############")
-            print("------------------------------------------")
+            print("--------------------------------------------")
 
     if verbose:
-        check_warnings(pdb_folder=pdb_folder)
-        print("\n---------------- PROTEINS ----------------")
+        checkWarnings(pdb_folder=pdb_folder)
+        print("\n------------- RECEPTORS ----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
 
-    split_repeated_residues(pdb_folder=pdb_folder, verbose=verbose)
-    clear_hetatm(pdb_folder=pdb_folder, verbose=verbose)
-    split_chains(pdb_folder=pdb_folder, verbose=verbose)
+    splitRepeatedResidues(pdb_folder=pdb_folder, verbose=verbose)
+    deleteHeteroatomsChains(pdb_folder=pdb_folder, verbose=verbose)
+    splitChains(pdb_folder=pdb_folder, verbose=verbose)
 
-    prepare_receptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose, charges_to_add=charges_to_add)
+    prepareReceptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose, charges_to_add=charges_to_add)
 
     if verbose:
-        print("\n---------------- PROTEINS ----------------")
+        print("\n------------- RECEPTORS ----------------")
         print("################# STEP 3 #################")
         print("------------------------------------------")
-    create_gridbox(
+    createGridboxes(
         pdb_folder=pdb_folder,
         gridbox_output_folder=gridbox_output_folder,
         margin=margin,
@@ -168,4 +162,4 @@ if __name__ == "__main__":
     )
 
     if verbose:
-        print("\n----------- PROTEINS: COMPLETED ----------")
+        print("\n---------- RECEPTORS: COMPLETED ---------")

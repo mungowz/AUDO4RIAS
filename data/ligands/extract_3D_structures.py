@@ -2,13 +2,13 @@ import pandas as pd
 import xlsxwriter
 import pubchempy as pcp
 import os
-from utils import remove_files
+from Utilities.utils import removeFiles
 
 
 def extract_3d_structures(excel_path, sdf_folder, excel_folder, verbose, keep_ligands):
 
     if not keep_ligands:
-        remove_files(sdf_folder, ".sdf")
+        removeFiles(sdf_folder, ".sdf")
 
     # select ligands from an excel file
     ### By default, ./excel_files/pest_group_MOA.xlsx ###

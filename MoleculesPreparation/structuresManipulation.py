@@ -2,7 +2,7 @@ from utils import decompress
 import os
 
 
-def extract_remark350_monomeric(
+def extractRemark350Monomeric(
     pdb_path,
     pdb_folder,
 ):
@@ -28,7 +28,7 @@ def extract_remark350_monomeric(
     return False
 
 
-def check_warnings(pdb_folder):
+def checkWarnings(pdb_folder):
 
     ## pdb example ##
     ## REMARK 350 BIOMOLECULE: n
