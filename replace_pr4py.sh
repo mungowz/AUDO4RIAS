@@ -21,7 +21,8 @@ fi
 if [ "$VERBOSE" = true ]; then
     echo "Searching for ADFRsuite Utilities24 directory..."
 fi
-ADFR_PR4=$(find "$HOME" -type d -name "Utilities24")
+ADFR_FOLDER=$(find "$HOME" -type d -name "ADFRsuite-1.0")
+ADFR_PR4=$(find "$ADFR_FOLDER" -type d -name "Utilities24")
 
 if [ "$VERBOSE" = true ]; then
     echo "FOUND: "$ADFR_PR4""
