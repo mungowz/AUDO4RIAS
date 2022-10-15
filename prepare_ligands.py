@@ -1,10 +1,10 @@
 import os
+from MoleculesPreparation.ligandsPreparation import prepareLigands, selectLigands
+from Utilities.utils import checkFilesInFolder, removeFiles
 from config import Config
-from ligands.extract_3D_structures import extract_3d_structures
-from ligands.sdf_to_pdb import sdf_to_pdb
-from ligands.pdb_to_pdbqt import pdb_to_pdbqt
 from pathlib import Path
-from utils import isWritable
+from Utilities.utils import isWritable
+from MoleculesPreparation.structuresManipulation import sdf2pdb
 
 if __name__ == "__main__":
     import sys
@@ -68,8 +68,14 @@ if __name__ == "__main__":
             print("set verbose to ", verbose)
 
         if o in ("-e", "--excel-file"):
-            # verify path ? (existance, permissions)
+            # verify path  (existance, permissions)
             # set path to excel file = a
+            if not os.path.exists(a):
+                print("Specify a valid excel file!")
+                exit(1)
+            if os.access(a, os.R_OK):
+                print("Modify file permission!")
+                exit(1)
             excel_file = a
             if verbose:
                 print("set excel filepath to ", excel_file)
@@ -135,27 +141,41 @@ if __name__ == "__main__":
     if excel_folder == Config.EXCEL_FOLDER:
         Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
 
-    ## cannot specify keep ligands and excel_file ##
-    #if not keep_ligands:
-    if verbose:
-        print("---------------- LIGANDS -----------------")
-        print("################# STEP 1 #################")
-        print("------------------------------------------")
+
+    if keep_ligands is True and excel_file != os.path.join(excel_folder, "pest_group_MOA.xlsx"):
+        print("You cannot specify either --keep_ligands and --excel_file!")
+        exit(1)
     
-    extract_3d_structures(
-        excel_path=excel_file,
-        sdf_folder=sdf_folder,
-        excel_folder=excel_folder,
-        keep_ligands=keep_ligands,
-        verbose=verbose
-    )
+
+    if not keep_ligands:
+        removeFiles(sdf_folder, ".sdf")
+        if verbose:
+            print("---------------- LIGANDS -----------------")
+            print("################# STEP 1 #################")
+            print("------------------------------------------")
+    
+        selectLigands(
+            excel_path=excel_file,
+            sdf_folder=sdf_folder,
+            excel_folder=excel_folder,
+            verbose=verbose
+        )
+    else: 
+        # check if there is at least a sdf file
+        if not checkFilesInFolder(folder=sdf_folder, docted_extension=".sdf"):
+            print("ERROR: There's no sdf file into sdf folder")
+            exit(2)
+        if verbose:
+            print("\n--------------- LIGANDS ------------------")
+            print("############# SKIPPED STEP 1.1 #############")
+            print("--------------------------------------------")
     
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
     
-    sdf_to_pdb(
+    sdf2pdb(
             sdf_folder=sdf_folder, 
             pdb_folder=pdb_folder, 
             verbose=verbose,
@@ -166,7 +186,7 @@ if __name__ == "__main__":
         print("################# STEP 3 #################")
         print("------------------------------------------")
     
-    pdb_to_pdbqt(
+    prepareLigands(
         pdb_folder=pdb_folder,
         pdbqt_folder=pdbqt_folder,
         verbose=verbose

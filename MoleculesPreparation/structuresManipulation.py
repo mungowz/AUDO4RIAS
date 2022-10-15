@@ -1,4 +1,4 @@
-from utils import decompress
+from Utilities.utils import decompress
 import os
 
 
@@ -35,7 +35,7 @@ def checkWarnings(pdb_folder):
     ## REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: str1
     ## REMARK 350 SOFTWARE DETERMINED QUATERNARY STRUCTURE: str2
 
-    print("1.4 - Checking warnings...")
+    print("Checking warnings...")
     # if str1 != str2 put a warning
     author_determined_biological_unit = None
     biomolecule = None
@@ -86,3 +86,24 @@ def checkWarnings(pdb_folder):
                         + ") are not equal!"
                     )
                 software_determined_quaternary_structure = None
+
+def sdf2pdb(sdf_folder, pdb_folder, verbose):
+    for sdf_file in os.scandir(sdf_folder):
+        if sdf_file.is_file() and sdf_file.path.endswith(".sdf"):
+            ligand_name = sdf_file.path.split(os.sep)[-1].split(".")[0]
+            pdb_path = pdb_folder + "/" + ligand_name + ".pdb"
+            
+            command = (
+                'obabel ' 
+                + sdf_file.path 
+                + ' -O '
+                + pdb_path
+            )
+            os.system(command=command)
+
+            if verbose:
+                print(
+                    "{ligand_name} converted from sdf into pdb! (Stored in {output_file})\n".format(
+                        ligand_name=ligand_name, output_file=pdb_path
+                    )
+                )
