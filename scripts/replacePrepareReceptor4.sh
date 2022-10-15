@@ -7,13 +7,13 @@ PR4_PATH=$(find "$(cd ..; pwd)"  -type f -name "prepare_receptor4.py")
 if [ "$1" = "-v" ]; then
     VERBOSE=true
 elif [ "$1" = "-h" ]; then
-    echo "./replace_pr4.py [-v|-h]
+    echo "./replacePrepareReceptor4.sh [-v|-h]
             [-v]    verbose
             [-h]    help"
 fi
 
 if [ "$VERBOSE" = true ]; then
-    echo "############ replace_pr4py.sh #############"
+    echo "############ replacePrepareReceptor4.sh #############"
 fi
 
 # find dir that contains "prepare_receptor4.py"
