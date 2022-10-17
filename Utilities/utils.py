@@ -4,6 +4,7 @@ import tempfile
 import errno
 import re
 import pandas as pd
+import pickle
 
 def removeFiles(folder, docted_extension):
     for file in os.scandir(folder):
@@ -54,3 +55,35 @@ def saveDictToExcel(dict, folder):
 
 
 
+def mergeDicts(A, B, debug=False):
+    if debug:
+        print(A)
+        print(B)
+        print("len A: " + str(len(A))+", len B: " + str(len(B)))
+        
+    if len(A) == 0:
+        A = B
+        return A
+
+    for key in B.keys():
+        if key not in A.keys():
+            A[key] = B[key]
+            continue
+        for contact, value in B[key].items():
+            A[key][contact] = A[key].get(contact, 0) + B[key].get(contact, 0)
+
+    if debug:
+        print(A)
+        print("\n\n\n")
+    return A
+
+
+def saveDictToPickle(docking_folder, dict):
+    with open(os.path.join(docking_folder, "contacts.p"), 'wb+') as fp:
+        pickle.dump(dict, fp, protocol=pickle.HIGHEST_PROTOCOL)
+
+
+
+
+
+        

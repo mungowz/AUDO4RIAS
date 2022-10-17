@@ -1,6 +1,6 @@
 import pickle
+from InteractionsAnalysis.interactionsVisualization import buildHeatmap
 from config import Config
-from plot_interactions import build_heatmap
 import os
 import pandas as pd
 
@@ -26,7 +26,7 @@ if __name__ == '__main__':
                     contact_states = pickle.load(fp)
                 # print(contact_states)
                 # print("\n\n\n\n\n")
-                build_heatmap(file.split(".")[0], contact_states, ligands, [res for res in contact_states.keys()])
+                buildHeatmap(file.split(".")[0], contact_states, ligands, [res for res in contact_states.keys()])
                 # pd.DataFrame(contact_states).to_csv(os.path.join(root, file.split(".")[0] + ".csv"))
                 
                  

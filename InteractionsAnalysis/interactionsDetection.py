@@ -3,6 +3,7 @@ import pickle
 from MolKit import Read
 from MolKit.molecule import AtomSet, Atom
 from MolKit.interactionDescriptor import InteractionDescriptor
+import os
 # written in Python2
 
 # took from Pmv -> displayCommands 
@@ -53,9 +54,29 @@ def writeIntermolHBonds(macro, lig, hbonds):
         print(macro.name + "@" + lig.name + ": no intermolecular hydrogen bonds in specified atoms")
         return 'ERROR'
 
+def mergeDicts(A, B, debug=False):
+    if debug:
+        print(A)
+        print(B)
+        print("len A: " + str(len(A))+", len B: " + str(len(B)))
+        
+    if len(A) == 0:
+        A = B
+        return A
 
+    for key in B.keys():
+        if key not in A.keys():
+            A[key] = B[key]
+            continue
+        for contact, value in B[key].items():
+            A[key][contact] = A[key].get(contact, 0) + B[key].get(contact, 0)
 
-def detect_interactions(lig_filename, macro_filename, contact_states, debug=False):
+    if debug:
+        print(A)
+        print("\n\n\n")
+    return A
+
+def detectInteractionsForResidues(lig_filename, macro_filename, contact_states, debug=False):
     # read ligand
     lig = Read(lig_filename) # "ligand_PNG_2cb3_a_out.pdbqt"
     lig = lig[0] # set to model1
@@ -150,37 +171,7 @@ def detect_interactions(lig_filename, macro_filename, contact_states, debug=Fals
         print(residues)
     return residues
 
-
-def merge(A, B, debug=False):
-    if debug:
-        print(A)
-        print(B)
-        print("len A: " + str(len(A))+", len B: " + str(len(B)))
-        
-    if len(A) == 0:
-        A = B
-        return A
-
-    for key in B.keys():
-        if key not in A.keys():
-            A[key] = B[key]
-            continue
-        for contact, value in B[key].items():
-            A[key][contact] = A[key].get(contact, 0) + B[key].get(contact, 0)
-
-    if debug:
-        print(A)
-        print("\n\n\n")
-    return A
-
-from config import Config
-
-if __name__ == "__main__":
-    import os
-    # initialize variables
-    macro_folder = Config.RECEPTORS_PDBQT_FOLDER
-    docking_folder = Config.VINA_DOCKING_FOLDER
-
+def detectInteractions(macro_folder, docking_folder):
     proteins = {}
     contact_states = {}
     # for each protein
@@ -195,15 +186,15 @@ if __name__ == "__main__":
             proteins[protein_code] = {}
             contact_states[protein_code] = {}
 
-            # for each vina result stored in docking/<protein>/<ligand>/out.pdbqt
+            # for each result stored in  output/docking/<software>/<protein>/<ligand>/out.pdbqt
             for r, d, f in os.walk(lig_folder):
                 for lig in f:
                     if lig == "out.pdbqt":
                         lig_path = os.path.join(r, lig)
 
                         # detect interactions
-                        interaction = detect_interactions(lig_path, macro_path, contact_states[protein_code])
-                        proteins[protein_code] = merge(proteins[protein_code], interaction)
+                        interaction = detectInteractionsForResidues(lig_path, macro_path, contact_states[protein_code])
+                        proteins[protein_code] = mergeDicts(proteins[protein_code], interaction)
             # print(contact_states)
             # print("\n\n\n\n\n\n")
 
@@ -219,10 +210,10 @@ if __name__ == "__main__":
 
     # we can: dict -> dataframe with pandas -> csv (data not serialized, much space required)
     # print(contact_states)
-    with open('vina/contacts.p', 'wb+') as fp:
+    with open(os.path.join(docking_folder, "contacts.p"), 'wb+') as fp:
         pickle.dump(contact_states, fp, protocol=pickle.HIGHEST_PROTOCOL)
     # print(proteins)
-    with open('vina/data.p', 'wb+') as fp:
+    with open(os.path.join(docking_folder, 'data.p'), 'wb+') as fp:
         pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
 
     for protein in proteins.keys():
@@ -232,8 +223,10 @@ if __name__ == "__main__":
                 proteins[protein][residue][bond] = str(round(proteins[protein][residue][bond] * factor, 2)) 
 
     # print(proteins)
-    with open('vina/data_normalized.p', 'wb+') as fp:
+    with open(os.path.join(docking_folder, 'data_normalized.p'), 'wb+') as fp:
         pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
+    
+    return [proteins, contact_states]
     
 
     # we are interested in all interactions.. so how can we deal with it?
@@ -269,6 +262,3 @@ if __name__ == "__main__":
     #
 
 
-
-
-        
