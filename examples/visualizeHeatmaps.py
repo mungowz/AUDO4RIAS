@@ -1,19 +1,18 @@
 import pickle
 from InteractionsAnalysis.interactionsVisualization import buildHeatmap
+from Utilities.utils import getLigandsFromFolder
 from config import Config
 import os
 import pandas as pd
+
+
 
 
 if __name__ == '__main__':
     docking_folder = Config.VINA_DOCKING_FOLDER
     ligands_folder = Config.LIGANDS_SDF_FOLDER
 
-    ligands = []
-    for root, dirs, files in os.walk(ligands_folder):
-        for lig in files:
-            if lig.endswith(".sdf") and lig.startswith("ligand_"):
-                ligands.append(lig[lig.find("_")+1:-4])
+    ligands = getLigandsFromFolder(ligands_folder)
 
 
     # if we store data dict as csv file, we don't need to convert from .p to .csv, so we can plot data directly

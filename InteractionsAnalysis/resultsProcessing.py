@@ -1,10 +1,11 @@
-from operator import contains
 from openbabel import pybel
 import pandas as pd
 import os
 from config import Config
 import json
-
+from spyrmsd import io, rmsd
+from statistics import fmean
+import numpy as np
 
 
 def processDockingResult(filepath):
@@ -41,3 +42,66 @@ def processGninaResults(gnina_folder=Config.GNINA_DOCKING_FOLDER):
 
 
 
+def compareRMSDs(ref_path, dock_results):
+    # read ligand
+    ref = io.loadmol(ref_path)
+    
+    # remove hydrogen atoms
+    ref.strip()
+
+    coords_ref = ref.coordinates
+    anum_ref = ref.atomicnums
+    adj_ref = ref.adjacency_matrix
+
+    means = []
+    for result in dock_results:
+        # read docking results
+        mols = io.loadallmols(result)
+        
+        for mol in mols:
+            mol.strip()
+   
+        coords = [mol.coordinates for mol in mols]
+        anum = mols[0].atomicnums
+        adj = mols[0].adjacency_matrix
+
+        # calculate Symmetric-Corrected RMSD
+        RMSD = rmsd.symmrmsd(
+            coords_ref,
+            coords,
+            anum_ref,
+            anum,
+            adj_ref,
+            adj,
+            minimize=True
+        )
+        means.append(fmean(RMSD))
+    return means
+
+
+def RMSDComparison(receptor, ligands_folder=Config.LIGANDS_SDF_FOLDER, docking_folders=[Config.VINA_DOCKING_FOLDER, Config.GNINA_DOCKING_FOLDER]):
+    
+    means_list = []
+    for root, dirs, files in os.walk(ligands_folder):
+        for ligand in files:
+            if not ligand.endswith(".sdf") or not ligand.startswith("ligand_"):
+                continue
+
+            # select corresponding docking results
+            lig = ligand[ligand.find("_")+1:-4]
+
+
+            docking_results = []
+            for dock_folder in docking_folders:
+                result_path = os.path.join(dock_folder, str(receptor) + str(os.sep) + str(lig) + str(os.sep) + "out.pdbqt")
+                try:
+                    if os.path.exists(result_path): 
+                        docking_results.append(result_path)
+                except IOError:
+                    continue
+
+            means_list.append(compareRMSDs(os.path.join(root, ligand), docking_results))
+    
+    matrix = np.array(means_list)
+    results = np.mean(matrix, axis=0)
+    return [results, means_list]

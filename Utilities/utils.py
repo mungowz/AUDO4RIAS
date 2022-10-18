@@ -85,5 +85,12 @@ def saveDictToPickle(docking_folder, dict):
 
 
 
+def getLigandsFromFolder(folder):
+    ligands = []
+    for root, dirs, files in os.walk(folder):
+        for lig in files:
+            if lig.endswith(".sdf") and lig.startswith("ligand_"):
+                ligands.append(lig[lig.find("_")+1:-4])
+    return ligands
 
         
