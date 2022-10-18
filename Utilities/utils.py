@@ -94,3 +94,15 @@ def getLigandsFromFolder(folder):
     return ligands
 
         
+def checkFilesExistance(paths):
+    for path in paths:
+        if not os.path.exists(path):
+            return False
+    return True
+
+def checkRMSDCorrectness(rmsd):
+    for value in rmsd:
+        if value in [float("inf"), float(0)]:
+            return False
+    return True 
+

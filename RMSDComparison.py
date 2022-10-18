@@ -60,4 +60,5 @@ Optional parameters: \n\
         exit(1)
 
     results = RMSDComparison(receptor, ligands_folder, docking_folders)
+    
     print(f"VINA: {results[0][0]}\nGNINA:{results[0][1]}")

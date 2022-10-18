@@ -1,6 +1,7 @@
 from openbabel import pybel
 import pandas as pd
 import os
+from Utilities.utils import checkFilesExistance, checkRMSDCorrectness
 from config import Config
 import json
 from spyrmsd import io, rmsd
@@ -90,18 +91,20 @@ def RMSDComparison(receptor, ligands_folder=Config.LIGANDS_SDF_FOLDER, docking_f
             # select corresponding docking results
             lig = ligand[ligand.find("_")+1:-4]
 
-
             docking_results = []
             for dock_folder in docking_folders:
-                result_path = os.path.join(dock_folder, str(receptor) + str(os.sep) + str(lig) + str(os.sep) + "out.pdbqt")
-                try:
-                    if os.path.exists(result_path): 
-                        docking_results.append(result_path)
-                except IOError:
-                    continue
-
-            means_list.append(compareRMSDs(os.path.join(root, ligand), docking_results))
+                docking_results.append(os.path.join(dock_folder, str(receptor) + str(os.sep) + str(lig) + str(os.sep) + "out.pdbqt"))
+                
+            if not checkFilesExistance(docking_results):
+                print("WARNING: cannot compute RMSDs for {lig} because docking results don't exist!\n")
+                continue
+            
+            rmsd = compareRMSDs(os.path.join(root, ligand), docking_results)
+            print(f"ligand: {lig}\nRMSDs [Vina, GNINA]: {rmsd}\n\n")
+            if not checkRMSDCorrectness(rmsd):
+                continue
+            means_list.append(rmsd)
     
-    matrix = np.array(means_list)
-    results = np.mean(matrix, axis=0)
-    return [results, means_list]
+    means_matrix = np.array(means_list, dtype=object)
+    results = np.mean(means_matrix, axis=0)
+    return [results]
