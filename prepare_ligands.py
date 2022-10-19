@@ -155,7 +155,7 @@ if __name__ == "__main__":
             print("------------------------------------------")
     
         selectLigands(
-            input_path=input_file,
+            excel_path=input_file,
             sdf_folder=sdf_folder,
             excel_folder=excel_folder,
             verbose=verbose
