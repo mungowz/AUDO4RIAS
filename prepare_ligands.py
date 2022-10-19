@@ -54,7 +54,8 @@ if __name__ == "__main__":
 
     # initialize variables
     excel_folder = Config.EXCEL_FOLDER
-    input_file = os.path.join(Config.INPUT_FOLDER, "pest_group_MOA.xlsx")
+    default_file = os.path.join(Config.INPUT_FOLDER, "pest_group_MOA.xlsx")
+    input_file = default_file
     sdf_folder = Config.LIGANDS_SDF_FOLDER
     pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
     pdb_folder = Config.LIGANDS_PDB_FOLDER
@@ -142,7 +143,7 @@ if __name__ == "__main__":
         Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
 
 
-    if keep_ligands is True and input_file != os.path.join(excel_folder, "pest_group_MOA.xlsx"):
+    if keep_ligands is True and input_file != default_file:
         print("You cannot specify either --keep_ligands and --input_file!")
         exit(1)
     
@@ -155,7 +156,7 @@ if __name__ == "__main__":
             print("------------------------------------------")
     
         selectLigands(
-            excel_path=input_file,
+            input_path=input_file,
             sdf_folder=sdf_folder,
             excel_folder=excel_folder,
             verbose=verbose
@@ -174,12 +175,13 @@ if __name__ == "__main__":
         print("---------------- LIGANDS -----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
-    
+            
+
     sdf2pdb(
-            sdf_folder=sdf_folder, 
-            pdb_folder=pdb_folder, 
-            verbose=verbose,
-        )
+        sdf_folder=sdf_folder, 
+        pdb_folder=pdb_folder, 
+        verbose=verbose,
+    )
     
     if verbose:
         print("---------------- LIGANDS -----------------")

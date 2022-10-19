@@ -5,12 +5,12 @@ import os
 from Utilities.utils import removeFiles
 
 
-def selectLigands(excel_path, sdf_folder, excel_folder, verbose):
+def selectLigands(input_path, sdf_folder, excel_folder, verbose):
         
     # select ligands from an excel file
     ### By default, ./excel_files/pest_group_MOA.xlsx ###
     sheet = "Hoja1"
-    df = pd.read_excel(io=excel_path, sheet_name=sheet)
+    df = pd.read_excel(io=input_path, sheet_name=sheet)
     # set of downloaded ligands
     ligands_set = set()
     # set of ligands that could not be downloaded
@@ -76,10 +76,10 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose):
             command = (
                 'prepare_ligand' 
                 + ' -l ' 
-                + pdb_file.path
+                + "\"" + pdb_file.path + "\""
                 + ' -v '
                 + ' -o '
-                + pdbqt_path
+                + "\"" + pdbqt_path + "\""
             ) 
             if verbose:
                 print("Executing: " + command)
