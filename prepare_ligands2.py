@@ -5,18 +5,15 @@ from config import Config
 from pathlib import Path
 from Utilities.utils import isWritable
 from MoleculesPreparation.structuresManipulation import sdf2pdb
+from tkinter import messagebox
 
 def prepare_ligands(
     verbose, 
     excel_file, 
     input_file, 
-    excel_folder_flag, 
     excel_folder, 
-    sdf_folder_flag, 
-    sdf_folder, 
-    pdb_folder_flag, 
+    sdf_folder,  
     pdb_folder, 
-    pdbqt_folder_flag,
     pdbqt_folder,
     keep_ligands
 ):
@@ -25,41 +22,41 @@ def prepare_ligands(
     print("######### INITIALIZE ENVIRONMENT #########")
     print("------------------------------------------")
 
-    if excel_file is not None:
+    if excel_file != input_file:
         if not os.path.exists(excel_file):
-            print("Specify a valid excel file!")
+            messagebox.showerror("Error", "Specify a valid excel file!")
             exit(1)
         if os.access(excel_file, os.R_OK):
-            print("Modify file permission!")
+            messagebox.showerror("Error", "Modify file permission!")
             exit(1)
         input_file = excel_file
         print("set input filepath to ", input_file)
 
-        if excel_folder_flag:
-            if not isWritable(excel_folder):
-                print("Specify a valid directory or modify dir permission!")
-                exit(1)
-            print("set excel folder to ", excel_folder)
+    if excel_folder != Config.EXCEL_FOLDER:
+        if not os.path.exists(excel_folder):
+            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for excel folder!")
+            exit(1)
+        print("set excel folder to ", excel_folder)
 
-        if sdf_folder_flag:
-            if not isWritable(sdf_folder):
-                print("Specify a valid directory or modify dir permission!")
-                exit(1)
-            print("set sdf folder to ", sdf_folder)
+    if sdf_folder != Config.LIGANDS_SDF_FOLDER:
+        if not os.path.exists(sdf_folder):
+            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for sdf folder!")
+            exit(1)
+        print("set sdf folder to ", sdf_folder)
 
-        if pdb_folder_flag:
-            if not isWritable(pdb_folder):
-                print("Specify a valid directory or modify dir permission!")
-                exit(1)
-            print("set pdb folder to ", pdb_folder)
+    if pdb_folder != Config.LIGANDS_PDB_FOLDER:
+        if not os.path.exists(pdb_folder):
+            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for pdb folder!")
+            exit(1)
+        print("set pdb folder to ", pdb_folder)
 
-        if pdbqt_folder_flag:
-            if not isWritable(pdbqt_folder):
-                print("Specify a valid directory or modify dir permission!")
-                exit(1)
-            print("set pdbqt folder to ", pdbqt_folder)
+    if pdbqt_folder != Config.LIGANDS_PDBQT_FOLDER:
+        if not os.path.exists(pdbqt_folder):
+            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for pdbqt folder!")
+            exit(1)
+        print("set pdbqt folder to ", pdbqt_folder)
 
-        print("set keep-ligands option to ", keep_ligands)
+    print("set keep-ligands option to ", keep_ligands)
 
 
     # initialize folders
