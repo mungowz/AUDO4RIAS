@@ -3,9 +3,9 @@ from MoleculesPreparation.ligandsPreparation import prepareLigands, selectLigand
 from Utilities.utils import checkFilesInFolder, removeFiles
 from config import Config
 from pathlib import Path
-from Utilities.utils import isWritable
 from MoleculesPreparation.structuresManipulation import sdf2pdb
 from tkinter import messagebox
+from gui import ProgressBar
 
 def prepare_ligands(
     verbose, 
@@ -58,7 +58,6 @@ def prepare_ligands(
 
     print("set keep-ligands option to ", keep_ligands)
 
-
     # initialize folders
     if sdf_folder == Config.LIGANDS_SDF_FOLDER:
         Path(Config.LIGANDS_SDF_FOLDER).mkdir(parents=True, exist_ok=True)
@@ -75,17 +74,19 @@ def prepare_ligands(
             print("---------------- LIGANDS -----------------")
             print("################# STEP 1 #################")
             print("------------------------------------------")
-    
+            
+
         selectLigands(
             input_path=input_file,
             sdf_folder=sdf_folder,
             excel_folder=excel_folder,
-            verbose=verbose
+            verbose=verbose 
         )
+    '''
     else: 
         # check if there is at least a sdf file
         if not checkFilesInFolder(folder=sdf_folder, docted_extension=".sdf"):
-            print("ERROR: There's no sdf file into sdf folder")
+            messagebox.showerror("Error", "There's no sdf file into sdf folder")
             exit(2)
         if verbose:
             print("\n--------------- LIGANDS ------------------")
@@ -117,3 +118,4 @@ def prepare_ligands(
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")
+'''

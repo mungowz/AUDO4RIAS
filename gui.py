@@ -1,13 +1,12 @@
-from doctest import master
-from email.policy import default
 import os
-from pickle import TRUE
-from pydoc import text
+from tkinter import ttk
 from config import Config
 import tkinter
 import tkinter.messagebox
+from tkinter.messagebox import showinfo
 import customtkinter
-from prepare_ligands2 import prepare_ligands
+from prepare_ligands2 import *
+
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
 customtkinter.set_default_color_theme("blue")  # Themes: "blue" (standard), "green", "dark-blue"
@@ -109,6 +108,51 @@ class HomePage(customtkinter.CTk):
     def on_closing(self, event=0):
         self.destroy()
 
+class ProgressBar(tkinter.Tk):
+    
+    WIDTH = 300
+    HEIGHT = 120
+
+    def __init__(self, pb_tile, pb_lenght):
+        super().__init__()
+
+        self.title(pb_tile)
+        self.geometry(f"{ProgressBar.WIDTH}x{ProgressBar.HEIGHT}")
+        self.pb_lenght = pb_lenght
+
+        self.frame_pb = tkinter.Frame(master=self)
+        self.progress_bar = ttk.Progressbar(
+                                            self,
+                                            orient="horizontal",
+                                            mode="determinate",
+                                            length=pb_lenght
+        )
+        self.progress_bar.grid(column=0, row=0, columnspan=2, padx=10, pady=20)
+
+        self.value_label = ttk.Label(
+                                self, 
+                                text=self.update_progress_label()
+        )
+        self.value_label.grid(column=0, row=1, columnspan=2)
+
+
+    def update_progress_label(self):
+        return f"Current Progress: {self.progress_bar['value']}%"
+
+
+    def progress(self):
+        if self.progress_bar['value'] < self.pb_lenght:
+            self.progress_bar['value'] += 1
+            self.value_label['text'] = self.update_progress_label()
+        else:
+            showinfo(message='The progress completed!')
+            self.quit()
+
+
+    def stop(self):
+        self.progress_bar.stop()
+        self.value_label['text'] = self.update_progress_label()
+        
 
 class Preparation(customtkinter.CTk):
 
@@ -120,7 +164,7 @@ class Preparation(customtkinter.CTk):
 
         self.title("Preparation")
         self.geometry(f"{Preparation.WIDTH}x{Preparation.HEIGHT}")
-        #self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
+        self.protocol("WM_DELETE_WINDOW", self.on_closing)  # call .on_closing() when app gets closed
 
         # ============ create two frames ============
 
@@ -221,6 +265,7 @@ class Preparation(customtkinter.CTk):
 
 
 class Ligands(customtkinter.CTk):
+    
     excel_folder = Config.EXCEL_FOLDER
     default_file = os.path.join(Config.INPUT_FOLDER, "pest_group_MOA.xlsx")
     input_file = default_file
