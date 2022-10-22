@@ -5,7 +5,7 @@ from config import Config
 from pathlib import Path
 from MoleculesPreparation.structuresManipulation import sdf2pdb
 from tkinter import messagebox
-from gui import ProgressBar
+from Gui.gui import ProgressBar
 
 def prepare_ligands(
     verbose, 

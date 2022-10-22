@@ -5,7 +5,7 @@ import tkinter
 import tkinter.messagebox
 from tkinter.messagebox import showinfo
 import customtkinter
-from prepare_ligands2 import *
+from Gui.prepare_ligands2 import *
 
 
 customtkinter.set_appearance_mode("System")  # Modes: "System" (standard), "Dark", "Light"
@@ -125,7 +125,7 @@ class ProgressBar(tkinter.Tk):
                                             self,
                                             orient="horizontal",
                                             mode="determinate",
-                                            length=pb_lenght
+                                            length=100,
         )
         self.progress_bar.grid(column=0, row=0, columnspan=2, padx=10, pady=20)
 
@@ -142,7 +142,7 @@ class ProgressBar(tkinter.Tk):
 
     def progress(self):
         if self.progress_bar['value'] < self.pb_lenght:
-            self.progress_bar['value'] += 1
+            self.progress_bar['value'] += 1 / 289
             self.value_label['text'] = self.update_progress_label()
         else:
             showinfo(message='The progress completed!')

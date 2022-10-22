@@ -3,10 +3,17 @@ import xlsxwriter
 import pubchempy as pcp
 import os
 from Utilities.utils import removeFiles
+#from gui import ProgressBar
 
 
 def selectLigands(input_path, sdf_folder, excel_folder, verbose):
     
+    #pb = ProgressBar("Downloading sdf files", 289)
+    #pb.update()
+    # select ligands from an excel file
+    ### By default, ./excel_files/pest_group_MOA.xlsx ###
+    #sheet = "Hoja1"
+    #df = pd.read_excel(io=input_path, sheet_name=sheet)
     f = open(input_path, "r")
     # set of downloaded ligands
     ligands_set = set()
