@@ -60,5 +60,6 @@ Optional parameters: \n\
         exit(1)
 
     results = RMSDComparison(receptor, ligands_folder, docking_folders)
-    
-    print(f"VINA: {results[0][0]}\nGNINA:{results[0][1]}")
+    magnitude = "{:.1e}".format(abs(results[0][0] - results[0][1]))
+
+    print(f"VINA: {results[0][0]}\nGNINA:{results[0][1]}\nMAGNITUDE:{magnitude}")

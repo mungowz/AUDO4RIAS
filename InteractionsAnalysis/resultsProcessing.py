@@ -1,6 +1,8 @@
 from openbabel import pybel
 import pandas as pd
 import os
+
+import spyrmsd
 from Utilities.utils import checkFilesExistance, checkRMSDCorrectness
 from config import Config
 import json
@@ -43,7 +45,7 @@ def processGninaResults(gnina_folder=Config.GNINA_DOCKING_FOLDER):
 
 
 
-def compareRMSDs(ref_path, dock_results):
+def compareRMSDs(ref_path, dock_results, verbose=True):
     # read ligand
     ref = io.loadmol(ref_path)
     
@@ -66,21 +68,25 @@ def compareRMSDs(ref_path, dock_results):
         anum = mols[0].atomicnums
         adj = mols[0].adjacency_matrix
 
-        # calculate Symmetric-Corrected RMSD
-        RMSD = rmsd.symmrmsd(
-            coords_ref,
-            coords,
-            anum_ref,
-            anum,
-            adj_ref,
-            adj,
-            minimize=True
-        )
-        means.append(fmean(RMSD))
+        try:
+            # calculate Symmetric-Corrected RMSD
+            RMSD = rmsd.symmrmsd(
+                coords_ref,
+                coords,
+                anum_ref,
+                anum,
+                adj_ref,
+                adj,
+                minimize=True
+            )
+            means.append(fmean(RMSD))
+        except spyrmsd.exceptions.NonIsomorphicGraphs:
+            if verbose: print("WARNING: spyrmsd.exceptions.NonIsomorphicGraphs: Graphs are not isomorphic.")
+            continue
     return means
 
 
-def RMSDComparison(receptor, ligands_folder=Config.LIGANDS_SDF_FOLDER, docking_folders=[Config.VINA_DOCKING_FOLDER, Config.GNINA_DOCKING_FOLDER]):
+def RMSDComparison(receptor, ligands_folder=Config.LIGANDS_SDF_FOLDER, docking_folders=[Config.VINA_DOCKING_FOLDER, Config.GNINA_DOCKING_FOLDER], verbose=True):
     
     means_list = []
     for root, dirs, files in os.walk(ligands_folder):
@@ -96,11 +102,11 @@ def RMSDComparison(receptor, ligands_folder=Config.LIGANDS_SDF_FOLDER, docking_f
                 docking_results.append(os.path.join(dock_folder, str(receptor) + str(os.sep) + str(lig) + str(os.sep) + "out.pdbqt"))
                 
             if not checkFilesExistance(docking_results):
-                print("WARNING: cannot compute RMSDs for {lig} because docking results don't exist!\n")
+                if verbose: print(f"WARNING: cannot compute RMSDs for {lig} because docking results don't exist!\n")
                 continue
             
-            rmsd = compareRMSDs(os.path.join(root, ligand), docking_results)
-            print(f"ligand: {lig}\nRMSDs [Vina, GNINA]: {rmsd}\n\n")
+            rmsd = compareRMSDs(os.path.join(root, ligand), docking_results, verbose)
+            if verbose: print(f"ligand: {lig}\nRMSDs [Vina, GNINA]: {rmsd}\n\n")
             if not checkRMSDCorrectness(rmsd):
                 continue
             means_list.append(rmsd)
