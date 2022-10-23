@@ -20,6 +20,8 @@ if __name__ == "__main__":
 
     df = pd.DataFrame(data, index=receptors, columns=['Vina', 'GNINA', 'Magnitude'])
     
+    print("Multiple RMSD Comparison")
+    print(f"Receptors: {receptors}")
     print(df)
 
     vina_mean, gnina_mean = fmean(df['Vina']), fmean(df['GNINA'])

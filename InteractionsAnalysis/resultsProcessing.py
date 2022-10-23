@@ -1,7 +1,8 @@
+from os.path import isdir
 from openbabel import pybel
 import pandas as pd
 import os
-
+from biopandas.pdb import PandasPdb
 import spyrmsd
 from Utilities.utils import checkFilesExistance, checkRMSDCorrectness
 from config import Config
@@ -11,38 +12,133 @@ from statistics import fmean
 import numpy as np
 
 
-def processDockingResult(filepath):
+def getGninaDockingResult(filepath, return_df=True):
     scores = []
     for mol in pybel.readfile('sdf', filepath):
         # keys: minimizedAffinity, CNNscore, CNNaffinity, CNN_VS, CNNaffinity_variance
         scores.append({'title': mol.title, 
         'CNNscore': float(mol.data['CNNscore']),
         'CNNaffinity': float(mol.data['CNNaffinity']),
-        'Vinardo': float(mol.data['minimizedAffinity']),
-        'CNN_VS': float(mol.data['CNN_VS']),
-        'CNNaffinity_variance': float(mol.data['CNNaffinity_variance'])})
-
-    scores = pd.DataFrame(scores)
-    scores['label'] = scores.title.str.contains('active')
+        'minimizedAffinity': float(mol.data['minimizedAffinity'])
+        })
+    
+    if return_df:
+        scores = pd.DataFrame(scores)
     return scores
 
-def processGninaResults(gnina_folder=Config.GNINA_DOCKING_FOLDER):
-    for root, dirs, files in os.walk(gnina_folder):
+
+def getGninaDockingResultFromPDBQT(filepath):
+    # build a function to extract gnina output parameters from REMARK in header pdbqt file
+    with open(filepath, "r") as pdb_reader:
+
+        for l_no, line in enumerate(pdb_reader):
+            line = line.replace("REMARK", "").split(" ")
+            chunks = [word for word in line if word]
+            if "minimizedAffinity" in chunks:
+                break
+            
+    
+    return {
+        'minimizedAffinity': float(chunks[1]),
+        'CNNscore': float(chunks[3]),
+        'CNNaffinity': float(chunks[5])    
+    }
+                
+
+def getVinaDockingResultFromPDBQT(filepath):
+    with open(filepath, "r") as pdb_reader:
+
+        for l_no, line in enumerate(pdb_reader):
+            line = line.split(" ")
+            chunks = [word for word in line if word]
+            if "REMARK" in chunks:
+                break    
+
+    return {'affinity': float(chunks[3])}
+
+
+
+def processGninaResultsByReceptor(receptor_folder):
+    scores = []
+    ligands = []
+    for root, dirs, files in os.walk(receptor_folder):
         for file in files:
-            if file == "out.sdf.gz":
+            if file == "out.pdbqt":
+                
                 try:
-                    filepath = os.path.join(root, file)
-                    print(filepath)
-                    # filepath = f"/home/gomax22/Desktop/Computational-Docking/gnina/docking/1fcq/1-(4-Chlorophenyl)-5-(2-methoxyethoxy)-4-oxo-1,4-dihydrocinnoline-3-carboxylic_acid/out.sdf.gz"
-                    scores = processDockingResult(filepath)
-                    
-                    print(scores)
+                    results = getGninaDockingResultFromPDBQT(os.path.join(root, file))
+                    scores.append(results)
                 except AttributeError:
                     continue
-                
-                # with open('scores.json', 'w', encoding='utf-8') as f:
-                #    json.dump(scores, f, ensure_ascii=False, indent=4)
+                ligands.append(os.path.join(root, file).split(os.sep)[-2])
+    df = pd.DataFrame(scores)          
+    return df
 
+def averageGninaResults(df):
+    record = {
+        'CNNscore': fmean(df['CNNscore']),
+        'CNNaffinity':fmean(df['CNNaffinity']),
+        'minimizedAffinity': fmean(df['minimizedAffinity'])
+    }
+    return record
+
+def averageVinaResults(df):
+    record = {
+        'affinity': fmean(df['affinity'])
+    }
+    return record
+
+def processGninaResults(gnina_folder=Config.GNINA_DOCKING_FOLDER):
+    scores = []
+    receptors = []
+    for dir in os.listdir(gnina_folder):
+        if not os.path.isdir(os.path.join(gnina_folder, dir)):
+            continue
+        try:
+            receptor_df = processGninaResultsByReceptor(os.path.join(gnina_folder, dir))
+            record = averageGninaResults(receptor_df)
+            record['code'] = str(dir)
+            scores.append(record)
+        except AttributeError:
+            continue
+        receptors.append(dir)
+
+    df = pd.DataFrame(scores)
+    return df
+
+def processVinaResultsByReceptor(receptor_folder):
+    scores = []
+    ligands = []
+    for root, dirs, files in os.walk(receptor_folder):
+        for file in files:
+            if file == "out.pdbqt":
+                
+                try:
+                    results = getVinaDockingResultFromPDBQT(os.path.join(root, file))
+                    scores.append(results)
+                except AttributeError:
+                    continue
+                ligands.append(os.path.join(root, file).split(os.sep)[-2])
+    df = pd.DataFrame(scores)          
+    return df
+
+def processVinaResults(vina_folder=Config.VINA_DOCKING_FOLDER):
+    scores = []
+    receptors = []
+    for dir in os.listdir(vina_folder):
+        if not os.path.isdir(os.path.join(vina_folder, dir)):
+            continue
+        try:
+            receptor_df = processVinaResultsByReceptor(os.path.join(vina_folder, dir))
+            record = averageVinaResults(receptor_df)
+            record['code'] = str(dir)
+            scores.append(record)
+        except AttributeError:
+            continue
+        receptors.append(dir)
+
+    df = pd.DataFrame(scores)
+    return df
 
 
 def compareRMSDs(ref_path, dock_results, verbose=True):
