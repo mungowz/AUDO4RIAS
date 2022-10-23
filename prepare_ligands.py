@@ -54,7 +54,7 @@ if __name__ == "__main__":
 
     # initialize variables
     excel_folder = Config.EXCEL_FOLDER
-    default_file = os.path.join(Config.INPUT_FOLDER, "pest_group_MOA.xlsx")
+    default_file = os.path.join(Config.INPUT_FOLDER, "ligands_list.txt")
     input_file = default_file
     sdf_folder = Config.LIGANDS_SDF_FOLDER
     pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
