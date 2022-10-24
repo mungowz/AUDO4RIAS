@@ -7,15 +7,17 @@ from Utilities.utils import removeFiles
 
 def selectLigands(input_path, sdf_folder, excel_folder, verbose):
     
-    f = open(input_path, "r")
     # set of downloaded ligands
     ligands_set = set()
     # set of ligands that could not be downloaded
     ligands_problem_set = set()
 
-
     # extract ligands from Pubchem
-    for substance in f:
+    with open(input_path) as f:
+        contents = f.readlines()
+    f.close()
+
+    for substance in contents:
         substance = substance[:-1] + ""
         ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
@@ -47,10 +49,6 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
                         )
                     )
                 ligands_problem_set.add(substance)
-        #pb.progress()
-        #pb.update()
-
-    f.close()
 
     # write an output excel file which contains information about sdf ligands output
     workbook = xlsxwriter.Workbook(
