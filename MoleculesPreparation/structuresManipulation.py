@@ -1,4 +1,3 @@
-from Utilities.utils import decompress
 import os
 
 
@@ -107,3 +106,15 @@ def sdf2pdb(sdf_folder, pdb_folder, verbose):
                         ligand_name=ligand_name, output_file=pdb_path
                     )
                 )
+
+def removeRemarks(input_filepath, output_filepath):
+
+    with open(input_filepath, 'r') as pdbqt_reader:
+        lines = pdbqt_reader.readlines()
+        with open(output_filepath, 'w') as pdbqt_writer:
+            for line in lines:
+                if "minimizedAffinity" in line:
+                    continue
+                pdbqt_writer.write(line)  
+
+                

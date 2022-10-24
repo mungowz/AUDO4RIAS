@@ -6,11 +6,12 @@ import os
 
 # This script relies on MGLTools packages, written in Python2
 # Because of compatibility problems between Python versions (2 and 2.5+), this script cannot be executed without errors by Python binaries but
-# a good solution is given by using .../MGLTools-1.5.6/bin/pythonsh
+# a good solution is given by using .../MGLTools-1.5.6/bin/pythonsh or .../ADFRsuite-1.0/bin/pythonsh
 if __name__ == "__main__":
     import sys
     import getopt
     from InteractionsAnalysis.interactionsDetection import detectInteractions
+    from MoleculesPreparation.structuresManipulation import removeRemarks
 
     def usage():
         print("Analyze docking results to detect interactions of protein-ligand complexes.\
@@ -56,6 +57,14 @@ if __name__ == "__main__":
             usage()
             exit(0)
 
-    detectInteractions(macro_folder, docking_folder)
+    print(docking_folder)
+
+    # remove remarks in order to detect interactions
+    for root, dirs, files in os.walk(docking_folder):
+        for file in files:
+            if file == "out.pdbqt":
+                removeRemarks(os.path.join(root, file), os.path.join(root, "out_without_remarks.pdbqt"))
+
+    proteins, contact_states = detectInteractions(macro_folder, docking_folder)
 
 

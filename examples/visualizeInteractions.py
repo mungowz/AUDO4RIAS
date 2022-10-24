@@ -6,8 +6,8 @@ import os
 
 if __name__ == '__main__':
 
-    docking_folder = Config.VINA_DOCKING_FOLDER
-
+    vina_folder = Config.VINA_DOCKING_FOLDER
+    gnina_folder =  Config.GNINA_DOCKING_FOLDER
     
     # For each protein-ligand complex, scores are stored in output/docking/<software>/<protein>/<ligand>/<protein>.p
     # For each protein-ligand complex, contacts are stored in output/docking/<software>/<protein>/<ligand>/<protein>_contacts.p
@@ -17,7 +17,8 @@ if __name__ == '__main__':
     # choose a pickle file that stores scores
     # choose a pickle file that store contacts 
     # display interactions
-    displayInteractions(os.path.join(docking_folder, 'data.p'), os.path.join(docking_folder, 'contacts.p'))
+    displayInteractions(os.path.join(vina_folder, 'data.p'), os.path.join(vina_folder, 'contacts.p'))
+    displayInteractions(os.path.join(gnina_folder, 'data.p'), os.path.join(gnina_folder, 'contacts.p'))
     
     
 
