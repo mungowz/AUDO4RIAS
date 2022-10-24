@@ -200,8 +200,10 @@ def detectInteractions(macro_folder, docking_folder):
                         # detect interactions
                         interaction = detectInteractionsForResidues(lig_path, macro_path, contact_states[protein_code])
                         proteins[protein_code] = mergeDicts(proteins[protein_code], interaction)
-            # print(contact_states)
-            # print("\n\n\n\n\n\n")
+            
+            if bool(proteins[protein_code]):
+                del proteins[protein_code]
+                del contact_states[protein_code]
 
             output_file = os.path.join(lig_folder, protein_code + ".p")
             contact_states_file =  os.path.join(lig_folder, protein_code + "_contacts.p")
@@ -219,7 +221,7 @@ def detectInteractions(macro_folder, docking_folder):
                 with open(contact_states_file, 'wb+') as fp2:
                     pickle.dump(contact_states[protein_code], fp2, protocol=pickle.HIGHEST_PROTOCOL)
             except IOError as e:
-                print("WARNING: " + str(e.msg))
+                print("WARNING: " + str(e))
                 continue
 
     # we can: dict -> dataframe with pandas -> csv (data not serialized, much space required)
@@ -228,7 +230,7 @@ def detectInteractions(macro_folder, docking_folder):
         with open(os.path.join(docking_folder, "contacts.p"), 'wb+') as fp:
             pickle.dump(contact_states, fp, protocol=pickle.HIGHEST_PROTOCOL)
     except IOError as e:
-        print("WARNING: "+ str(e.msg))
+        print("WARNING: "+ str(e))
 
     # print(proteins)
 
@@ -236,7 +238,7 @@ def detectInteractions(macro_folder, docking_folder):
         with open(os.path.join(docking_folder, 'data.p'), 'wb+') as fp:
             pickle.dump(proteins, fp, protocol=pickle.HIGHEST_PROTOCOL)
     except IOError as e:
-        print("WARNING: "+str(e.msg))
+        print("WARNING: "+str(e))
 
     for protein in proteins.keys():
         for residue in proteins[protein].keys():

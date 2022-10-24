@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     print(docking_folder)
 
-    # remove remarks in order to detect interactions
+    # remove unnecessary remarks in order to detect interactions
     for root, dirs, files in os.walk(docking_folder):
         for file in files:
             if file == "out.pdbqt":
