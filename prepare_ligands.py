@@ -74,7 +74,7 @@ if __name__ == "__main__":
             if not os.path.exists(a):
                 print("Specify a valid excel file!")
                 exit(1)
-            if os.access(a, os.R_OK):
+            if not os.access(a, os.R_OK):
                 print("Modify file permission!")
                 exit(1)
             input_file = a
