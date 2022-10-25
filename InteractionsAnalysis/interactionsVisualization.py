@@ -92,23 +92,27 @@ def plotInteraction(protein, scores, contact_states):
 
 
 
-def plotInteractions(scores, contact_states):
-    proteins = [key for key in scores.keys()]
+def plotInteractions(scores, contact_states, proteins=None):
+    
+    if not proteins:
+        proteins = [key for key in scores.keys()]
 
     for protein in proteins:
         plotInteraction(protein, scores, contact_states)
 
 
-def displayInteractions(data_path, contacts_path):
+def displayInteractions(data_path, contacts_path, proteins=None):
     # retrieve scores and contact states
     with open(data_path, 'rb') as fp:
         scores = pickle.load(fp)
 
+    print(f"DATA: {data_path}")
     # contacts contains for each residue the list of ligands involved in interactions
     with open(contacts_path, 'rb') as fp:
         contact_states = pickle.load(fp)
-
-    plotInteractions(scores, contact_states)
+    print(f"CONTACTS: {contacts_path}")
+    
+    plotInteractions(scores, contact_states, proteins)
 
 
 
