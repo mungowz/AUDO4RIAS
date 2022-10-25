@@ -1,5 +1,8 @@
 import os
 from tkinter import ttk
+from turtle import width
+
+from numpy import maximum
 from config import Config
 import tkinter
 import tkinter.messagebox
@@ -125,7 +128,8 @@ class ProgressBar(tkinter.Tk):
                                             self,
                                             orient="horizontal",
                                             mode="determinate",
-                                            length=100,
+                                            length=280,
+                                            maximum=pb_lenght
         )
         self.progress_bar.grid(column=0, row=0, columnspan=2, padx=10, pady=20)
 
@@ -137,12 +141,16 @@ class ProgressBar(tkinter.Tk):
 
 
     def update_progress_label(self):
-        return f"Current Progress: {self.progress_bar['value']}%"
+        if self.progress_bar['value'] >= self.pb_lenght:
+            return f"Current Progress: 100.00%"    
+        else:
+            return f"Current Progress: {format(self.progress_bar['value'], '.2f')}%"
 
 
     def progress(self):
+        step = 100 / self.pb_lenght
         if self.progress_bar['value'] < self.pb_lenght:
-            self.progress_bar['value'] += 1 / 289
+            self.progress_bar['value'] += step
             self.value_label['text'] = self.update_progress_label()
         else:
             showinfo(message='The progress completed!')

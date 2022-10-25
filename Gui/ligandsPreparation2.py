@@ -8,16 +8,17 @@ from gui import ProgressBar
 
 def selectLigands(input_path, sdf_folder, excel_folder, verbose):
     
-    pb = ProgressBar("Downloading sdf files", 289)
+    with open(input_path) as f:
+        contents = f.readlines()
+        number_contents = len(contents)
+    f.close()
+
+    pb = ProgressBar("Downloading sdf files", number_contents)
     pb.update()
     # set of downloaded ligands
     ligands_set = set()
     # set of ligands that could not be downloaded
     ligands_problem_set = set()
-
-    with open(input_path) as f:
-        contents = f.readlines()
-    f.close()
 
     # extract ligands from Pubchem
     for substance in contents:
