@@ -3,26 +3,24 @@ import xlsxwriter
 import pubchempy as pcp
 import os
 from Utilities.utils import removeFiles
-#from gui import ProgressBar
+from gui import ProgressBar
 
 
 def selectLigands(input_path, sdf_folder, excel_folder, verbose):
     
-    #pb = ProgressBar("Downloading sdf files", 289)
-    #pb.update()
-    # select ligands from an excel file
-    ### By default, ./excel_files/pest_group_MOA.xlsx ###
-    #sheet = "Hoja1"
-    #df = pd.read_excel(io=input_path, sheet_name=sheet)
-    f = open(input_path, "r")
+    pb = ProgressBar("Downloading sdf files", 289)
+    pb.update()
     # set of downloaded ligands
     ligands_set = set()
     # set of ligands that could not be downloaded
     ligands_problem_set = set()
 
+    with open(input_path) as f:
+        contents = f.readlines()
+    f.close()
 
     # extract ligands from Pubchem
-    for substance in f:
+    for substance in contents:
         substance = substance[:-1] + ""
         ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
@@ -54,10 +52,8 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
                         )
                     )
                 ligands_problem_set.add(substance)
-        #pb.progress()
-        #pb.update()
-
-    f.close()
+        pb.progress()
+        pb.update()
 
     # write an output excel file which contains information about sdf ligands output
     workbook = xlsxwriter.Workbook(

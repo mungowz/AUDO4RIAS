@@ -12,11 +12,11 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
     # set of ligands that could not be downloaded
     ligands_problem_set = set()
 
-    # extract ligands from Pubchem
     with open(input_path) as f:
         contents = f.readlines()
     f.close()
 
+    # extract ligands from Pubchem
     for substance in contents:
         substance = substance[:-1] + ""
         ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")

@@ -235,7 +235,7 @@ class Preparation(customtkinter.CTk):
 
         self.label_info_1 = customtkinter.CTkLabel(
                                                     master=self.frame_info,
-                                                       text="-Select Ligands to prepare ligands\n-Select receptors to prepare\n-Select back to return to the home page",
+                                                       text="-Select Ligands to prepare ligands\n-Select Receptors to prepare receptors\n-Select Back to return to the home page",
                                                        height=400,
                                                        corner_radius=6,  # <- custom corner radius
                                                        fg_color=("white", "gray38"),  # <- custom tuple-color
@@ -267,9 +267,8 @@ class Preparation(customtkinter.CTk):
 class Ligands(customtkinter.CTk):
     
     excel_folder = Config.EXCEL_FOLDER
-    default_file = os.path.join(Config.INPUT_FOLDER, "pest_group_MOA.xlsx")
+    default_file = os.path.join(Config.INPUT_FOLDER, "ligands_list.txt")
     input_file = default_file
-    excel_file = default_file
     sdf_folder = Config.LIGANDS_SDF_FOLDER
     pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
     pdb_folder = Config.LIGANDS_PDB_FOLDER
@@ -346,7 +345,7 @@ class Ligands(customtkinter.CTk):
 
         self.label_info = customtkinter.CTkLabel(
                                                     master=self.frame_info,
-                                                       text="-Select Execute to prepare ligands\n-Select back to return to the home page",
+                                                       text="-Select Execute to prepare ligands\n-Select Back to return to the home page",
                                                        height=2,
                                                        corner_radius=1,  # <- custom corner radius
                                                        fg_color=("white", "gray38"),  # <- custom tuple-color
@@ -354,22 +353,22 @@ class Ligands(customtkinter.CTk):
                                                 )
         self.label_info.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
 
-        self.label_excel_file = customtkinter.CTkLabel(
+        self.label_input_file = customtkinter.CTkLabel(
                                                     master=self.frame_right,
                                                     height=1,
-                                                    text="Specify the path of the input excel file or leave it blank to use the default path:",
+                                                    text="Specify the path of the input file or leave it blank to use the default path"
         )
-        self.label_excel_file.grid(column=0, row=1, sticky="nwe", padx=1, pady=1)
-        self.entry_excel_file = customtkinter.CTkEntry(
+        self.label_input_file.grid(column=0, row=1, sticky="nwe", padx=15, pady=1)
+        self.entry_input_file = customtkinter.CTkEntry(
                                                         master=self.frame_right,
                                                         width=120,
         )
-        self.entry_excel_file.grid(row=2, column=0, columnspan=1, pady=1, padx=1, sticky="nwe")
+        self.entry_input_file.grid(row=2, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
 
         self.label_excel_folder = customtkinter.CTkLabel(
                                                     master=self.frame_right,
                                                     height=1,
-                                                    text="Specify the path of the input excel folder or leave it blank to use the default path:"
+                                                    text="Specify the path of the input excel folder or leave it blank to use the default path"
         )
         self.label_excel_folder.grid(column=0, row=4, sticky="nwe", padx=15, pady=1)
         self.entry_excel_folder = customtkinter.CTkEntry(
@@ -422,8 +421,8 @@ class Ligands(customtkinter.CTk):
 
     def button_event_execute(self):
 
-        if self.entry_excel_file.get() != "":
-            self.entry_excel_file = self.entry_excel_file.get()
+        if self.entry_input_file.get() != "":
+            self.input_file = self.entry_input_file.get()
         
         if self.entry_excel_folder.get() != "":
             self.excel_folder = self.entry_excel_folder.get()
@@ -442,8 +441,8 @@ class Ligands(customtkinter.CTk):
 
         prepare_ligands(
             self.verbose, 
-            self.excel_file, 
-            self.input_file,  
+            self.input_file,
+            self.default_file,  
             self.excel_folder,  
             self.sdf_folder, 
             self.pdb_folder, 

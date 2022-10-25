@@ -1,16 +1,16 @@
 import os
-from MoleculesPreparation.ligandsPreparation import prepareLigands, selectLigands
+from Gui.ligandsPreparation2 import prepareLigands, selectLigands
 from Utilities.utils import checkFilesInFolder, removeFiles
 from config import Config
 from pathlib import Path
 from MoleculesPreparation.structuresManipulation import sdf2pdb
 from tkinter import messagebox
-from Gui.gui import ProgressBar
+
 
 def prepare_ligands(
     verbose, 
-    excel_file, 
     input_file, 
+    default_file, 
     excel_folder, 
     sdf_folder,  
     pdb_folder, 
@@ -22,14 +22,15 @@ def prepare_ligands(
     print("######### INITIALIZE ENVIRONMENT #########")
     print("------------------------------------------")
 
-    if excel_file != input_file:
-        if not os.path.exists(excel_file):
-            messagebox.showerror("Error", "Specify a valid excel file!")
+    print(input_file)
+
+    if input_file != default_file:
+        if not os.path.exists(input_file):
+            messagebox.showerror("Error", "Specify a valid input file!")
             exit(1)
-        if os.access(excel_file, os.R_OK):
+        if not os.access(input_file, os.R_OK):
             messagebox.showerror("Error", "Modify file permission!")
             exit(1)
-        input_file = excel_file
         print("set input filepath to ", input_file)
 
     if excel_folder != Config.EXCEL_FOLDER:
@@ -82,7 +83,7 @@ def prepare_ligands(
             excel_folder=excel_folder,
             verbose=verbose 
         )
-    '''
+
     else: 
         # check if there is at least a sdf file
         if not checkFilesInFolder(folder=sdf_folder, docted_extension=".sdf"):
@@ -118,4 +119,3 @@ def prepare_ligands(
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")
-'''
