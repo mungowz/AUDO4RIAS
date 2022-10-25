@@ -6,12 +6,7 @@ from Utilities.utils import removeFiles
 from gui import ProgressBar
 
 
-def selectLigands(input_path, sdf_folder, excel_folder, verbose):
-    
-    with open(input_path) as f:
-        contents = f.readlines()
-        number_contents = len(contents)
-    f.close()
+def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
 
     pb = ProgressBar("Downloading sdf files", number_contents)
     pb.update()
@@ -55,6 +50,7 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
                 ligands_problem_set.add(substance)
         pb.progress()
         pb.update()
+    pb.close()
 
     # write an output excel file which contains information about sdf ligands output
     workbook = xlsxwriter.Workbook(
@@ -70,10 +66,11 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
         worksheet_problem.write(row_num, 0, data)
     workbook.close()
 
-    return [ligands_set, ligands_problem_set]
 
+def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
+    pb = ProgressBar("Converting pdbqt files", number_contents)
+    pb.update()
 
-def prepareLigands(pdb_folder, pdbqt_folder, verbose):
     for pdb_file in os.scandir(pdb_folder):
         os.chdir(pdb_folder)
         if pdb_file.is_file() and pdb_file.path.endswith(".pdb"):
@@ -92,4 +89,36 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose):
                 print("Executing: " + command)
             os.system(command = command)
             print("\n")
+
+        pb.progress()
+        pb.update()
+    pb.close()
+
+def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
+    pb = ProgressBar("Converting pdb files", number_contents)
+    pb.update()
+
+    for sdf_file in os.scandir(sdf_folder):
+        if sdf_file.is_file() and sdf_file.path.endswith(".sdf"):
+            ligand_name = sdf_file.path.split(os.sep)[-1].split(".")[0]
+            pdb_path = os.path.join(pdb_folder, ligand_name + ".pdb")
+            command = (
+                'obabel ' 
+                + '\"' + sdf_file.path + '\"' 
+                + ' -O '
+                + '\"' + pdb_path + '\"'
+            )
+            print(command)
+            os.system(command=command)
+
+            if verbose:
+                print(
+                    "{ligand_name} converted from sdf into pdb! (Stored in {output_file})\n".format(
+                        ligand_name=ligand_name, output_file=pdb_path
+                    )
+                )
+
+        pb.progress()
+        pb.update()
+    pb.close()
     

@@ -113,7 +113,7 @@ class HomePage(customtkinter.CTk):
 
 class ProgressBar(tkinter.Tk):
     
-    WIDTH = 300
+    WIDTH = 250
     HEIGHT = 120
 
     def __init__(self, pb_tile, pb_lenght):
@@ -128,16 +128,15 @@ class ProgressBar(tkinter.Tk):
                                             self,
                                             orient="horizontal",
                                             mode="determinate",
-                                            length=280,
-                                            maximum=pb_lenght
-        )
-        self.progress_bar.grid(column=0, row=0, columnspan=2, padx=10, pady=20)
+                                            length=100
+                            )
+        self.progress_bar.pack(padx=10, pady=20)
 
         self.value_label = ttk.Label(
                                 self, 
                                 text=self.update_progress_label()
         )
-        self.value_label.grid(column=0, row=1, columnspan=2)
+        self.value_label.pack(padx=10, pady=10)
 
 
     def update_progress_label(self):
@@ -149,12 +148,13 @@ class ProgressBar(tkinter.Tk):
 
     def progress(self):
         step = 100 / self.pb_lenght
-        if self.progress_bar['value'] < self.pb_lenght:
+        if self.progress_bar['value'] <= self.pb_lenght:
             self.progress_bar['value'] += step
             self.value_label['text'] = self.update_progress_label()
-        else:
-            showinfo(message='The progress completed!')
-            self.quit()
+        
+    def close(self):
+        showinfo(message='The progress completed!')
+        self.destroy()
 
 
     def stop(self):

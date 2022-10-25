@@ -1,9 +1,8 @@
 import os
-from Gui.ligandsPreparation2 import prepareLigands, selectLigands
+from Gui.ligandsPreparation2 import prepareLigands, selectLigands, sdf2pdb
 from Utilities.utils import checkFilesInFolder, removeFiles
 from config import Config
 from pathlib import Path
-from MoleculesPreparation.structuresManipulation import sdf2pdb
 from tkinter import messagebox
 
 
@@ -69,19 +68,23 @@ def prepare_ligands(
     if excel_folder == Config.EXCEL_FOLDER:
         Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
     
+    with open(input_file) as f:
+        contents = f.readlines()
+        number_contents = len(contents)
+
     if not keep_ligands:
         removeFiles(sdf_folder, ".sdf")
         if verbose:
             print("---------------- LIGANDS -----------------")
             print("################# STEP 1 #################")
             print("------------------------------------------")
-            
 
         selectLigands(
-            input_path=input_file,
             sdf_folder=sdf_folder,
             excel_folder=excel_folder,
-            verbose=verbose 
+            verbose=verbose,
+            contents=contents,
+            number_contents=number_contents
         )
 
     else: 
@@ -104,6 +107,7 @@ def prepare_ligands(
         sdf_folder=sdf_folder, 
         pdb_folder=pdb_folder, 
         verbose=verbose,
+        number_contents=number_contents
     )
     
     if verbose:
@@ -114,7 +118,8 @@ def prepare_ligands(
     prepareLigands(
         pdb_folder=pdb_folder,
         pdbqt_folder=pdbqt_folder,
-        verbose=verbose
+        verbose=verbose,
+        number_contents=number_contents
     )
 
     if verbose:
