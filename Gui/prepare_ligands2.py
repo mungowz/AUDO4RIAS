@@ -1,5 +1,5 @@
 import os
-from Gui.ligandsPreparation2 import prepareLigands, selectLigands, sdf2pdb
+from Gui.ligandsPreparation2 import *
 from Utilities.utils import checkFilesInFolder, removeFiles
 from config import Config
 from pathlib import Path

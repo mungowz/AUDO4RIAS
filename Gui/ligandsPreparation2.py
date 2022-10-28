@@ -3,12 +3,11 @@ import xlsxwriter
 import pubchempy as pcp
 import os
 from Utilities.utils import removeFiles
-from gui import ProgressBar
-
+from Gui.progressBar import ProgressBar
 
 def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
 
-    pb = ProgressBar("Downloading sdf files", number_contents)
+    pb = ProgressBar("Downloading sdf files", number_contents, True)
     pb.update()
     # set of downloaded ligands
     ligands_set = set()
@@ -68,7 +67,7 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
 
 
 def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
-    pb = ProgressBar("Converting pdbqt files", number_contents)
+    pb = ProgressBar("Converting pdbqt files", number_contents, True)
     pb.update()
 
     for pdb_file in os.scandir(pdb_folder):
@@ -95,7 +94,7 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
     pb.close()
 
 def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
-    pb = ProgressBar("Converting pdb files", number_contents)
+    pb = ProgressBar("Converting pdb files", number_contents, True)
     pb.update()
 
     for sdf_file in os.scandir(sdf_folder):

@@ -4,7 +4,6 @@ from rcsbsearch import Attr
 import json
 from urllib.parse import unquote
 import requests, requests.utils
-
 from webView import webView
 
 
