@@ -63,7 +63,12 @@ def selectPdbs(query_type, minimum_length, include_mutants):
     return proteins_list
 
 
-def removeUnavailablePdbs(pdbs_unavailable=[], pdbs_list=[]):
+def removeUnavailablePdbs(pdbs_unavailable=None, pdbs_list=None):
+    if pdbs_list is None or not pdbs_list:
+        raise ValueError("PDBs list cannot be None.")
+    if pdbs_unavailable is None or not pdbs_unavailable:
+        return pdbs_list
+
     for pdb in pdbs_unavailable:
         if pdb in pdbs_list:
             pdbs_list.remove(pdb)
