@@ -6,7 +6,7 @@ import Bio.PDB as bioPDB
 from config import Config
 from MoleculesPreparation.structuresManipulation import extractRemark350Monomeric
 from MoleculesPreparation.structuresSelection import RestApiSelection, downloadPdbs, selectPdbs
-from Utilities.utils import saveDictToExcel
+from Utilities.utils import saveDictToExcel, findFile
 
 def deleteHeteroatomsChains(pdb_folder, verbose):
     if verbose:
@@ -313,7 +313,10 @@ def selectReceptors(
 
 
 def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'):
-    command = "chmod u+x scripts/replacePrepareReceptor4.sh; ./scripts/replacePrepareReceptor4.sh"
+    SCRIPT_FILENAME = "replacePrepareReceptor4.sh"
+    script_path = findFile(SCRIPT_FILENAME, os.environ.get("HOME"))
+
+    command = f"chmod u+x {script_path}; .{script_path}"
     if verbose:
         print("\nReplacing ADFRsuite prepare_receptor4.py script...")
         command += " -v"
