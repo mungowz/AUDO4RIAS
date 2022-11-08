@@ -17,5 +17,12 @@ The next step is install external dependencies, that are:
 - _MGLTools_
 - _ADFR suite_
 - _AutoDock Vina_
+- _GNINA_
 
-Go to the download section of the official _MGLTools_ web site: https://ccsb.scripps.edu/mgltools/downloads/, and install the latest version of _MGLTools_, if you use Linux include path of _MGLTools_' local directory into global enviroment variable **PATH**. To install _ADFR suite_ go to the download page of its official web site: https://ccsb.scripps.edu/adfr/downloads/, and install the latest version of _ADFR suite_. You can download _Autodock Vina_ from his official web page: https://vina.scripps.edu/downloads/ or you can download the latest stable version from its GitHub repository: https://vina.scripps.edu/downloads/.
+Go to the download section of the official _MGLTools_ web site: https://ccsb.scripps.edu/mgltools/downloads/, and install the latest version of _MGLTools_, if you use Linux include path of _MGLTools_' local directory into global enviroment variable **PATH**. To install _ADFR suite_ go to the download page of its official web site: https://ccsb.scripps.edu/adfr/downloads/, and install the latest version of _ADFR suite_. You can download _Autodock Vina_ from his official web page: https://vina.scripps.edu/downloads/ or you can download the latest stable version from its GitHub repository: https://vina.scripps.edu/downloads/. To install _GNINA_ follow instruction in installation section on its GithHub repository: https://github.com/gnina/gnina.
+
+### Internal dependencies
+
+From requirements.txt you can install internal dependencies, python package and libraries, by typing in terminal this command:
+
+`pip install -r requirements.txt`
