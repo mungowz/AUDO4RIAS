@@ -1,6 +1,5 @@
 # Computational-Docking
 
-# Computational Docking
 ## Installation
 The first step to install **Computational docking** is type in terminal this command:
 
