@@ -8,7 +8,7 @@ To install **Computational Docking**, first type this command into your terminal
 
 `git clone https://github.com/mungowz/Computational-Docking.git`
 
-The GitHub repository of the project will be installed into a local directory chosen by user.
+The GitHub repository of the project will be cloned into a local directory chosen by user.
 
 ### External dependencies
 
@@ -20,7 +20,7 @@ We strongly recommend you to follow the installation instructions of the softwar
 - [_AutoDock Vina_](https://vina.scripps.edu/downloads/) (latest stable version)
 - [_GNINA_](https://github.com/gnina/gnina)
 
-**N.B.:** For Linux users, include _MGLTools_ directory's path into global enviroment variable **PATH**.
+**N.B.:** For Linux users, add _MGLTools_ directory's path to your global enviroment variable `$PATH`.
 
 ### Internal dependencies
 Internal dependencies, which correspond to python packages and libraries, can be installed by typing this command into your terminal:
