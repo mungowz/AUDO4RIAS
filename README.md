@@ -2,27 +2,27 @@
 
 ## Installation
 
-### Download repository
+### Clone repository
 
-The first step to install **Computational docking** is type in terminal this command:
+To install **Computational Docking**, first type this command into your terminal:
 
-`git https://github.com/mungowz/Computational-Docking.git`
+`git clone https://github.com/mungowz/Computational-Docking.git`
 
 The GitHub repository of the project will be installed into a local directory chosen by user.
 
 ### External dependencies
 
-The next step is install external dependencies, that are:
+In the following, external dependencies are listed. 
+We strongly recommend you to follow the installation instructions of the softwares below mentioned.
 
-- _MGLTools_
-- _ADFR suite_
-- _AutoDock Vina_
-- _GNINA_
+- [_MGLTools v1.5.6_](https://ccsb.scripps.edu/mgltools/downloads/)
+- [_ADFR suite v1.0_]( https://ccsb.scripps.edu/adfr/downloads/)
+- [_AutoDock Vina_](https://vina.scripps.edu/downloads/) (latest stable version)
+- [_GNINA_](https://github.com/gnina/gnina)
 
-Go to the download section of the official _MGLTools_ web site: https://ccsb.scripps.edu/mgltools/downloads/, and install the latest version of _MGLTools_, if you use Linux include path of _MGLTools_' local directory into global enviroment variable **PATH**. To install _ADFR suite_ go to the download page of its official web site: https://ccsb.scripps.edu/adfr/downloads/, and install the latest version of _ADFR suite_. You can download _Autodock Vina_ from his official web page: https://vina.scripps.edu/downloads/ or you can download the latest stable version from its GitHub repository: https://vina.scripps.edu/downloads/. To install _GNINA_ follow instruction in installation section on its GithHub repository: https://github.com/gnina/gnina.
+**N.B.:** For Linux users, include _MGLTools_ directory's path into global enviroment variable **PATH**.
 
 ### Internal dependencies
-
-From requirements.txt you can install internal dependencies, python package and libraries, by typing in terminal this command:
+Internal dependencies, which correspond to python packages and libraries, can be installed by typing this command into your terminal:
 
 `pip install -r requirements.txt`
