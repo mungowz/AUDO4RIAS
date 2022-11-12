@@ -1,21 +1,13 @@
-import os
-from Gui.ligandsPreparation2 import *
-from Utilities.utils import checkFilesInFolder, removeFiles
+from Gui.scripts.ligandsPreparation2 import selectLigands, sdf2pdb, prepareLigands
+from Utilities.utils import removeFiles, checkFilesInFolder
 from config import Config
-from pathlib import Path
 from tkinter import messagebox
+from pathlib import Path
+from os.path import join, exists
+from os import access, R_OK
 
 
-def prepare_ligands(
-    verbose, 
-    input_file, 
-    default_file, 
-    excel_folder, 
-    sdf_folder,  
-    pdb_folder, 
-    pdbqt_folder,
-    keep_ligands
-):
+def prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands, contents, number_contents):
         
     print("------------------------------------------")
     print("######### INITIALIZE ENVIRONMENT #########")
@@ -23,35 +15,35 @@ def prepare_ligands(
 
     print(input_file)
 
-    if input_file != default_file:
-        if not os.path.exists(input_file):
+    if input_file != join(Config.INPUT_FOLDER, "ligands_list.txt"):
+        if not exists(input_file):
             messagebox.showerror("Error", "Specify a valid input file!")
             exit(1)
-        if not os.access(input_file, os.R_OK):
+        if not access(input_file, R_OK):
             messagebox.showerror("Error", "Modify file permission!")
             exit(1)
         print("set input filepath to ", input_file)
 
     if excel_folder != Config.EXCEL_FOLDER:
-        if not os.path.exists(excel_folder):
+        if not exists(excel_folder):
             messagebox.showerror("Error", "Specify a valid directory or modify dir permission for excel folder!")
             exit(1)
         print("set excel folder to ", excel_folder)
 
     if sdf_folder != Config.LIGANDS_SDF_FOLDER:
-        if not os.path.exists(sdf_folder):
+        if not exists(sdf_folder):
             messagebox.showerror("Error", "Specify a valid directory or modify dir permission for sdf folder!")
             exit(1)
         print("set sdf folder to ", sdf_folder)
 
     if pdb_folder != Config.LIGANDS_PDB_FOLDER:
-        if not os.path.exists(pdb_folder):
+        if not exists(pdb_folder):
             messagebox.showerror("Error", "Specify a valid directory or modify dir permission for pdb folder!")
             exit(1)
         print("set pdb folder to ", pdb_folder)
 
     if pdbqt_folder != Config.LIGANDS_PDBQT_FOLDER:
-        if not os.path.exists(pdbqt_folder):
+        if not exists(pdbqt_folder):
             messagebox.showerror("Error", "Specify a valid directory or modify dir permission for pdbqt folder!")
             exit(1)
         print("set pdbqt folder to ", pdbqt_folder)
@@ -67,10 +59,6 @@ def prepare_ligands(
         Path(Config.LIGANDS_PDBQT_FOLDER).mkdir(parents=True, exist_ok=True)
     if excel_folder == Config.EXCEL_FOLDER:
         Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
-    
-    with open(input_file) as f:
-        contents = f.readlines()
-        number_contents = len(contents)
 
     if not keep_ligands:
         removeFiles(sdf_folder, ".sdf")
@@ -79,13 +67,7 @@ def prepare_ligands(
             print("################# STEP 1 #################")
             print("------------------------------------------")
 
-        selectLigands(
-            sdf_folder=sdf_folder,
-            excel_folder=excel_folder,
-            verbose=verbose,
-            contents=contents,
-            number_contents=number_contents
-        )
+        selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents)
 
     else: 
         # check if there is at least a sdf file
@@ -103,24 +85,14 @@ def prepare_ligands(
         print("------------------------------------------")
             
 
-    sdf2pdb(
-        sdf_folder=sdf_folder, 
-        pdb_folder=pdb_folder, 
-        verbose=verbose,
-        number_contents=number_contents
-    )
+    sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents)
     
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 3 #################")
         print("------------------------------------------")
     
-    prepareLigands(
-        pdb_folder=pdb_folder,
-        pdbqt_folder=pdbqt_folder,
-        verbose=verbose,
-        number_contents=number_contents
-    )
+    prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents)
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")

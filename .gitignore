@@ -3,6 +3,7 @@
 env/
 venv/
 ENV/
+output/vina/
 env.bak/
 venv.bak/
 __pycache__/

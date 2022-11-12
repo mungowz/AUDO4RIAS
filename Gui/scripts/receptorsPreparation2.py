@@ -8,8 +8,9 @@ from MoleculesPreparation.structuresManipulation import extractRemark350Monomeri
 from MoleculesPreparation.structuresSelection import RestApiSelection, downloadPdbs, selectPdbs
 from Utilities.utils import saveDictToExcel
 
+
 def deleteHeteroatomsChains(pdb_folder, verbose, pb):
-    pb.progress()
+    pb.increase()
     pb.update()
     
     if verbose:
@@ -38,7 +39,7 @@ def deleteHeteroatomsChains(pdb_folder, verbose, pb):
             )
             print(invalid_hetatm_chains)
         
-        pb.progress()
+        pb.increase()
         pb.update()
         # for each record in HETATM dataframe of a given pdb, drop records in which chain_id is set to a chain in invalid_hetatm_chains
         for row in range(0, len(pdb.df["HETATM"].index)):
@@ -55,7 +56,7 @@ def deleteHeteroatomsChains(pdb_folder, verbose, pb):
                     + line_idx
                     + " removed"
                 )
-            pb.progress()
+            pb.increase()
             pb.update()
 
         # save df as pdb in place
@@ -68,7 +69,7 @@ def deleteHeteroatomsChains(pdb_folder, verbose, pb):
 
 # margin in angstroms to have some space between the max and min atom coordinates for the ligand
 def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose, pb):
-    pb.progress()
+    pb.increase()
     pb.update()
 
     ppdb = PandasPdb()
@@ -92,12 +93,12 @@ def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose, pb):
                         + output_path
                         + ")"
                     )
-        pb.progress()
+        pb.increase()
         pb.update()
 
                 
 def createGridbox(ppdb, protein_path, gridbox_folder, margin, pb):
-    pb.progress()
+    pb.increase()
     pb.update()
     
     # extract the protein_code from path name
@@ -136,7 +137,7 @@ size_z = {size_z}
 
 exhaustiveness = 16"""
 
-    pb.progress()
+    pb.increase()
     pb.update()
     # to create the text with the grid box values, first we create the file name with the prot code + extension
     file_name = f"protein_{protein_code}_grid.txt"
@@ -149,7 +150,7 @@ exhaustiveness = 16"""
     return [output_path, protein_code]
 
 def splitRepeatedResidues(pdb_folder, verbose, pb, output_folder=None):
-    pb.progress()
+    pb.increase()
     pb.update()
     
     if output_folder is None:
@@ -175,7 +176,7 @@ def splitRepeatedResidues(pdb_folder, verbose, pb, output_folder=None):
         ppdb.df["ATOM"]["alt_loc"] = ""
         ppdb.to_pdb(path=output_path, records=None, gz=False, append_newline=True)
     
-        pb.progress()
+        pb.increase()
         pb.update()
 
     if verbose:
@@ -189,7 +190,7 @@ def splitChains(pdb_folder, verbose, pb):
     if verbose:
         print("\nSplitting chains of monomeric biological unit...")
 
-    pb.progress()
+    pb.increase()
     pb.update()
 
     proteins_dict = {}
@@ -227,7 +228,7 @@ def splitChains(pdb_folder, verbose, pb):
         }  # dict {chain-sequence}
         proteins_dict[atoms.getTitle()] = chid_sequence  # dict {code: {chain-sequence}}
 
-        pb.progress()
+        pb.increase()
         pb.update()
 
         # for each chain starting from B, ...
@@ -249,7 +250,7 @@ def splitChains(pdb_folder, verbose, pb):
                     chid_sequence[chid] = hv[chid].getSequence()
                     proteins_dict[atoms.getTitle()] = chid_sequence
 
-            pb.progress()
+            pb.increase()
             pb.update()
 
         for chid, seq in proteins_dict[atoms.getTitle()].items():
@@ -266,7 +267,7 @@ def splitChains(pdb_folder, verbose, pb):
             # save new pdb file
             writePDB(filename, new_atoms)
 
-            pb.progress()
+            pb.increase()
             pb.update()
         
         # remove old pdb file
@@ -289,7 +290,7 @@ def selectReceptors(
 
     proteins_list = RestApiSelection(Config.URL)
 
-    pb.progress()
+    pb.increase()
     pb.update()
     # Build a query that select all needed proteins
     # proteins_list = selectPdbs(
@@ -306,13 +307,13 @@ def selectReceptors(
     # download pdb files from a list
     downloadPdbs(pdbs_list=proteins_list, output_path=pdb_folder, verbose=verbose, pb=pb)
 
-    pb.progress()
+    pb.increase()
     pb.update()
 
     proteins = dict()
     parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
 
-    pb.progress()
+    pb.increase()
     pb.update()
     for protein_file in os.scandir(pdb_folder):
         # for each protein_code in proteins_list
@@ -345,7 +346,7 @@ def selectReceptors(
                     "journal": journal,
                     "compound": compound,
                 }
-            pb.progress()
+            pb.increase()
             pb.update()
 
     if verbose:
@@ -369,12 +370,12 @@ def downloadPdbs(pdbs_list, output_path, verbose, pb):
             fetchPDB(protein_code, folder=output_path, compressed=False)
             print("\n")
 
-            pb.progress()
+            pb.increase()
             pb.update()
 
 
 def prepareReceptors(pdb_folder, pdbqt_folder, verbose, pb, charges_to_add='Kollman'):
-    pb.progress()
+    pb.increase()
     pb.update()
     command = "chmod u+x scripts/replacePrepareReceptor4.sh; ./scripts/replacePrepareReceptor4.sh"
     if verbose:
@@ -431,7 +432,7 @@ def prepareReceptors(pdb_folder, pdbqt_folder, verbose, pb, charges_to_add='Koll
         #               in the list and no metals.
         #            (default is False which means not to do this)
         #
-        pb.progress()
+        pb.increase()
         pb.update()
         command = (
             "prepare_receptor -r "
@@ -450,3 +451,63 @@ def prepareReceptors(pdb_folder, pdbqt_folder, verbose, pb, charges_to_add='Koll
 
     if verbose:
         print("Done.")
+
+
+def checkWarnings(pdb_folder):
+
+    ## pdb example ##
+    ## REMARK 350 BIOMOLECULE: n
+    ## REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: str1
+    ## REMARK 350 SOFTWARE DETERMINED QUATERNARY STRUCTURE: str2
+
+    print("Checking warnings...")
+    # if str1 != str2 put a warning
+    author_determined_biological_unit = None
+    biomolecule = None
+    software_determined_quaternary_structure = None
+
+    for pdb_file in os.scandir(pdb_folder):
+
+        if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
+            continue
+        with open(pdb_file.path, "r") as pdb_reader:
+            for l_no, line in enumerate(pdb_reader):
+
+                if "REMARK" in line:
+                    remark = line.split(" ")[1]
+                    if remark > "350":
+                        break
+
+                if "BIOMOLECULE" in line:
+                    biomolecule = line.rstrip().split(" ")[-1]
+
+                    continue
+
+                if "AUTHOR DETERMINED BIOLOGICAL UNIT" in line:
+                    author_determined_biological_unit = line.rstrip().split(" ")[-1]
+                    continue
+
+                if "SOFTWARE DETERMINED QUATERNARY STRUCTURE" in line:
+                    software_determined_quaternary_structure = line.rstrip().split(" ")[
+                        -1
+                    ]
+
+                if (
+                    software_determined_quaternary_structure is not None
+                    and software_determined_quaternary_structure
+                    != author_determined_biological_unit
+                ):
+                    # put a warning
+                    print(
+                        "\nWARNING: @"
+                        + pdb_file.path.split(os.sep)[-1]
+                        + ":BIOMOLECULE: "
+                        + biomolecule
+                        + "\n"
+                        + "AUTHOR DETERMINED BIOLOGICAL UNIT ("
+                        + author_determined_biological_unit
+                        + ") and SOFTWARE DETERMINED QUATERNARY STRUCTURE ("
+                        + software_determined_quaternary_structure
+                        + ") are not equal!"
+                    )
+                software_determined_quaternary_structure = None

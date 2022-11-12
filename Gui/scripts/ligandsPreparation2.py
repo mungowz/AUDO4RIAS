@@ -1,14 +1,15 @@
-import pandas as pd
-import xlsxwriter
-import pubchempy as pcp
-import os
-from Utilities.utils import removeFiles
-from Gui.progressBar import ProgressBar
+from pubchempy import get_compounds, download
+from xlsxwriter import Workbook
+from os import sep, rename, scandir, chdir, system
+from os.path import join, exists
+from Gui.windows.progressBar import determinateProgressBar
+
 
 def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
 
-    pb = ProgressBar("Downloading sdf files", number_contents, True)
+    pb = determinateProgressBar(number_contents, "Downloading sdf files")
     pb.update()
+    
     # set of downloaded ligands
     ligands_set = set()
     # set of ligands that could not be downloaded
@@ -17,13 +18,13 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
     # extract ligands from Pubchem
     for substance in contents:
         substance = substance[:-1] + ""
-        ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")
+        ligands_path = join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
-        if not os.path.exists(file_name.replace(" ", "_")):
-            structure = pcp.get_compounds(substance, "name", record_type="3d")
+        if not exists(file_name.replace(" ", "_")):
+            structure = get_compounds(substance, "name", record_type="3d")
             if structure:
                 ligands_set.add(substance)
-                pcp.download(
+                download(
                     "SDF",
                     ligands_path,
                     substance,
@@ -38,7 +39,7 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
                         )
                     )
                 # replaces the space with the underscore in the name of the .sdf file
-                os.rename(ligands_path, ligands_path.replace(" ", "_"))
+                rename(ligands_path, ligands_path.replace(" ", "_"))
             if not structure:
                 if verbose:
                     print(
@@ -52,14 +53,14 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
     pb.close()
 
     # write an output excel file which contains information about sdf ligands output
-    workbook = xlsxwriter.Workbook(
-        os.path.join(excel_folder, "ligands_sdf_output.xlsx")
-    )
+    workbook = Workbook(join(excel_folder, "ligands_sdf_output.xlsx"))
     worksheet_ligands = workbook.add_worksheet("ligands")
     worksheet_problem = workbook.add_worksheet("ligands_problem")
+    
     # write dowloaded ligands
     for row_num, data in enumerate(ligands_set):
         worksheet_ligands.write(row_num, 0, data)
+    
     # write ligands which could not be downloaded
     for row_num, data in enumerate(ligands_problem_set):
         worksheet_problem.write(row_num, 0, data)
@@ -67,14 +68,15 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
 
 
 def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
-    pb = ProgressBar("Converting pdbqt files", number_contents, True)
+    
+    pb = determinateProgressBar(number_contents, "Converting pdbqt files")
     pb.update()
 
-    for pdb_file in os.scandir(pdb_folder):
-        os.chdir(pdb_folder)
+    for pdb_file in scandir(pdb_folder):
+        chdir(pdb_folder)
         if pdb_file.is_file() and pdb_file.path.endswith(".pdb"):
-            pdbqt_code = pdb_file.path.split(os.sep)[-1].split(".")[0] + '.pdbqt'
-            pdbqt_path = os.path.join(pdbqt_folder, pdbqt_code) 
+            pdbqt_code = pdb_file.path.split(sep)[-1].split(".")[0] + '.pdbqt'
+            pdbqt_path = join(pdbqt_folder, pdbqt_code) 
 
             command = (
                 'prepare_ligand' 
@@ -86,21 +88,23 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
             ) 
             if verbose:
                 print("Executing: " + command)
-            os.system(command = command)
+            system(command = command)
             print("\n")
 
         pb.progress()
         pb.update()
     pb.close()
 
+
 def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
-    pb = ProgressBar("Converting pdb files", number_contents, True)
+    
+    pb = determinateProgressBar(number_contents, "Converting pdb files")
     pb.update()
 
-    for sdf_file in os.scandir(sdf_folder):
+    for sdf_file in scandir(sdf_folder):
         if sdf_file.is_file() and sdf_file.path.endswith(".sdf"):
-            ligand_name = sdf_file.path.split(os.sep)[-1].split(".")[0]
-            pdb_path = os.path.join(pdb_folder, ligand_name + ".pdb")
+            ligand_name = sdf_file.path.split(sep)[-1].split(".")[0]
+            pdb_path = join(pdb_folder, ligand_name + ".pdb")
             command = (
                 'obabel ' 
                 + '\"' + sdf_file.path + '\"' 
@@ -108,7 +112,7 @@ def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
                 + '\"' + pdb_path + '\"'
             )
             print(command)
-            os.system(command=command)
+            system(command=command)
 
             if verbose:
                 print(
