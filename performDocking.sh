@@ -42,7 +42,7 @@ for p in  ${DATA_FOLDER}/proteins/pdbqt/protein_*.pdbqt; do
     receptor=${tmp%.*}
     # mkdir -p "${DOCKING_FOLDER}/${receptor}"
     if [ "$DOCKING_SOFTWARE" = "vina" ]; then
-        for g in proteins/gridbox_output/protein_*_grid.txt; do
+        for g in  ${DATA_FOLDER}/proteins/gridbox/protein_*_grid.txt; do
             tmp=${g#*_}
             tmp=${tmp#*_}
             gridbox=${tmp%_*}
@@ -62,10 +62,10 @@ for p in  ${DATA_FOLDER}/proteins/pdbqt/protein_*.pdbqt; do
         echo Processing ligand "$ligand"
         mkdir -p "${DOCKING_FOLDER}/${DOCKING_SOFTWARE}/${receptor}/${ligand}"
         if [ "$DOCKING_SOFTWARE" = "vina" ]; then
-            touch "${DOCKING_FOLDER}/${receptor}/${ligand}/log.txt"
-            vina --config "$g" --receptor "$p" --ligand "$f" --out "${DOCKING_FOLDER}/vina/${receptor}/${ligand}/out.pdbqt" --log "${DOCKING_FOLDER}/${receptor}/${ligand}/log.txt"
+            touch "${DOCKING_FOLDER}/${DOCKING_SOFTWARE}/${receptor}/${ligand}/log.txt"
+            vina --config "$g" --receptor "$p" --ligand "$f" --out "${DOCKING_FOLDER}/${DOCKING_SOFTWARE}/${receptor}/${ligand}/out.pdbqt" --log "${DOCKING_FOLDER}/${DOCKING_SOFTWARE}/${receptor}/${ligand}/log.txt"
         else
-            gnina --receptor "$p" --ligand "$f" --autobox_ligand "$p" --out "${DOCKING_FOLDER}/gnina/${receptor}/${ligand}/out.pdbqt" --cnn_verbose 
+            gnina --receptor "$p" --ligand "$f" --autobox_ligand "$p" --out "${DOCKING_FOLDER}/${DOCKING_SOFTWARE}/${receptor}/${ligand}/out.pdbqt" --cnn_verbose 
         fi
     done
 done
