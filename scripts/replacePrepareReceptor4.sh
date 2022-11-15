@@ -10,6 +10,8 @@ elif [ "$1" = "-h" ]; then
     echo "./replacePrepareReceptor4.sh [-v|-h]
             [-v]    verbose
             [-h]    help"
+    exit 1
+
 fi
 
 if [ "$VERBOSE" = true ]; then
@@ -51,5 +53,5 @@ chmod a+x "$FINAL_PATH"
 
 if [ "$VERBOSE" = true ]; then
     echo "Set execution flag to "$FINAL_PATH""
-    echo "###############   DONE   #################"
 fi
+echo "###############   DONE   #################"

@@ -2,6 +2,8 @@ import pandas as pd
 import xlsxwriter
 import pubchempy as pcp
 import os
+import shlex
+import subprocess
 from Utilities.utils import removeFiles
 
 
@@ -74,16 +76,15 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose):
             pdbqt_code = pdb_file.path.split(os.sep)[-1].split(".")[0] + '.pdbqt'
             pdbqt_path = os.path.join(pdbqt_folder, pdbqt_code) 
 
-            command = (
-                'prepare_ligand' 
-                + ' -l ' 
-                + "\"" + pdb_file.path + "\""
-                + ' -v '
-                + ' -o '
-                + "\"" + pdbqt_path + "\""
-            ) 
+            command = [
+                'prepare_ligand',
+                '-l',
+                shlex.quote(pdb_file.path),
+                '-v', '-o',
+                shlex.quote(pdbqt_path)
+            ] 
             if verbose:
-                print("Executing: " + command)
-            os.system(command = command)
+                print("Executing: " + " ".join(c for c in command))
+            subprocess.run(command)
             print("\n")
     

@@ -1,5 +1,7 @@
 from biopandas.pdb import PandasPdb
 import os
+import subprocess
+import shlex
 import math
 from prody import *
 import Bio.PDB as bioPDB
@@ -315,13 +317,16 @@ def selectReceptors(
 def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'):
     SCRIPT_FILENAME = "replacePrepareReceptor4.sh"
     script_path = findFile(SCRIPT_FILENAME, os.environ.get("HOME"))
-
-    command = f"chmod u+x {script_path}; .{script_path}"
+    command = [
+        '/bin/sh',
+        shlex.quote(script_path)
+    ]
     if verbose:
         print("\nReplacing ADFRsuite prepare_receptor4.py script...")
-        command += " -v"
+        command.append('-v')
 
-    os.system(command=command)
+    subprocess.run(['chmod', 'u+x', shlex.quote(script_path)], check=True)
+    subprocess.run(command, check=True)
 
     if verbose:
         print(
@@ -371,17 +376,22 @@ def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'
         #               in the list and no metals.
         #            (default is False which means not to do this)
         #
-        command = (
-            "prepare_receptor -r "
-            + pdb_file.path
-            + " -A checkhydrogens -C " + charges_to_add + " -e -o "
-            + output_filename
-        )
+        command = [
+            "prepare_receptor",
+            "-r",
+            shlex.quote(pdb_file.path),
+            "-A", 
+            "checkhydrogens",
+            "-C",
+            charges_to_add,
+            "-e","-o",
+            shlex.quote(output_filename)
+        ]
 
         if verbose:
-            print("Executing: " + command)
+            print("Executing: " + " ".join(c for c in command))
         # produce .pdbqt file for each pdb file
-        os.system(command=command)
+        subprocess.run(command)
 
         # 3r72: The coordinate for one atom was wrong and the atom was floating around too far away to create a bond
         # We assume that it is already correct in our input files

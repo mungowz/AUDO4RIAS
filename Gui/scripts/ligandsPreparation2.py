@@ -1,6 +1,8 @@
 from pubchempy import get_compounds, download
 from xlsxwriter import Workbook
-from os import sep, rename, scandir, chdir, system
+from os import sep, rename, scandir, chdir
+import subprocess
+import shlex
 from os.path import join, exists
 from Gui.windows.progressBar import determinateProgressBar
 
@@ -78,17 +80,16 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
             pdbqt_code = pdb_file.path.split(sep)[-1].split(".")[0] + '.pdbqt'
             pdbqt_path = join(pdbqt_folder, pdbqt_code) 
 
-            command = (
-                'prepare_ligand' 
-                + ' -l ' 
-                + "\"" + pdb_file.path + "\""
-                + ' -v '
-                + ' -o '
-                + "\"" + pdbqt_path + "\""
-            ) 
+            command = [
+                'prepare_ligand',
+                '-l',
+                shlex.quote(pdb_file.path),
+                '-v', '-o',
+                shlex.quote(pdbqt_path)
+            ] 
             if verbose:
-                print("Executing: " + command)
-            system(command = command)
+                print("Executing: " + " ".join(c for c in command))
+            subprocess.run(command)
             print("\n")
 
         pb.progress()
@@ -105,14 +106,15 @@ def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
         if sdf_file.is_file() and sdf_file.path.endswith(".sdf"):
             ligand_name = sdf_file.path.split(sep)[-1].split(".")[0]
             pdb_path = join(pdb_folder, ligand_name + ".pdb")
-            command = (
-                'obabel ' 
-                + '\"' + sdf_file.path + '\"' 
-                + ' -O '
-                + '\"' + pdb_path + '\"'
-            )
-            print(command)
-            system(command=command)
+            command = [
+                'obabel',
+                shlex.quote(sdf_file.path),
+                '-O',
+                shlex.quote(pdb_path)
+            ]
+            print(" ".join(c for c in command))
+            subprocess.run(command)
+
 
             if verbose:
                 print(
