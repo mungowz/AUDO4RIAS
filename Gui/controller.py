@@ -1,4 +1,4 @@
-from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme
+from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme, CTkInputDialog
 import Gui.windows.computationalDocking as computationalDocking
 import Gui.windows.preparation as preparation
 import Gui.windows.ligands as ligands
@@ -9,6 +9,8 @@ from Gui.scripts.prepare_receptors2 import prepare_receptors
 from Gui.scripts.performDocking import performDocking
 from os.path import join
 from config import Config
+from tkinter.filedialog import askopenfilename, askdirectory
+from tkinter import END
 
 
 LARGEFONT =("Verdana", 35)
@@ -57,6 +59,29 @@ class Controller(CTk):
     def change_appearance_mode(self, new_appearance_mode):
         
         set_appearance_mode(new_appearance_mode)
+
+    def browse_directory(self, entry):
+        entry.delete(0, END)
+
+        filename = askdirectory(
+            initialdir = "/",
+            title = "Select a File",
+        )
+
+        entry.insert(0, filename)
+
+
+    def browse_files(self, entry):
+        
+        entry.delete(0, END)
+
+        filename = askopenfilename(
+            initialdir = "/",
+            title = "Select a File",
+            filetypes = [("All files", "*.*")]
+        )
+
+        entry.insert(0, filename)
 
     def execute_ligands(self, verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands):
 

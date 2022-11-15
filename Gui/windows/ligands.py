@@ -39,26 +39,36 @@ class Ligands(CTkFrame):
         label_input_file.grid(column=0, row=1, sticky="nwe", padx=15, pady=1)
         entry_input_file = CTkEntry(master=frame_right, width=120,)
         entry_input_file.grid(row=2, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
+        button_browse_input_file = CTkButton(master = frame_right, height=1, text="Browse files", command=lambda: controller.browse_files(entry_input_file))
+        button_browse_input_file.place(x=312, y=93)
 
         label_excel_folder = CTkLabel(master=frame_right, height=1, text="Specify the path of input excel folder or leave it blank to use the default path")
         label_excel_folder.grid(column=0, row=4, sticky="nwe", padx=15, pady=1)
         entry_excel_folder = CTkEntry(master=frame_right, width=120)
         entry_excel_folder.grid(row=5, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
+        button_browse_excel_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_excel_folder))
+        button_browse_excel_folder.place(x=312, y=144)
 
         label_sdf_folder = CTkLabel(master=frame_right, height=1, text="Specify the path of the sdf folder or leave it blank to use the default path:")
         label_sdf_folder.grid(column=0, row=7, sticky="nwe", padx=1, pady=1)
         entry_sdf_folder = CTkEntry(master=frame_right, width=120,)
         entry_sdf_folder.grid(row=8, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
+        button_browse_sdf_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_sdf_folder))
+        button_browse_sdf_folder.place(x=312, y=195)
 
         label_pdb_folder = CTkLabel(master=frame_right, height=1, text="Specify the path of the pdb folder or leave it blank to use the default path:")
         label_pdb_folder.grid(column=0, row=10, sticky="nwe", padx=1, pady=1)
         entry_pdb_folder = CTkEntry(master=frame_right, width=120)
         entry_pdb_folder.grid(row=11, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
+        button_browse_pdb_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_pdb_folder))
+        button_browse_pdb_folder.place(x=312, y=246)
 
         label_pdbqt_folder = CTkLabel(master=frame_right, height=1, text="Specify the path of the pdbqt folder or leave it blank to use the default path:")
         label_pdbqt_folder.grid(column=0, row=13, sticky="nwe", padx=1, pady=5)
         entry_pdbqt_folder = CTkEntry(master=frame_right, width=120)
         entry_pdbqt_folder.grid(row=14, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
+        button_browse_pdbqt_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_pdbqt_folder))
+        button_browse_pdbqt_folder.place(x=312, y=305)
 
 
         check_box = CTkCheckBox(frame_right, text="Keep Ligands previously downloaded")
