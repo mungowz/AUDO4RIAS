@@ -1,5 +1,6 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkOptionMenu, CTkProgressBar
 import Gui.windows.preparation as preparation
+import Gui.windows.docking as docking
 from tkinter import LEFT
 
 
@@ -35,7 +36,7 @@ class ComputationalDocking(CTkFrame):
         button_preparation = CTkButton(master=frame_left, text="Preparation", command=lambda: controller.show_frame(preparation.Preparation))
         button_preparation.grid(row=2, column=0, pady=10, padx=20)
         
-        button_docking = CTkButton(master=frame_left, text="Docking", command=lambda: controller.show_frame(preparation.Preparation))
+        button_docking = CTkButton(master=frame_left, text="Docking", command=lambda: controller.show_frame(docking.Docking))
         button_docking.grid(row=3, column=0, pady=10, padx=20)
         
         label_mode = CTkLabel(master=frame_left, text="Appearance Mode:")

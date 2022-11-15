@@ -3,8 +3,10 @@ import Gui.windows.computationalDocking as computationalDocking
 import Gui.windows.preparation as preparation
 import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
+import Gui.windows.docking as docking
 from Gui.scripts.prepare_ligands2 import prepare_ligands
 from Gui.scripts.prepare_receptors2 import prepare_receptors
+from Gui.scripts.performDocking import performDocking
 from os.path import join
 from config import Config
 
@@ -22,9 +24,9 @@ class Controller(CTk):
 
         CTk.__init__(self, *args, **kwargs)
         
-        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors)
-        TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors")
-        DIMENSIONS = ("720x520", "720x520", "720x520", "720x520")
+        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking)
+        TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors", "Docking")
+        DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520")
 
         self.container = CTkFrame(self)
         self.container.pack(side = "top", fill = "both", expand = True)
@@ -100,3 +102,20 @@ class Controller(CTk):
             charges_to_add = "Kollman"       
 
         prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files, gridbox_output_folder, charges_to_add)
+
+    def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
+
+        if gridboxes_folder == "":
+            gridboxes_folder = Config.GRIDBOX_FOLDER
+
+        if proteins_folder == "":
+            proteins_folder = Config.RECEPTORS_PDBQT_FOLDER
+
+        if ligands_folder == "":
+            ligands_folder = Config.LIGANDS_PDBQT_FOLDER
+
+        if outputs_folder == "":
+            outputs_folder = Config.VINA_DOCKING_FOLDER
+
+        performDocking(gridboxes_folder, proteins_folder, ligands_folder, outputs_folder)
+
