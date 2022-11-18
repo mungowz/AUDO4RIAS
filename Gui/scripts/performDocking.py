@@ -4,11 +4,31 @@ from pathlib import Path
 from subprocess import run
 from shlex import quote
 from Gui.windows.progressBar import indeterminateProgressBar
+from Utilities.utils import checkFilesInFolder
+from tkinter.messagebox import showerror
+
 
 def performDocking(gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
     
+    print("set gridbox folder to ", gridboxes_folder)
+    print("set proteins folder to ", proteins_folder)
+    print("set ligands folder to ", ligands_folder)
+    print("set outputs folder to ", outputs_folder)
+
     #pb = indeterminateProgressBar(100, "Executing docking")
     #pb.update()
+
+    if not checkFilesInFolder(folder=gridboxes_folder, docted_extension=".txt"):
+        showerror("Error", "There's no txt file into gridbox folder")
+        return
+
+    if not checkFilesInFolder(folder=ligands_folder, docted_extension=".pdbqt"):
+        showerror("Error", "There's no pdbqt file into ligands folder")
+        return
+
+    if not checkFilesInFolder(folder=proteins_folder, docted_extension=".pdbqt"):
+        showerror("Error", "There's no pdbqt file into proteins folder")
+        return
 
     gridboxes_files = scandir(gridboxes_folder)
     proteins_files = scandir(proteins_folder)

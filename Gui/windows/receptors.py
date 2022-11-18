@@ -37,7 +37,7 @@ class Receptors(CTkFrame):
         label_excel_folder.grid(column=0, row=1, sticky="nwe", padx=15, pady=1)
         entry_excel_folder = CTkEntry(master=frame_right, width=120)
         entry_excel_folder.grid(row=2, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
-        button_browse_excel_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_diretory(entry_excel_folder))
+        button_browse_excel_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_excel_folder))
         button_browse_excel_folder.place(x=334, y=93)
 
         label_pdb_folder = CTkLabel(master=frame_right, height=1, text="Specify the path of the pdb folder or leave it blank to use the default path:")

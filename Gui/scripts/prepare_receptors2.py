@@ -2,37 +2,22 @@ from Gui.scripts.receptorsPreparation2 import selectReceptors, splitRepeatedResi
 from config import Config
 from Utilities.utils import checkFilesInFolder, removeFiles
 from pathlib import Path
-from tkinter import messagebox
+from tkinter.messagebox import showerror
 from os.path import exists
 
 
 def prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files, gridbox_output_folder, charges_to_add):
     
+    print("set excel folder to ", excel_folder)
+    print("set pdb folder to ", pdb_folder)
+    print("set pdbqt folder to ", pdbqt_folder)
+    print("set gridbox folder to ", gridbox_output_folder)
+    print("set keep-pdb-files option to ", bool(keep_pdb_files))
+    print("set margin to ", margin)
+
     print("--------- prepare_receptors.py -----------")
     print("######### INITIALIZE ENVIRONMENT #########")
     print("------------------------------------------")
-    
-    if excel_folder != Config.EXCEL_FOLDER:
-        if not exists(excel_folder):
-            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for excel folder!")
-            exit(1)
-        print("set excel folder to ", excel_folder)
-    
-    if pdb_folder != Config.LIGANDS_PDB_FOLDER:
-        if not exists(pdb_folder):
-            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for pdb folder!")
-            exit(1)
-        print("set pdb folder to ", pdb_folder)
-
-    if pdbqt_folder != Config.LIGANDS_PDBQT_FOLDER:
-        if not exists(pdbqt_folder):
-            messagebox.showerror("Error", "Specify a valid directory or modify dir permission for pdbqt folder!")
-            exit(1)
-        print("set pdbqt folder to ", pdbqt_folder)
-
-    print("set keep-pdb-files option to ", bool(keep_pdb_files))
-
-    print("set margin to ", margin)
 
     # initialize folders
     if pdb_folder == Config.RECEPTORS_PDB_FOLDER:
@@ -55,8 +40,8 @@ def prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, k
     else:
         # check if there is at least a pdb file
         if not checkFilesInFolder(folder=pdb_folder, docted_extension=".pdb"):
-            messagebox("Error", "There's no pdb file into pdb folder")
-            exit(2)
+            showerror("Error", "There's no pdb file into pdb folder")
+            return
         if verbose:
             print("\n--------------- RECEPTORS ----------------")
             print("############# SKIPPED STEP 1.1 #############")
