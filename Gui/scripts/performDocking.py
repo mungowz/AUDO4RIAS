@@ -6,9 +6,9 @@ from shlex import quote
 from Gui.windows.progressBar import indeterminateProgressBar
 
 def performDocking(gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
-
-    pb = indeterminateProgressBar(100, "Executing docking")
-    pb.update()
+    
+    #pb = indeterminateProgressBar(100, "Executing docking")
+    #pb.update()
 
     gridboxes_files = scandir(gridboxes_folder)
     proteins_files = scandir(proteins_folder)
@@ -40,5 +40,5 @@ def performDocking(gridboxes_folder, proteins_folder, ligands_folder, outputs_fo
                     ]
                     run(command)
                     
-                    pb.increase()
-                    pb.update()
+                    #pb.increase()
+                    #pb.update()

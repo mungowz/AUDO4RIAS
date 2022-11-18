@@ -11,9 +11,7 @@ from MoleculesPreparation.structuresSelection import RestApiSelection, downloadP
 from Utilities.utils import saveDictToExcel, findFile
 
 
-def deleteHeteroatomsChains(pdb_folder, verbose, pb):
-    pb.increase()
-    pb.update()
+def deleteHeteroatomsChains(pdb_folder, verbose):
     
     if verbose:
         print("\nCleaning structures from heteroatoms chains...")
@@ -41,8 +39,7 @@ def deleteHeteroatomsChains(pdb_folder, verbose, pb):
             )
             print(invalid_hetatm_chains)
         
-        pb.increase()
-        pb.update()
+
         # for each record in HETATM dataframe of a given pdb, drop records in which chain_id is set to a chain in invalid_hetatm_chains
         for row in range(0, len(pdb.df["HETATM"].index)):
             if pdb.df["HETATM"]["chain_id"][row] not in invalid_hetatm_chains:
@@ -58,8 +55,6 @@ def deleteHeteroatomsChains(pdb_folder, verbose, pb):
                     + line_idx
                     + " removed"
                 )
-            pb.increase()
-            pb.update()
 
         # save df as pdb in place
         pdb.to_pdb(path=pdb_file.path, records=None, gz=False, append_newline=True)
@@ -70,9 +65,7 @@ def deleteHeteroatomsChains(pdb_folder, verbose, pb):
 
 
 # margin in angstroms to have some space between the max and min atom coordinates for the ligand
-def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose, pb):
-    pb.increase()
-    pb.update()
+def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose):
 
     ppdb = PandasPdb()
 
@@ -84,7 +77,7 @@ def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose, pb):
             # Now we use PandasPDB from the package biopandas to extract a table with the atom coordinates.
             # We used the files that end with .pdb
             if protein_path.endswith(".pdb"):
-                output_path, protein_code = createGridbox(ppdb, protein_path, gridbox_output_folder, margin, pb)
+                output_path, protein_code = createGridbox(ppdb, protein_path, gridbox_output_folder, margin)
 
                 
                 if verbose:
@@ -95,14 +88,10 @@ def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose, pb):
                         + output_path
                         + ")"
                     )
-        pb.increase()
-        pb.update()
 
                 
-def createGridbox(ppdb, protein_path, gridbox_folder, margin, pb):
-    pb.increase()
-    pb.update()
-    
+def createGridbox(ppdb, protein_path, gridbox_folder, margin):
+
     # extract the protein_code from path name
     protein_code = protein_path.split(os.sep)[-1].split(".")[0]
     ppdb.read_pdb(protein_path)
@@ -139,8 +128,6 @@ size_z = {size_z}
 
 exhaustiveness = 16"""
 
-    pb.increase()
-    pb.update()
     # to create the text with the grid box values, first we create the file name with the prot code + extension
     file_name = f"protein_{protein_code}_grid.txt"
     # Then we define the path of the output
@@ -151,10 +138,8 @@ exhaustiveness = 16"""
     output.close()
     return [output_path, protein_code]
 
-def splitRepeatedResidues(pdb_folder, verbose, pb, output_folder=None):
-    pb.increase()
-    pb.update()
-    
+def splitRepeatedResidues(pdb_folder, verbose, output_folder=None):
+
     if output_folder is None:
         output_folder = pdb_folder
     if verbose:
@@ -177,23 +162,17 @@ def splitRepeatedResidues(pdb_folder, verbose, pb, output_folder=None):
         # have later on problems converting the pdb to pbdbqt
         ppdb.df["ATOM"]["alt_loc"] = ""
         ppdb.to_pdb(path=output_path, records=None, gz=False, append_newline=True)
-    
-        pb.increase()
-        pb.update()
 
     if verbose:
         print("Done.")
 
 
 
-def splitChains(pdb_folder, verbose, pb):
+def splitChains(pdb_folder, verbose):
     if not verbose:
         confProDy(verbosity="none")
     if verbose:
         print("\nSplitting chains of monomeric biological unit...")
-
-    pb.increase()
-    pb.update()
 
     proteins_dict = {}
     monomeric_proteins = []
@@ -230,9 +209,6 @@ def splitChains(pdb_folder, verbose, pb):
         }  # dict {chain-sequence}
         proteins_dict[atoms.getTitle()] = chid_sequence  # dict {code: {chain-sequence}}
 
-        pb.increase()
-        pb.update()
-
         # for each chain starting from B, ...
         # compare sequence to a list of sequences for the same protein code, initially filled with chain A sequence
         # if sequence is not in the list then append chain and sequence to a dict for this protein code otherwise do nothing (chain will be splitted and deleted)
@@ -252,9 +228,6 @@ def splitChains(pdb_folder, verbose, pb):
                     chid_sequence[chid] = hv[chid].getSequence()
                     proteins_dict[atoms.getTitle()] = chid_sequence
 
-            pb.increase()
-            pb.update()
-
         for chid, seq in proteins_dict[atoms.getTitle()].items():
 
             # build new pdb filename
@@ -268,9 +241,6 @@ def splitChains(pdb_folder, verbose, pb):
 
             # save new pdb file
             writePDB(filename, new_atoms)
-
-            pb.increase()
-            pb.update()
         
         # remove old pdb file
         if verbose:
@@ -282,18 +252,16 @@ def splitChains(pdb_folder, verbose, pb):
 
 
 def selectReceptors(
-    pdb_folder, excel_folder, verbose, pb
+    pdb_folder, excel_folder, verbose
 ):
 
     if verbose:
         print("PROTEINS FOLDER: " + pdb_folder)
         print("EXCEL FOLDER: " + excel_folder)
         print("\nSelecting proteins...")
-
+    
     proteins_list = RestApiSelection(Config.URL)
 
-    pb.increase()
-    pb.update()
     # Build a query that select all needed proteins
     # proteins_list = selectPdbs(
     #     query_type=query_type,
@@ -307,16 +275,11 @@ def selectReceptors(
         print("Number of Proteins selected: " + str(len(proteins_list)))
         print("\nDowloading proteins...")
     # download pdb files from a list
-    downloadPdbs(pdbs_list=proteins_list, output_path=pdb_folder, verbose=verbose, pb=pb)
-
-    pb.increase()
-    pb.update()
+    downloadPdbs(pdbs_list=proteins_list, output_path=pdb_folder, verbose=verbose)
 
     proteins = dict()
     parser = bioPDB.PDBParser(PERMISSIVE=True, QUIET=True)
 
-    pb.increase()
-    pb.update()
     for protein_file in os.scandir(pdb_folder):
         # for each protein_code in proteins_list
         if protein_file.is_file():
@@ -348,8 +311,6 @@ def selectReceptors(
                     "journal": journal,
                     "compound": compound,
                 }
-            pb.increase()
-            pb.update()
 
     if verbose:
         print("\nStoring information into an excel file...")
@@ -359,7 +320,7 @@ def selectReceptors(
         print("Stored into " + os.path.join(excel_folder, "info_proteins.xlsx"))
 
 
-def downloadPdbs(pdbs_list, output_path, verbose, pb):
+def downloadPdbs(pdbs_list, output_path, verbose):
     if not verbose:
         confProDy(verbosity="none")
 
@@ -372,13 +333,9 @@ def downloadPdbs(pdbs_list, output_path, verbose, pb):
             fetchPDB(protein_code, folder=output_path, compressed=False)
             print("\n")
 
-            pb.increase()
-            pb.update()
 
+def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'):
 
-def prepareReceptors(pdb_folder, pdbqt_folder, verbose, pb, charges_to_add='Kollman'):
-    pb.increase()
-    pb.update()
     SCRIPT_FILENAME = "replacePrepareReceptor4.sh"
     script_path = findFile(SCRIPT_FILENAME, os.environ.get("HOME"))
     command = [
@@ -440,8 +397,7 @@ def prepareReceptors(pdb_folder, pdbqt_folder, verbose, pb, charges_to_add='Koll
         #               in the list and no metals.
         #            (default is False which means not to do this)
         #
-        pb.increase()
-        pb.update()
+        
         command = [
             "prepare_receptor",
             "-r",

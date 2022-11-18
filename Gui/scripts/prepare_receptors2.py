@@ -1,5 +1,4 @@
 from Gui.scripts.receptorsPreparation2 import selectReceptors, splitRepeatedResidues, deleteHeteroatomsChains, splitChains, prepareReceptors, createGridboxes, checkWarnings
-from Gui.windows.progressBar import indeterminateProgressBar
 from config import Config
 from Utilities.utils import checkFilesInFolder, removeFiles
 from pathlib import Path
@@ -31,7 +30,7 @@ def prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, k
             exit(1)
         print("set pdbqt folder to ", pdbqt_folder)
 
-    print("set keep-pdb-files option to ", keep_pdb_files)
+    print("set keep-pdb-files option to ", bool(keep_pdb_files))
 
     print("set margin to ", margin)
 
@@ -46,16 +45,13 @@ def prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, k
     removeFiles(pdbqt_folder, ".pdbqt")
     removeFiles(gridbox_output_folder, ".txt")
 
-    pb = indeterminateProgressBar(100, "Downloading proteins")
-    pb.update()
-
-    if keep_pdb_files is False:
+    if not keep_pdb_files:
         removeFiles(pdb_folder, ".pdb")
         if verbose:
             print("\n------------- RECEPTORS ----------------")
             print("################# STEP 1 #################")
             print("------------------------------------------")
-        selectReceptors(pdb_folder=pdb_folder, excel_folder=excel_folder, verbose=verbose, pb=pb)
+        selectReceptors(pdb_folder=pdb_folder, excel_folder=excel_folder, verbose=verbose)
     else:
         # check if there is at least a pdb file
         if not checkFilesInFolder(folder=pdb_folder, docted_extension=".pdb"):
@@ -66,28 +62,23 @@ def prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, k
             print("############# SKIPPED STEP 1.1 #############")
             print("--------------------------------------------")
 
-    pb.increase()
-    pb.update()
-
     if verbose:
         checkWarnings(pdb_folder=pdb_folder)
         print("\n------------- RECEPTORS ----------------")
         print("################# STEP 2 #################")
         print("------------------------------------------")
 
-    splitRepeatedResidues(pdb_folder=pdb_folder, verbose=verbose, pb=pb)
-    deleteHeteroatomsChains(pdb_folder=pdb_folder, verbose=verbose, pb=pb)
-    splitChains(pdb_folder=pdb_folder, verbose=verbose, pb=pb)
+    splitRepeatedResidues(pdb_folder=pdb_folder, verbose=verbose)
+    deleteHeteroatomsChains(pdb_folder=pdb_folder, verbose=verbose)
+    splitChains(pdb_folder=pdb_folder, verbose=verbose)
 
-    prepareReceptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose, charges_to_add=charges_to_add, pb=pb)
+    prepareReceptors(pdb_folder=pdb_folder, pdbqt_folder=pdbqt_folder, verbose=verbose, charges_to_add=charges_to_add)
 
     if verbose:
         print("\n------------- RECEPTORS ----------------")
         print("################# STEP 3 #################")
         print("------------------------------------------")
-    createGridboxes(pdb_folder=pdb_folder, gridbox_output_folder=gridbox_output_folder, margin=margin, verbose=verbose, pb=pb)
-
-    pb.close()
+    createGridboxes(pdb_folder=pdb_folder, gridbox_output_folder=gridbox_output_folder, margin=margin, verbose=verbose)
 
     if verbose:
         print("\n---------- RECEPTORS: COMPLETED ---------")

@@ -7,10 +7,7 @@ from os.path import join, exists
 from Gui.windows.progressBar import determinateProgressBar
 
 
-def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
-
-    pb = determinateProgressBar(number_contents, "Downloading sdf files")
-    pb.update()
+def selectLigands(sdf_folder, excel_folder, verbose, contents):
     
     # set of downloaded ligands
     ligands_set = set()
@@ -22,6 +19,8 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
         substance = substance[:-1] + ""
         ligands_path = join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
+        ligands_path = ligands_path.replace("(", "")
+        ligands_path = ligands_path.replace(")", "")
         if not exists(file_name.replace(" ", "_")):
             structure = get_compounds(substance, "name", record_type="3d")
             if structure:
@@ -50,9 +49,6 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
                         )
                     )
                 ligands_problem_set.add(substance)
-        pb.progress()
-        pb.update()
-    pb.close()
 
     # write an output excel file which contains information about sdf ligands output
     workbook = Workbook(join(excel_folder, "ligands_sdf_output.xlsx"))
@@ -69,10 +65,7 @@ def selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents):
     workbook.close()
 
 
-def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
-    
-    pb = determinateProgressBar(number_contents, "Converting pdbqt files")
-    pb.update()
+def prepareLigands(pdb_folder, pdbqt_folder, verbose):
 
     for pdb_file in scandir(pdb_folder):
         chdir(pdb_folder)
@@ -92,15 +85,9 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents):
             subprocess.run(command)
             print("\n")
 
-        pb.progress()
-        pb.update()
-    pb.close()
 
 
-def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
-    
-    pb = determinateProgressBar(number_contents, "Converting pdb files")
-    pb.update()
+def sdf2pdb(sdf_folder, pdb_folder, verbose):
 
     for sdf_file in scandir(sdf_folder):
         if sdf_file.is_file() and sdf_file.path.endswith(".sdf"):
@@ -122,8 +109,3 @@ def sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents):
                         ligand_name=ligand_name, output_file=pdb_path
                     )
                 )
-
-        pb.progress()
-        pb.update()
-    pb.close()
-    

@@ -1,4 +1,4 @@
-from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme, CTkInputDialog
+from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme, CTkTextbox, CTkScrollbar
 import Gui.windows.computationalDocking as computationalDocking
 import Gui.windows.preparation as preparation
 import Gui.windows.ligands as ligands
@@ -10,8 +10,9 @@ from Gui.scripts.performDocking import performDocking
 from os.path import join
 from config import Config
 from tkinter.filedialog import askopenfilename, askdirectory
-from tkinter import END
-
+from tkinter import Tk, Frame, Button, Scrollbar, Text, END
+from threading import Thread
+import sys
 
 LARGEFONT =("Verdana", 35)
 
@@ -102,9 +103,34 @@ class Controller(CTk):
 
         with open(input_file) as f:
             contents = f.readlines()
-            number_contents = len(contents)
- 
-        prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands, contents, number_contents)
+
+        root = Tk()
+
+        root.title("Ligands preparation")
+
+        frame = CTkFrame(root)
+        frame.pack(expand=True, fill='both')
+
+        text = Text(frame)
+        text.pack(side='left', fill='both', expand=True)
+
+        scrollbar = CTkScrollbar(frame)
+        scrollbar.pack(side='right', fill='y')
+
+        text['yscrollcommand'] = scrollbar.set
+        scrollbar['command'] = text.yview
+
+        old_stdout = sys.stdout    
+        sys.stdout = Redirect(text)
+
+        # - after close window -
+
+        Thread(target=prepare_ligands, args=(verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands, contents)).start()
+
+        root.mainloop()
+
+        sys.stdout = old_stdout
+        
 
     def execute_receptors(self, verbose, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files, gridbox_output_folder, charges_to_add):
 
@@ -125,10 +151,12 @@ class Controller(CTk):
 
         if charges_to_add == "":
             charges_to_add = "Kollman"       
-
+            
         prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files, gridbox_output_folder, charges_to_add)
 
     def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
+
+        print("qui")
 
         if gridboxes_folder == "":
             gridboxes_folder = Config.GRIDBOX_FOLDER
@@ -143,4 +171,17 @@ class Controller(CTk):
             outputs_folder = Config.VINA_DOCKING_FOLDER
 
         performDocking(gridboxes_folder, proteins_folder, ligands_folder, outputs_folder)
+        
+
+class Redirect():
+
+    def __init__(self, widget, autoscroll=True):
+        self.widget = widget
+        self.autoscroll = autoscroll
+
+    def write(self, text):
+        self.widget.insert('end', text)
+        if self.autoscroll:
+            self.widget.see("end")  # autoscroll
+        
 

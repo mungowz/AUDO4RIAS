@@ -89,10 +89,10 @@ class Receptors(CTkFrame):
                 entry_excel_folder.get(),
                 entry_pdb_folder.get(),
                 entry_pdbqt_folder.get(),
-                entry_gridbox_output_folder.get(),
                 entry_margin.get(),
-                entry_charges_to_add.get(),
-                check_box.get()
+                check_box.get(),
+                entry_gridbox_output_folder.get(),
+                entry_charges_to_add.get()
             )
         )
         button_execute.grid(row=2, column=0, pady=10, padx=20)

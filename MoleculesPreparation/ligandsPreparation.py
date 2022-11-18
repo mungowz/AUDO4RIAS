@@ -23,6 +23,8 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
         substance = substance[:-1] + ""
         ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
+        ligands_path = ligands_path.replace("(", "")
+        ligands_path = ligands_path.replace(")", "")
         if not os.path.exists(file_name.replace(" ", "_")):
             structure = pcp.get_compounds(substance, "name", record_type="3d")
             if structure:
@@ -51,7 +53,6 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
                         )
                     )
                 ligands_problem_set.add(substance)
-
     # write an output excel file which contains information about sdf ligands output
     workbook = xlsxwriter.Workbook(
         os.path.join(excel_folder, "ligands_sdf_output.xlsx")
@@ -80,7 +81,8 @@ def prepareLigands(pdb_folder, pdbqt_folder, verbose):
                 'prepare_ligand',
                 '-l',
                 shlex.quote(pdb_file.path),
-                '-v', '-o',
+                '-v', 
+                '-o',
                 shlex.quote(pdbqt_path)
             ] 
             if verbose:

@@ -7,13 +7,11 @@ from os.path import join, exists
 from os import access, R_OK
 
 
-def prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands, contents, number_contents):
+def prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands, contents):
         
     print("------------------------------------------")
     print("######### INITIALIZE ENVIRONMENT #########")
     print("------------------------------------------")
-
-    print(input_file)
 
     if input_file != join(Config.INPUT_FOLDER, "ligands_list.txt"):
         if not exists(input_file):
@@ -48,7 +46,7 @@ def prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, p
             exit(1)
         print("set pdbqt folder to ", pdbqt_folder)
 
-    print("set keep-ligands option to ", keep_ligands)
+    print("set keep-ligands option to ", bool(keep_ligands))
 
     # initialize folders
     if sdf_folder == Config.LIGANDS_SDF_FOLDER:
@@ -67,7 +65,7 @@ def prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, p
             print("################# STEP 1 #################")
             print("------------------------------------------")
 
-        selectLigands(sdf_folder, excel_folder, verbose, contents, number_contents)
+        selectLigands(sdf_folder, excel_folder, verbose, contents)
 
     else: 
         # check if there is at least a sdf file
@@ -85,14 +83,14 @@ def prepare_ligands(verbose, input_file, excel_folder, sdf_folder, pdb_folder, p
         print("------------------------------------------")
             
 
-    sdf2pdb(sdf_folder, pdb_folder, verbose, number_contents)
+    sdf2pdb(sdf_folder, pdb_folder, verbose)
     
     if verbose:
         print("---------------- LIGANDS -----------------")
         print("################# STEP 3 #################")
         print("------------------------------------------")
     
-    prepareLigands(pdb_folder, pdbqt_folder, verbose, number_contents)
+    prepareLigands(pdb_folder, pdbqt_folder, verbose)
 
     if verbose:
         print("----------- LIGANDS: COMPLETED -----------")
