@@ -30,6 +30,8 @@ class Controller(CTk):
 
         CTk.__init__(self, *args, **kwargs)
         
+        self.resizable(False, False)
+
         FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking)
         TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors", "Docking")
         DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520")
