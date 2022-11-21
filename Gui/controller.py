@@ -4,6 +4,7 @@ import Gui.windows.preparation as preparation
 import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
 import Gui.windows.docking as docking
+import Gui.windows.help as help
 from os.path import exists, join
 from os import access, R_OK
 from Utilities.utils import checkFilesInFolder, isWritable
@@ -59,6 +60,15 @@ class Controller(CTk):
         self.update_idletasks()
         self.title(title)
         self.geometry(dimension)
+        frame.tkraise()
+
+    def help(self, window):
+
+        frame = help.Help(self.container, self, window)
+        frame.grid(row = 0, column = 0, sticky ="nsew")
+        self.update_idletasks()
+        self.title("Help")
+        self.geometry("720x520")
         frame.tkraise()
 
     def change_appearance_mode(self, new_appearance_mode):
@@ -230,5 +240,5 @@ class Controller(CTk):
         args = split(command)
         thread = Thread(target=Popen(args))
         thread.start()
-    
+
 

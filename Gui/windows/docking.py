@@ -85,6 +85,9 @@ class Docking(CTkFrame):
         button_back = CTkButton(master=frame_left, text="Back", command=lambda: controller.show_frame(computationalDocking.ComputationalDocking))
         button_back.grid(row=3, column=0, pady=10, padx=20)
 
+        button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(Docking))
+        button_help.grid(row=4, column=0, pady=10, padx=20)
+
         label_mode = CTkLabel(master=frame_left, text="Appearance Mode:")
         label_mode.grid(row=9, column=0, pady=0, padx=20, sticky="w")
 

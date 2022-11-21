@@ -27,7 +27,7 @@ class Preparation(CTkFrame):
         # ============ frame_left ============
 
         frame_left.grid_rowconfigure(0, minsize=10)
-        frame_left.grid_rowconfigure(5, weight=1)
+        frame_left.grid_rowconfigure(6, weight=1)
         frame_left.grid_rowconfigure(8, minsize=20)
         frame_left.grid_rowconfigure(11, minsize=10)
 
@@ -42,6 +42,9 @@ class Preparation(CTkFrame):
 
         button_back = CTkButton(frame_left, text="Back", command=lambda: controller.show_frame(computationalDocking.ComputationalDocking))
         button_back.grid(row=4, column=0, pady=10, padx=20)
+
+        button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(Preparation))
+        button_help.grid(row=5, column=0, pady=10, padx=20)
 
         label_mode = CTkLabel(master=frame_left, text="Appearance Mode:")
         label_mode.grid(row=9, column=0, pady=0, padx=20, sticky="w")
