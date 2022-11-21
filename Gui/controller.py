@@ -1,20 +1,19 @@
-from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme, CTkTextbox, CTkScrollbar
+from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme
 import Gui.windows.computationalDocking as computationalDocking
 import Gui.windows.preparation as preparation
 import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
 import Gui.windows.docking as docking
-from Gui.scripts.prepare_ligands2 import prepare_ligands
-from Gui.scripts.prepare_receptors2 import prepare_receptors
-from Gui.scripts.performDocking import performDocking
-from os.path import join, exists
+from os.path import exists, join
+from os import access, R_OK
+from Utilities.utils import checkFilesInFolder, isWritable
 from config import Config
 from tkinter.filedialog import askopenfilename, askdirectory
 from tkinter.messagebox import showerror
-from tkinter import Tk, Frame, Button, Scrollbar, Text, END
+from tkinter import END
+from subprocess import Popen
+from shlex import split
 from threading import Thread
-import sys
-from os import access, R_OK
 
 
 LARGEFONT =("Verdana", 35)
@@ -76,7 +75,6 @@ class Controller(CTk):
 
         entry.insert(0, filename)
 
-
     def browse_files(self, entry):
         
         entry.delete(0, END)
@@ -89,156 +87,148 @@ class Controller(CTk):
 
         entry.insert(0, filename)
 
-    def execute_ligands(self, verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands):
+    def execute_ligands(self, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands):
 
-        if input_file == "":
-            input_file = join(Config.INPUT_FOLDER, "ligands_list.txt")
-        else:
+        command = "xterm -xrm 'XTerm.vt100.allowTitleOps: false' -T Ligands -fg black -bg white -e python3 prepare_ligands.py -v"
+
+        if input_file != "":
             if not exists(input_file):
                 showerror("Error", "Specify a valid input file!")
                 return
             if not access(input_file, R_OK):
                 showerror("Error", "Modify file permission!")
                 return
-
-        if excel_folder == "":
-            excel_folder = Config.EXCEL_FOLDER
+            command += " -i " + input_file
         else:
+            input_file = join(Config.INPUT_FOLDER, "ligands_list.txt")
+
+        if excel_folder != "":
             if not exists(excel_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for excel folder!")
                 return
+            command += " -e " + excel_folder
+        else:
+            excel_folder = Config.EXCEL_FOLDER
 
-        if sdf_folder == "":
-            sdf_folder = Config.LIGANDS_SDF_FOLDER
-        else: 
+        if sdf_folder != "":
             if not exists(sdf_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for sdf folder!")
                 return
-
-        if pdb_folder == "":
-            pdb_folder = Config.LIGANDS_PDB_FOLDER
+            command += " -s " + sdf_folder
         else:
+            sdf_folder = Config.LIGANDS_SDF_FOLDER
+
+        if pdb_folder != "":
             if not exists(pdb_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for pdb folder!")
                 return
-
-        if pdbqt_folder == "":
-            pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
+            command += " -p " + pdb_folder
         else:
+            pdb_folder = Config.LIGANDS_PDB_FOLDER
+
+        if pdbqt_folder != "":
             if not exists(pdbqt_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for pdbqt folder!")
                 return
-
-        with open(input_file) as f:
-            contents = f.readlines()
-
-        root = Tk()
-
-        root.title("Ligands preparation")
-
-        frame = CTkFrame(root)
-        frame.pack(expand=True, fill='both')
-
-        text = Text(frame)
-        text.pack(side='left', fill='both', expand=True)
-
-        scrollbar = CTkScrollbar(frame)
-        scrollbar.pack(side='right', fill='y')
-
-        text['yscrollcommand'] = scrollbar.set
-        scrollbar['command'] = text.yview
-
-        old_stdout = sys.stdout    
-        sys.stdout = Redirect(text)
-
-        Thread(target=prepare_ligands, args=(verbose, input_file, excel_folder, sdf_folder, pdb_folder, pdbqt_folder, keep_ligands, contents)).start()
-
-        root.mainloop()
-
-        sys.stdout = old_stdout
-        
-
-    def execute_receptors(self, verbose, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files, gridbox_output_folder, charges_to_add):
-
-        if excel_folder == "":
-            excel_folder = Config.EXCEL_FOLDER
+            command += " -P " + pdbqt_folder
         else:
+            pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
+
+        if keep_ligands:
+            command += " --keep-ligands"
+
+        args = split(command)
+        thread = Thread(target=Popen(args))
+        thread.start()
+
+    def execute_receptors(self, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files):
+
+        command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Receptors -e python3 prepare_receptors.py -v"
+
+        if excel_folder != "":
             if not exists(excel_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for excel folder!")
                 return
-
-        if pdb_folder == "":
-            pdb_folder = Config.RECEPTORS_PDB_FOLDER
+            command += " -E " + excel_folder
         else:
+            excel_folder = Config.EXCEL_FOLDER
+
+        if pdb_folder != "":
             if not exists(pdb_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for pdb folder!")
                 return
-
-        if pdbqt_folder == "":
-            pdbqt_folder = Config.RECEPTORS_PDBQT_FOLDER
+            command += " -p " + pdb_folder
         else:
+            pdb_folder = Config.RECEPTORS_PDB_FOLDER
+
+        if pdbqt_folder != "":
             if not exists(pdbqt_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for pdbqt folder!")
                 return
-
-        if margin == "":
-            margin = 3
-
-        if gridbox_output_folder == "":
-            gridbox_output_folder = Config.GRIDBOX_FOLDER
+            command += " -P " + pdbqt_folder
         else:
-            if not exists(gridbox_output_folder):
-                showerror("Error", "Specify a valid directory or modify dir permission for gridbox folder!")
-                return
+            pdbqt_folder = Config.RECEPTORS_PDBQT_FOLDER 
 
-        if charges_to_add == "":
-            charges_to_add = "Kollman"       
+        if margin != "":
+            command += " -m " + margin
+      
+        if keep_pdb_files:
+            command += " --keep-pdb-files"
 
-        prepare_receptors(verbose, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files, gridbox_output_folder, charges_to_add)
+        args = split(command)
+        thread = Thread(target=Popen(args))
+        thread.start()
 
     def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
 
-        if gridboxes_folder == "":
-            gridboxes_folder = Config.GRIDBOX_FOLDER
-        else:
-            if not exists(gridboxes_folder):
+        command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Docking -e python3 performDocking.py"
+
+        if gridboxes_folder != "":
+            if not exists(gridboxes_folder) or not isWritable(gridboxes_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for gridbox folder!")
                 return
-        
-
-        if proteins_folder == "":
-            proteins_folder = Config.RECEPTORS_PDBQT_FOLDER
+            command += " -g " + gridboxes_folder
         else:
-            if not exists(proteins_folder):
+            gridboxes_folder = Config.GRIDBOX_FOLDER
+
+        if proteins_folder != "":
+            if not exists(proteins_folder) or not isWritable(proteins_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for proteins folder!")
                 return
-
-        if ligands_folder == "":
-            ligands_folder = Config.LIGANDS_PDBQT_FOLDER
+            command += " -p " + proteins_folder
         else:
-            if not exists(ligands_folder):
+            proteins_folder = Config.RECEPTORS_PDBQT_FOLDER
+
+        if ligands_folder != "":
+            if not exists(ligands_folder)or not isWritable(ligands_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for ligands folder!")
                 return
-
-        if outputs_folder == "":
-            outputs_folder = Config.VINA_DOCKING_FOLDER
+            command += " -l " + ligands_folder
         else:
-            if not exists(outputs_folder):
+            ligands_folder = Config.LIGANDS_PDBQT_FOLDER
+
+        if outputs_folder != "":
+            if not exists(outputs_folder) or not isWritable(outputs_folder):
                 showerror("Error", "Specify a valid directory or modify dir permission for outputs folder!")
                 return
+            command += " -o " + outputs_folder
+        else:
+            outputs_folder = Config.VINA_DOCKING_FOLDER
 
-        performDocking(gridboxes_folder, proteins_folder, ligands_folder, outputs_folder)
-        
+        if not checkFilesInFolder(folder=gridboxes_folder, docted_extension=".txt"):
+            showerror("Error", "There's no txt file into gridbox folder")
+            return
 
-class Redirect():
+        if not checkFilesInFolder(folder=ligands_folder, docted_extension=".pdbqt"):
+            showerror("Error", "There's no pdbqt file into ligands folder")
+            return
 
-    def __init__(self, widget, autoscroll=True):
-        self.widget = widget
-        self.autoscroll = autoscroll
+        if not checkFilesInFolder(folder=proteins_folder, docted_extension=".pdbqt"):
+            showerror("Error", "There's no pdbqt file into proteins folder")
+            return
 
-    def write(self, text):
-        self.widget.insert('end', text)
-        if self.autoscroll:
-            self.widget.see("end")  # autoscroll
-        
+        args = split(command)
+        thread = Thread(target=Popen(args))
+        thread.start()
+    
 

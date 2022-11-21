@@ -1,10 +1,11 @@
 import sys
-from PyQt6.QtCore import QUrl, QEventLoop
-from PyQt6.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
-from PyQt6.QtWebEngineWidgets import QWebEngineView
+from PyQt5.QtCore import QUrl, QEventLoop
+from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
+from PyQt5.QtWebEngineWidgets import QWebEngineView
 
 
-APP = QApplication(sys.argv)
+APP = QApplication(['', '--no-sandbox'])
+
 
 class Widget(QWidget):
     def __init__(self, url):
@@ -41,13 +42,14 @@ class Widget(QWidget):
 
 
 def webView(url):
-
+    
     app = QApplication.instance()
+    app.processEvents(QEventLoop.ExcludeUserInputEvents | QEventLoop.ExcludeSocketNotifiers | QEventLoop.WaitForMoreEvents)
 
     widget = Widget(url)
     widget.showMaximized()
 
-    return_code = app.exec()
+    return_code = app.exec_()
     if return_code:
         print(f"Return code: {return_code}... exiting")
         exit(return_code)

@@ -26,12 +26,13 @@ if __name__ == "__main__":
     try:
         opt_list, args = getopt.getopt(
             sys.argv[1:],
-            "E:p:P:m:hvk",
+            "E:p:P:m:V:hvk",
             [
                 "excel-folder",
                 "pdbqt-folder",
                 "pdb-folder",
                 "margin",
+                "virtual-box"
                 "keep-pdb-files",
                 "help",
                 "verbose",
@@ -56,13 +57,16 @@ if __name__ == "__main__":
     url = Config.URL
     verbose = False
     margin = 3
+    virtual_box = False
     keep_pdb_files = False
     charges_to_add = 'Kollman'
 
     for o, a in opt_list:
+        
         if o in ("-v", "--verbose"):
             verbose = True
             print("set verbose to ", verbose)
+        
         if o in ("-E", "--excel-folder"):
             # verify path (permissions)
             if not isWritable(a):
@@ -72,6 +76,7 @@ if __name__ == "__main__":
             excel_folder = a
             if verbose:
                 print("set excel folder to ", excel_folder)
+
         if o in ("-P", "--pdbqt-folder"):
             # verify path (permissions)
             if not isWritable(a):
@@ -126,7 +131,7 @@ if __name__ == "__main__":
         selectReceptors(
             pdb_folder=pdb_folder,
             excel_folder=excel_folder,
-            verbose=verbose,
+            verbose=verbose
         )
     else:
         # check if there is at least a pdb file

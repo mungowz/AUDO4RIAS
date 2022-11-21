@@ -29,9 +29,9 @@ if __name__ == "__main__":
     try:
         opt_list, args = getopt.getopt(
             sys.argv[1:],
-            "e:E:s:P:p:khv",
+            "i:e:s:P:p:khv",
             [
-                "excel-file",
+                "input-file",
                 "excel-folder",
                 "sdf-folder",
                 "pdbqt-folder",
@@ -68,11 +68,11 @@ if __name__ == "__main__":
             verbose = True
             print("set verbose to ", verbose)
 
-        if o in ("-e", "--excel-file"):
+        if o in ("-i", "--input-file"):
             # verify path  (existance, permissions)
-            # set path to excel file = a
+            # set path to input file = a
             if not os.path.exists(a):
-                print("Specify a valid excel file!")
+                print("Specify a valid input file!")
                 exit(1)
             if not os.access(a, os.R_OK):
                 print("Modify file permission!")
@@ -81,7 +81,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set input filepath to ", input_file)
 
-        if o in ("-E", "--excel-folder"):
+        if o in ("-e", "--excel-folder"):
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")

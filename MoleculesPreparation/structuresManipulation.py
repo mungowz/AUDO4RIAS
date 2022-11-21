@@ -93,7 +93,7 @@ def sdf2pdb(sdf_folder, pdb_folder, verbose):
             ligand_name = sdf_file.path.split(os.sep)[-1].split(".")[0]
             pdb_path = os.path.join(pdb_folder, ligand_name + ".pdb")
             command = [
-                'obabel',
+                'openbabel.obabel',
                 shlex.quote(sdf_file.path),
                 '-O',
                 shlex.quote(pdb_path)

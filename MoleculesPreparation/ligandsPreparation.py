@@ -23,8 +23,8 @@ def selectLigands(input_path, sdf_folder, excel_folder, verbose):
         substance = substance[:-1] + ""
         ligands_path = os.path.join(sdf_folder, "ligand_" + substance + ".sdf")
         file_name = ligands_path
-        ligands_path = ligands_path.replace("(", "")
-        ligands_path = ligands_path.replace(")", "")
+        ligands_path = ligands_path.replace("(", "_")
+        ligands_path = ligands_path.replace(")", "_")
         if not os.path.exists(file_name.replace(" ", "_")):
             structure = pcp.get_compounds(substance, "name", record_type="3d")
             if structure:

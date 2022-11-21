@@ -54,25 +54,13 @@ class Receptors(CTkFrame):
         button_browse_pdbqt_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_pdbqt_folder))
         button_browse_pdbqt_folder.place(x=334, y=203)
 
-        label_gridbox_output_folder = CTkLabel(master=frame_right, height=1, text="Specify the path of the output gridbox or leave it blank to use the default path")
-        label_gridbox_output_folder.grid(column=0, row=10, sticky="nwe", padx=15, pady=1)
-        entry_gridbox_output_folder = CTkEntry(master=frame_right, width=120)
-        entry_gridbox_output_folder.grid(row=11, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
-        button_browse_gridbox_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_gridbox_output_folder))
-        button_browse_gridbox_folder.place(x=334, y=254)
-
         label_margin = CTkLabel(master=frame_right, height=1, text="Specify the value of margin or leave it blank to use the default value(3):")
-        label_margin.grid(column=0, row=13, sticky="nwe", padx=1, pady=1)
+        label_margin.grid(column=0, row=10, sticky="nwe", padx=1, pady=1)
         entry_margin = CTkEntry(master=frame_right, width=120)
-        entry_margin.grid(row=14, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
+        entry_margin.grid(row=11, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
 
-        label_charges_to_add = CTkLabel(master=frame_right, height=1, text="Specify charges to add or leave it blank to use the default value(Kollman):")
-        label_charges_to_add.grid(column=0, row=15, sticky="nwe", padx=1, pady=1)
-        entry_charges_to_add = CTkEntry(master=frame_right, width=120)
-        entry_charges_to_add.grid(row=16, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")
-
-        check_box = CTkCheckBox(master=frame_right, text="Keep pdb files previously downloaded")
-        check_box.grid(row=17, column=0, pady=10, padx=20, sticky="w")
+        check_box_pdb_files = CTkCheckBox(master=frame_right, text="Keep pdb files previously downloaded")
+        check_box_pdb_files.grid(row=13, column=0, pady=10, padx=20, sticky="w")
 
         # ============ frame_left ============
 
@@ -85,14 +73,11 @@ class Receptors(CTkFrame):
         label_options.grid(row=1, column=0, pady=10, padx=10)
 
         button_execute = CTkButton(master=frame_left, text="Execute", command=lambda: controller.execute_receptors(
-                True,
                 entry_excel_folder.get(),
                 entry_pdb_folder.get(),
                 entry_pdbqt_folder.get(),
                 entry_margin.get(),
-                check_box.get(),
-                entry_gridbox_output_folder.get(),
-                entry_charges_to_add.get()
+                check_box_pdb_files.get()
             )
         )
         button_execute.grid(row=2, column=0, pady=10, padx=20)
