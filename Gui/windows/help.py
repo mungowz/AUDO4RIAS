@@ -19,8 +19,11 @@ class Help(CTkFrame):
         - Docking:\n\
         • Ligands folder: Computational-Docking/data/ligands/pdbqt/\n\
         • Proteins folder: Computational-Docking/data/proteins/pdbqt/\n\
-        • Gridboxes folder: Computational-Docking/data/proteins/gridbox/"
-
+        • Gridboxes folder: Computational-Docking/data/proteins/gridbox/\n\n\
+INPUTS\n\n\
+        • Ligands: ligands input consists of a .txt file where all the names of the ligands\n\
+        are listed one below the other.\n\
+        To add, edit, or remove inputs, modify the ligands_list.txt file."
 
     def __init__(self, parent, controller, window):
 

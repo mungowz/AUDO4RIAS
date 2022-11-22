@@ -5,7 +5,8 @@ from tkinter import LEFT
 
 class Receptors(CTkFrame):
 
-    MENU = "-Select Execute to prepare receptors\n-Select Back to return to the home page"
+    MENU = "- Select Execute to prepare receptors\n\
+- Select Back to return to the home page"
 
     def __init__(self, parent, controller):
         
@@ -54,7 +55,7 @@ class Receptors(CTkFrame):
         button_browse_pdbqt_folder = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_directory(entry_pdbqt_folder))
         button_browse_pdbqt_folder.place(x=334, y=203)
 
-        label_margin = CTkLabel(master=frame_right, height=1, text="Specify the value of margin or leave it blank to use the default value(3):")
+        label_margin = CTkLabel(master=frame_right, height=1, text="Specify the value of margin or leave it blank to use the default value:")
         label_margin.grid(column=0, row=10, sticky="nwe", padx=1, pady=1)
         entry_margin = CTkEntry(master=frame_right, width=120)
         entry_margin.grid(row=11, column=0, columnspan=1, pady=1, padx=7, sticky="nwe")

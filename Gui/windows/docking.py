@@ -5,7 +5,8 @@ from tkinter import LEFT
 
 class Docking(CTkFrame):
 
-    MENU = "-Select Execute to perform docking\n-Select Back to return to the home page"
+    MENU = "- Select Execute to perform docking\n\
+- Select Back to return to the home page"
 
     def __init__(self, parent, controller):
 

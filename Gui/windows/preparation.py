@@ -7,7 +7,9 @@ from tkinter import LEFT
 
 class Preparation(CTkFrame):
 
-    MENU = "-Select Ligands to prepare ligands\n-Select Receptors to prepare receptors\n-Select Back to return to the home page"
+    MENU = "- Select Ligands to prepare ligands\n\
+- Select Receptors to prepare receptors\n\
+- Select Back to return to the home page"
 
     def __init__(self, parent, controller):
 

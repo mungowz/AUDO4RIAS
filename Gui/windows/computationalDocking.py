@@ -6,7 +6,11 @@ from tkinter import LEFT
 
 class ComputationalDocking(CTkFrame):
 
-    MENU = "Welcome\n-Select Preparation to prepare ligands and receptors\n-Select Docking to perform docking"
+    MENU = " Welcome:\n\
+       - Select Preparation to prepare ligands and receptors\n\
+       - Select Docking to perform docking\n\
+       - Selext Analyses to perform analyses on docking outputs\n\
+       - Select help to get more information on default parameters and inputs"
 
     def __init__(self, parent, controller):
         
@@ -26,7 +30,7 @@ class ComputationalDocking(CTkFrame):
         # ============ frame_left ============
 
         frame_left.grid_rowconfigure(0, minsize=10)   
-        frame_left.grid_rowconfigure(5, weight=1)  
+        frame_left.grid_rowconfigure(6, weight=1)  
         frame_left.grid_rowconfigure(8, minsize=20)   
         frame_left.grid_rowconfigure(11, minsize=10)  
         
@@ -39,8 +43,11 @@ class ComputationalDocking(CTkFrame):
         button_docking = CTkButton(master=frame_left, text="Docking", command=lambda: controller.show_frame(docking.Docking))
         button_docking.grid(row=3, column=0, pady=10, padx=20)
         
+        button_analyses = CTkButton(master=frame_left, text="Analyses", command=lambda: print("Analyses button"))
+        button_analyses.grid(row=4, column=0, pady=10, padx=20)
+
         button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(ComputationalDocking))
-        button_help.grid(row=4, column=0, pady=10, padx=20)
+        button_help.grid(row=5, column=0, pady=10, padx=20)
 
         label_mode = CTkLabel(master=frame_left, text="Appearance Mode:")
         label_mode.grid(row=9, column=0, pady=0, padx=20, sticky="w")

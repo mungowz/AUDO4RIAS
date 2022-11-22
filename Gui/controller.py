@@ -68,7 +68,7 @@ class Controller(CTk):
         frame.grid(row = 0, column = 0, sticky ="nsew")
         self.update_idletasks()
         self.title("Help")
-        self.geometry("720x520")
+        self.geometry("800x600")
         frame.tkraise()
 
     def change_appearance_mode(self, new_appearance_mode):
@@ -80,7 +80,7 @@ class Controller(CTk):
 
         filename = askdirectory(
             initialdir = "/",
-            title = "Select a File",
+            title = "Select a folder",
         )
 
         entry.insert(0, filename)
@@ -91,7 +91,7 @@ class Controller(CTk):
 
         filename = askopenfilename(
             initialdir = "/",
-            title = "Select a File",
+            title = "Select a file",
             filetypes = [("All files", "*.*")]
         )
 
