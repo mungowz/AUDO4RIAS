@@ -6,7 +6,7 @@ from tkinter import LEFT
 class Ligands(CTkFrame):
 
     MENU = "- Select Execute to prepare ligands\n\
-- Select Back to return to the home page"
+- Select Back to return to the preparation page"
 
     def __init__(self, parent, controller):
 

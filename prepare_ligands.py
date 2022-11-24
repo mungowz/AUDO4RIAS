@@ -15,14 +15,14 @@ if __name__ == "__main__":
 
         print(
             "Optional parameters: \n \
-            \t[-v] | [--verbose]: verbose output (default is False)\n \
-            \t[-e] | [--excel-file]: define an excel file as input file to select needed ligands\n \
-            \t[-E] | [--excel-folder]: define a folder where excel files has to be stored or are stored\n \
-            \t[-s] | [--sdf-folder]: define a folder where sdf files has to be stored or are stored\n \
-            \t[-p] | [--pdbqt-folder]: define a folder where pdbqt files has to be stored or are stored\n \
-            \t[-P] | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
-            \t[-k] | [--keep-ligands]: keep ligands stored into sdf folder (default is False)\n \
-            \t[-h] | [--help]: print usage" 
+            \t[-v]: verbose output (default is False)\n \
+            \t[-e]: define an excel file as input file to select needed ligands\n \
+            \t[-E]: define a folder where excel files has to be stored or are stored\n \
+            \t[-s]: define a folder where sdf files has to be stored or are stored\n \
+            \t[-p]: define a folder where pdbqt files has to be stored or are stored\n \
+            \t[-P]: define a folder where pdb files has to be stored or are stored\n \
+            \t[-k]: keep ligands stored into sdf folder (default is False)\n \
+            \t[-h]: print usage" 
         )
 
     # process command arguments
@@ -30,16 +30,7 @@ if __name__ == "__main__":
         opt_list, args = getopt.getopt(
             sys.argv[1:],
             "i:e:s:P:p:khv",
-            [
-                "input-file",
-                "excel-folder",
-                "sdf-folder",
-                "pdbqt-folder",
-                "pdb-folder",
-                "keep-ligands",
-                "help",
-                "verbose",
-            ],
+            []
         )
     except getopt.GetoptError as msg:
         sys.stdout = sys.stderr
@@ -63,12 +54,12 @@ if __name__ == "__main__":
     verbose = False
 
     for o, a in opt_list:
-        if o in ("-v", "--verbose"):
+        if o == "-v":
             # set verbose to true
             verbose = True
             print("set verbose to ", verbose)
 
-        if o in ("-i", "--input-file"):
+        if o == "-i":
             # verify path  (existance, permissions)
             # set path to input file = a
             if not os.path.exists(a):
@@ -81,7 +72,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set input filepath to ", input_file)
 
-        if o in ("-e", "--excel-folder"):
+        if o == "-e":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -91,7 +82,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set excel folder to ", excel_folder)
 
-        if o in ("-s", "--sdf-folder"):
+        if o == "-s":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -101,7 +92,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set sdf folder to ", sdf_folder)
 
-        if o in ("-P", "--pdbqt-folder"):
+        if o == "-P":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -111,7 +102,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set pdqbt folder to ", pdbqt_folder)
 
-        if o in ("-p", "--pdb-folder"):
+        if o == "-p":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -121,14 +112,14 @@ if __name__ == "__main__":
             if verbose:
                 print("set pdb folder to ", pdb_folder)
 
-        if o in ("-k", "--keep-ligands"):
+        if o == "-k":
             # check if -s or default sdf folder contains sdf files (?)
             # keep ligands stored into sdf folder
             keep_ligands = True
             if verbose:
                 print("set keep-ligands option to ", keep_ligands)
 
-        if o in ("-h", "--help"):
+        if o == "-h":
             usage()
             exit(0)
 

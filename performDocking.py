@@ -17,11 +17,11 @@ if __name__ == "__main__":
 
         print(
             "Optional parameters: \n \
-            \t[-g] | [--gridbox-folder]: define a folder where gridboxes files are stored\n \
-            \t[-p] | [--protein-folder]: define a folder where proteins files are stored\n \
-            \t[-l] | [--ligand-folder]: define a folder where ligands files are stored\n \
-            \t[-o] | [--output-folder]: define a folder where outputs files have to be or are stored\n \
-            \t[-h] | [--help]: print usage" 
+            \t[-g]: define a folder where gridboxes files are stored\n \
+            \t[-p]: define a folder where proteins files are stored\n \
+            \t[-l]: define a folder where ligands files are stored\n \
+            \t[-o]: define a folder where outputs files have to be or are stored\n \
+            \t[-h]: print usage" 
         )
 
     # process command arguments
@@ -29,14 +29,7 @@ if __name__ == "__main__":
         opt_list, args = getopt(
             argv[1:],
             "g:p:l:o:h",
-            [
-                "gridbox-folder",
-                "protein-folder",
-                "ligand-folder",
-                "output-folder",
-                "pdb-folder",
-                "help",
-            ],
+            []
         )
     except GetoptError as msg:
         stdout = stderr
@@ -62,7 +55,7 @@ if __name__ == "__main__":
 
     for o, a in opt_list:
 
-        if o in ("-g", "--gridbox-folder"):
+        if o == "-g":
             # verify path  (existance, permissions)
             # set path to input file = a
             if not exists(a):
@@ -73,7 +66,7 @@ if __name__ == "__main__":
                 exit(1)
             gridboxes_folder = a
 
-        if o in ("-l", "--ligands_folder"):
+        if o == "-l":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -81,7 +74,7 @@ if __name__ == "__main__":
             # set path to ligands folder = a
             ligands_folder = a
 
-        if o in ("-p", "--proteins-folder"):
+        if o == "-p":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -89,7 +82,7 @@ if __name__ == "__main__":
             # set path to proteins folder = a
             proteins_folder = a
 
-        if o in ("-o", "--outputs-folder"):
+        if o == "-o":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -97,7 +90,7 @@ if __name__ == "__main__":
             # set path to outputs folder = a
             outputs_folder = a
 
-        if o in ("-h", "--help"):
+        if o == "-h":
             usage()
             exit(0)
 

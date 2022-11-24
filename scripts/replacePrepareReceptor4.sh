@@ -1,7 +1,7 @@
 #! /bin/bash
 
 # repository cannot be located as ADFRsuite subdir 
-PR4_PATH=$(find "$(cd ..; pwd)"  -type f -name "prepare_receptor4.py")
+PR4_PATH=$(find "$(pwd)"  -type f -name "prepare_receptor4.py")
 
 
 if [ "$1" = "-v" ]; then

@@ -13,22 +13,17 @@ Usage: %s -r <receptor> [-L <folder>] [-h]\n" % sys.argv[0])
 
         print(
             "Description of parameters: \n\
-\t-r,   --receptor          Select the receptor involved in protein-ligand docked complex\n\
+\t-r              Select the receptor involved in protein-ligand docked complex\n\
 Optional parameters: \n\
-\t-L,   --ligands_folder    set the folder where are stored ligands in .sdf format\n\
-\t-h-.  --help              print usage\n"
+\t-L        set the folder where are stored ligands in .sdf format\n\
+\t-h        print usage\n"
         )
 
     # process command arguments
     try:
         opt_list, args = getopt.getopt(
             sys.argv[1:],
-            "hr:L:",
-            [
-                "--help",
-                "--receptor",
-                "--ligands_folder",
-            ],
+            "hr:L:", []
         )
     except getopt.GetoptError:
         sys.stdout = sys.stderr
@@ -43,15 +38,15 @@ Optional parameters: \n\
 
 
     for o, a in opt_list:
-        if o in ("-r", "--receptor"):
+        if o == "-r":
             print(f"set receptor to {a}")
             receptor = a
-        if o in ("-L", "--ligands_folder"):
+        if o == "-L":
             if not isWritable(a):
                 print("Invalid ligands folder: does not exists or no read permissions!")
                 exit(1)
             ref_path = a
-        if o in ("-h", "--help"):
+        if o == "-h":
             usage()
             exit(0)
     if receptor is None:

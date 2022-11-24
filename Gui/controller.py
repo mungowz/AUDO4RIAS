@@ -5,12 +5,13 @@ import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
 import Gui.windows.docking as docking
 import Gui.windows.help as help
+import Gui.windows.analyses as analyses
 from os.path import exists, join
 from os import access, R_OK
 from Utilities.utils import checkFilesInFolder, isWritable
 from config import Config
 from tkinter.filedialog import askopenfilename, askdirectory
-from tkinter.messagebox import showerror
+from tkinter.messagebox import showerror, showinfo
 from tkinter import END
 from subprocess import Popen
 from shlex import split
@@ -32,9 +33,9 @@ class Controller(CTk):
         
         self.resizable(False, False)
 
-        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking)
-        TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors", "Docking")
-        DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520")
+        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking, analyses.Analyses)
+        TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors", "Docking", "Analyses")
+        DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520", "720x520")
 
         self.container = CTkFrame(self)
         self.container.pack(side = "top", fill = "both", expand = True)
@@ -145,11 +146,13 @@ class Controller(CTk):
             pdbqt_folder = Config.LIGANDS_PDBQT_FOLDER
 
         if keep_ligands:
-            command += " --keep-ligands"
+            command += " -k"
 
         args = split(command)
         thread = Thread(target=Popen(args))
         thread.start()
+
+        showinfo(message='Ligands preparation completed!')
 
     def execute_receptors(self, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files):
 
@@ -183,11 +186,13 @@ class Controller(CTk):
             command += " -m " + margin
       
         if keep_pdb_files:
-            command += " --keep-pdb-files"
+            command += " -k" 
 
         args = split(command)
         thread = Thread(target=Popen(args))
         thread.start()
+
+        showinfo(message='Receptors preparation completed!')
 
     def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
 
@@ -241,4 +246,29 @@ class Controller(CTk):
         thread = Thread(target=Popen(args))
         thread.start()
 
+        showinfo(message='Docking completed!')
 
+    def execute_analyses(self, software):
+
+        command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Docking -e pythonsh detect_interactions.py -s "
+
+        if software == "AutoDockVina":
+            command += "vina"
+            docking_folder = Config.VINA_DOCKING_FOLDER
+        else:
+            command += "gnina"
+            docking_folder = Config.GNINA_DOCKING_FOLDER         
+        
+        if not checkFilesInFolder(folder=Config.LIGANDS_PDBQT_FOLDER, docted_extension=".pdbqt"):
+            showerror("Error", "There's no .pdbqt file into ligands folder")
+            return
+
+        if not checkFilesInFolder(folder=docking_folder, docted_extension=""):
+            showerror("Error", "There's no output in docking outputs folder")
+            return
+
+        args = split(command)
+        thread = Thread(target=Popen(args))
+        thread.start()
+
+        showinfo(message='Analysis completed!')

@@ -3,7 +3,6 @@ from config import Config
 import os
 
 
-
 # This script relies on MGLTools packages, written in Python2
 # Because of compatibility problems between Python versions (2 and 2.5+), this script cannot be executed without errors by Python binaries but
 # a good solution is given by using .../MGLTools-1.5.6/bin/pythonsh or .../ADFRsuite-1.0/bin/pythonsh
@@ -20,19 +19,15 @@ if __name__ == "__main__":
 
         print(
             "Optional parameters: \n \
-            \t[-s] | [--software]: set a specific software whose analyze results in [Vina, GNINA] (default is Vina)\n \
-            \t[-h] | [--help]: print usage"
+            \t[-s]: set a specific software whose analyze results in [Vina, GNINA] (default is Vina)\n \
+            \t[-h]: print usage"
         )
 
     # process command arguments
     try:
         opt_list, args = getopt.getopt(
             sys.argv[1:],
-            "hs:",
-            [
-                "--help",
-                "--software"
-            ],
+            "hs:",[]
         )
     except getopt.GetoptError:
         sys.stdout = sys.stderr
@@ -45,7 +40,7 @@ if __name__ == "__main__":
     docking_folder = Config.VINA_DOCKING_FOLDER
     docking_softwares = ["vina", "gnina"]
     for o, a in opt_list:
-        if o in ("-s", "--software"):
+        if o == "-s":
             if a.lower() not in docking_softwares:
                 print("Invalid software specified")
                 exit(1)
@@ -53,7 +48,7 @@ if __name__ == "__main__":
             if a.lower() == "gnina":
                 docking_folder = Config.GNINA_DOCKING_FOLDER
 
-        if o in ("-h", "--help"):
+        if o == "-h":
             usage()
             exit(0)
 

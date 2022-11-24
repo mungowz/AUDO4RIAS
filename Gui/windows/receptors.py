@@ -6,7 +6,7 @@ from tkinter import LEFT
 class Receptors(CTkFrame):
 
     MENU = "- Select Execute to prepare receptors\n\
-- Select Back to return to the home page"
+- Select Back to return to the preparation page"
 
     def __init__(self, parent, controller):
         

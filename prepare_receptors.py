@@ -13,30 +13,20 @@ if __name__ == "__main__":
 
         print(
             "Optional parameters: \n \
-            \t[-v] | [--verbose]: verbose output (default is False)\n \
-            \t[-E] | [--excel-folder]: define a folder where excel files has to be stored or are stored\n \
-            \t[-p] | [--pdbqt-folder]: define a folder where pdbqt files has to be stored or are stored\n \
-            \t[-P] | [--pdb-folder]: define a folder where pdb files has to be stored or are stored\n \
-            \t[-k] | [--keep-pdb-files]: keep pdb files stored into pdb_folder(must be specified after [-P] | [--keep-pdb-files])\
-            \t[-m] | [--margin]: define margin in angstroms to create protein gridbox for docking (default is 3)\
-            \t[-h] | [--help]: print usage"
+            \t[-v]: verbose output (default is False)\n \
+            \t[-E]: define a folder where excel files has to be stored or are stored\n \
+            \t[-p]: define a folder where pdbqt files has to be stored or are stored\n \
+            \t[-P]: define a folder where pdb files has to be stored or are stored\n \
+            \t[-k]: keep pdb files stored into pdb_folder(must be specified after [-P] | [--keep-pdb-files])\
+            \t[-m]: define margin in angstroms to create protein gridbox for docking (default is 3)\
+            \t[-h]: print usage"
         )
 
     # process command arguments
     try:
         opt_list, args = getopt.getopt(
             sys.argv[1:],
-            "E:p:P:m:V:hvk",
-            [
-                "excel-folder",
-                "pdbqt-folder",
-                "pdb-folder",
-                "margin",
-                "virtual-box"
-                "keep-pdb-files",
-                "help",
-                "verbose",
-            ],
+            "E:p:P:m:V:hvk",[]
         )
     except getopt.GetoptError as msg:
         sys.stdout = sys.stderr
@@ -63,11 +53,11 @@ if __name__ == "__main__":
 
     for o, a in opt_list:
         
-        if o in ("-v", "--verbose"):
+        if o == "-v":
             verbose = True
             print("set verbose to ", verbose)
         
-        if o in ("-E", "--excel-folder"):
+        if o == "-E":
             # verify path (permissions)
             if not isWritable(a):
                 print("Specify a valid directory or modify dir permission!")
@@ -77,7 +67,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set excel folder to ", excel_folder)
 
-        if o in ("-P", "--pdbqt-folder"):
+        if o == "-P":
             # verify path (permissions)
             if not isWritable(a):
                 print("ERROR: Specify a valid directory or modify dir permission!")
@@ -87,7 +77,7 @@ if __name__ == "__main__":
             if verbose:
                 print("set pdqbt folder to ", pdbqt_folder)
 
-        if o in ("-p", "--pdb-folder"):
+        if o == "-p":
             # verify path (permissions)
             if not isWritable(a):
                 print("ERROR: Specify a valid directory or modify dir permission!")
@@ -97,17 +87,17 @@ if __name__ == "__main__":
             if verbose:
                 print("set pdb folder to ", pdb_folder)
 
-        if o in ("-k", "--keep-pdb-files"):
+        if o == "-k":
             keep_pdb_files = True
             if verbose:
                 print("set keep-pdb-files option to ", True)
 
-        if o in ("-m", "--margin"):
+        if o == "-m":
             margin = a
             if verbose:
                 print("set margin to ", margin)
 
-        if o in ("-h", "--help"):
+        if o == "-h":
             usage()
             exit(0)
 
