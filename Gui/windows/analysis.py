@@ -1,9 +1,9 @@
 import Gui.windows.computationalDocking as computationalDocking
-from customtkinter import CTkButton, CTkProgressBar, CTkFrame, CTkLabel, CTkOptionMenu, CTkEntry
+from customtkinter import CTkButton, CTkProgressBar, CTkFrame, CTkLabel, CTkOptionMenu
 from tkinter import LEFT
 
 
-class Analyses(CTkFrame):
+class Analysis(CTkFrame):
 
     MENU = "- Select Execute to perform analyses\n\
 - Select Back to return to the home page"
@@ -43,7 +43,7 @@ class Analyses(CTkFrame):
         frame_info.rowconfigure(0, weight=1)
         frame_info.columnconfigure(0, weight=1)
 
-        label_menu = CTkLabel(master=frame_info, text=Analyses.MENU, height=200, corner_radius=6, fg_color=("white", "gray38"), justify=LEFT)
+        label_menu = CTkLabel(master=frame_info, text=Analysis.MENU, height=200, corner_radius=6, fg_color=("white", "gray38"), justify=LEFT)
         label_menu.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
 
         progressbar = CTkProgressBar(master=frame_info)
@@ -65,7 +65,7 @@ class Analyses(CTkFrame):
         button_back = CTkButton(master=frame_left, text="Back", command=lambda: controller.show_frame(computationalDocking.ComputationalDocking))
         button_back.grid(row=3, column=0, pady=10, padx=20)
 
-        button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(Analyses))
+        button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(Analysis))
         button_help.grid(row=4, column=0, pady=10, padx=20)
 
         label_mode = CTkLabel(master=frame_left, text="Appearance Mode:")

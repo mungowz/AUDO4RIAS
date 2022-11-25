@@ -1,7 +1,7 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkOptionMenu, CTkProgressBar
 import Gui.windows.preparation as preparation
 import Gui.windows.docking as docking
-import Gui.windows.analyses as analyses
+import Gui.windows.analysis as analysis
 from tkinter import LEFT
 
 
@@ -44,7 +44,7 @@ class ComputationalDocking(CTkFrame):
         button_docking = CTkButton(master=frame_left, text="Docking", command=lambda: controller.show_frame(docking.Docking))
         button_docking.grid(row=3, column=0, pady=10, padx=20)
         
-        button_analyses = CTkButton(master=frame_left, text="Analyses", command=lambda: controller.show_frame(analyses.Analyses))
+        button_analyses = CTkButton(master=frame_left, text="Analysis", command=lambda: controller.show_frame(analysis.Analysis))
         button_analyses.grid(row=4, column=0, pady=10, padx=20)
 
         button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(ComputationalDocking))

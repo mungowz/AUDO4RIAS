@@ -5,7 +5,7 @@ import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
 import Gui.windows.docking as docking
 import Gui.windows.help as help
-import Gui.windows.analyses as analyses
+import Gui.windows.analysis as analysis
 from os.path import exists, join
 from os import access, R_OK
 from Utilities.utils import checkFilesInFolder, isWritable
@@ -33,7 +33,7 @@ class Controller(CTk):
         
         self.resizable(False, False)
 
-        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking, analyses.Analyses)
+        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking, analysis.Analysis)
         TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors", "Docking", "Analyses")
         DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520", "720x520")
 
@@ -152,8 +152,6 @@ class Controller(CTk):
         thread = Thread(target=Popen(args))
         thread.start()
 
-        showinfo(message='Ligands preparation completed!')
-
     def execute_receptors(self, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files):
 
         command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Receptors -e python3 prepare_receptors.py -v"
@@ -191,8 +189,6 @@ class Controller(CTk):
         args = split(command)
         thread = Thread(target=Popen(args))
         thread.start()
-
-        showinfo(message='Receptors preparation completed!')
 
     def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
 
@@ -246,8 +242,6 @@ class Controller(CTk):
         thread = Thread(target=Popen(args))
         thread.start()
 
-        showinfo(message='Docking completed!')
-
     def execute_analyses(self, software):
 
         command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Docking -e pythonsh detect_interactions.py -s "
@@ -270,5 +264,3 @@ class Controller(CTk):
         args = split(command)
         thread = Thread(target=Popen(args))
         thread.start()
-
-        showinfo(message='Analysis completed!')
