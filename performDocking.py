@@ -3,16 +3,20 @@ from os.path import join, exists
 from pathlib import Path
 from subprocess import run
 from shlex import quote
-from Utilities.utils import checkFilesInFolder, isWritable
-from tkinter.messagebox import showerror
-from sys import exit, argv, stdout, stderr
+from Utilities.utils import isWritable
+from tkinter.messagebox import showinfo
+from sys import exit, argv, stderr
 from getopt import getopt, GetoptError
 from config import Config
+import time
 
 
 if __name__ == "__main__":
 
+    st = time.time()
+
     def usage():
+
         print("Usage: %s" % argv[0])
 
         print(
@@ -137,3 +141,9 @@ if __name__ == "__main__":
                         "--log", quote(log),
                     ]
                     run(command)
+    
+    et = time.time()
+
+    elapsed_time = et - st 
+
+    showinfo("Process completed", "Docking execution has been completed successfully in {:.2f} seconds".format(elapsed_time))

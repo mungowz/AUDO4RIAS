@@ -1,18 +1,23 @@
 #! /bin/python
+from tkinter.messagebox import showinfo
 from config import Config
 import os
+import sys
+import getopt
+from InteractionsAnalysis.interactionsDetection import detectInteractions
+from MoleculesPreparation.structuresManipulation import removeRemarks
+import time
 
 
 # This script relies on MGLTools packages, written in Python2
 # Because of compatibility problems between Python versions (2 and 2.5+), this script cannot be executed without errors by Python binaries but
 # a good solution is given by using .../MGLTools-1.5.6/bin/pythonsh or .../ADFRsuite-1.0/bin/pythonsh
 if __name__ == "__main__":
-    import sys
-    import getopt
-    from InteractionsAnalysis.interactionsDetection import detectInteractions
-    from MoleculesPreparation.structuresManipulation import removeRemarks
+
+    st = time.time()
 
     def usage():
+
         print("Analyze docking results to detect interactions of protein-ligand complexes.\
             It could takes a long time depending from the amount of protein-ligand complexes.\
         Usage: %s [-s] <software>" % sys.argv[0])
@@ -62,4 +67,8 @@ if __name__ == "__main__":
 
     proteins, contact_states = detectInteractions(macro_folder, docking_folder)
 
+    et = time.time()
 
+    elapsed_time = et - st 
+
+    showinfo("Process completed", "Analysis execution has been completed successfully in {:.2f} seconds".format(elapsed_time))

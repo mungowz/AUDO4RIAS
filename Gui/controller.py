@@ -149,8 +149,11 @@ class Controller(CTk):
             command += " -k"
 
         args = split(command)
-        thread = Thread(target=Popen(args))
+        thread = Thread(target=self.run_ligands, args=[args])
         thread.start()
+
+    def run_ligands(self, args):
+        Popen(args)
 
     def execute_receptors(self, excel_folder, pdb_folder, pdbqt_folder, margin, keep_pdb_files):
 
@@ -187,8 +190,11 @@ class Controller(CTk):
             command += " -k" 
 
         args = split(command)
-        thread = Thread(target=Popen(args))
+        thread = Thread(target=self.run_receptors, args=[args])
         thread.start()
+
+    def run_receptors(self, args):
+        Popen(args)
 
     def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
 
@@ -239,8 +245,11 @@ class Controller(CTk):
             return
 
         args = split(command)
-        thread = Thread(target=Popen(args))
+        thread = Thread(target=self.run_docking, args=[args])
         thread.start()
+
+    def run_docking(self, args):
+        Popen(args)
 
     def execute_analyses(self, software):
 
@@ -262,5 +271,8 @@ class Controller(CTk):
             return
 
         args = split(command)
-        thread = Thread(target=Popen(args))
+        thread = Thread(target=self.run_analysis, args=[args])
         thread.start()
+
+    def run_analysis(self, args):
+        Popen(args)

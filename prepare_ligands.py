@@ -1,14 +1,18 @@
 import os
+from tkinter.messagebox import showinfo
 from MoleculesPreparation.ligandsPreparation import prepareLigands, selectLigands
 from Utilities.utils import checkFilesInFolder, removeFiles
 from config import Config
 from pathlib import Path
 from Utilities.utils import isWritable
 from MoleculesPreparation.structuresManipulation import sdf2pdb
+import time
+import sys
+import getopt
 
 if __name__ == "__main__":
-    import sys
-    import getopt
+    
+    st = time.time()
 
     def usage():
         print("Usage: %s" % sys.argv[0])
@@ -186,4 +190,10 @@ if __name__ == "__main__":
     )
 
     if verbose:
-        print("----------- LIGANDS: COMPLETED -----------")
+        print("----------- LIGANDS: COMPLETED -----------\n\n")
+
+    et = time.time()
+
+    elapsed_time = et - st 
+
+    showinfo("Process completed", "Ligands preparation has been completed successfully in {:.2f} seconds".format(elapsed_time))

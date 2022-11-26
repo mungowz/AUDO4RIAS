@@ -1,14 +1,20 @@
 from MoleculesPreparation.receptorsPreparation import createGridboxes, deleteHeteroatomsChains, prepareReceptors, selectReceptors, splitChains, splitRepeatedResidues
 from MoleculesPreparation.structuresManipulation import checkWarnings
+from tkinter.messagebox import showinfo
 from config import Config
 from Utilities.utils import checkFilesInFolder, removeFiles, isWritable
 from pathlib import Path
+import sys
+import getopt
+import time
+
 
 if __name__ == "__main__":
-    import sys
-    import getopt
+
+    st = time.time()
 
     def usage():
+
         print("Usage: %s" % sys.argv[0])
 
         print(
@@ -158,3 +164,9 @@ if __name__ == "__main__":
 
     if verbose:
         print("\n---------- RECEPTORS: COMPLETED ---------")
+
+    et = time.time()
+
+    elapsed_time = et - st 
+
+    showinfo("Process completed", "Receptors preparation has been completed successfully in {:.2f} seconds".format(elapsed_time))
