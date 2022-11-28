@@ -35,7 +35,7 @@ class Analysis(CTkFrame):
 
         label_software = CTkLabel(master=frame_right, text="Select software:")
         label_software.grid(row=6, column=0, pady=0, padx=20, sticky="w")
-        optionmenu_software = CTkOptionMenu(master=frame_right, values=["vina", "gnina"])
+        optionmenu_software = CTkOptionMenu(master=frame_right, values=["AutoDockVina", "Gnina"])
         optionmenu_software.grid(row=6, column=0, pady=0, padx=150, sticky="w")
 
         # ============ frame_info ============
