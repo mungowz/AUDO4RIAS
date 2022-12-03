@@ -1,5 +1,6 @@
 import os
-
+import shlex
+import subprocess
 
 def extractRemark350Monomeric(
     pdb_path,
@@ -91,14 +92,14 @@ def sdf2pdb(sdf_folder, pdb_folder, verbose):
         if sdf_file.is_file() and sdf_file.path.endswith(".sdf"):
             ligand_name = sdf_file.path.split(os.sep)[-1].split(".")[0]
             pdb_path = os.path.join(pdb_folder, ligand_name + ".pdb")
-            command = (
-                'obabel ' 
-                + '\"' + sdf_file.path + '\"' 
-                + ' -O '
-                + '\"' + pdb_path + '\"'
-            )
-            print(command)
-            os.system(command=command)
+            command = [
+                'openbabel.obabel',
+                shlex.quote(sdf_file.path),
+                '-O',
+                shlex.quote(pdb_path)
+            ]
+            print(" ".join(c for c in command))
+            subprocess.run(command)
 
             if verbose:
                 print(

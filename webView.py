@@ -1,7 +1,11 @@
 import sys
-from PyQt5.QtCore import QUrl
+from PyQt5.QtCore import QUrl, QEventLoop
 from PyQt5.QtWidgets import QApplication, QWidget, QPushButton, QVBoxLayout
 from PyQt5.QtWebEngineWidgets import QWebEngineView
+
+
+APP = QApplication(['', '--no-sandbox'])
+
 
 class Widget(QWidget):
     def __init__(self, url):
@@ -38,18 +42,18 @@ class Widget(QWidget):
 
 
 def webView(url):
+    
+    app = QApplication.instance()
+    app.processEvents(QEventLoop.ExcludeUserInputEvents | QEventLoop.ExcludeSocketNotifiers | QEventLoop.WaitForMoreEvents)
 
-    # create application
-    app = QApplication(sys.argv)
-
-    # create view
     widget = Widget(url)
     widget.showMaximized()
 
-    # execute application
     return_code = app.exec_()
     if return_code:
         print(f"Return code: {return_code}... exiting")
         exit(return_code)
+
+    app.quit()
 
     return widget.get_url()

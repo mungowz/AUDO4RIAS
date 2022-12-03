@@ -3,6 +3,7 @@
 env/
 venv/
 ENV/
+output/vina/
 env.bak/
 venv.bak/
 __pycache__/
@@ -15,3 +16,4 @@ docking
 *.sdf
 *.xlsx
 ligands_*.txt
+.vscode/

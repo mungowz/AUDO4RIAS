@@ -201,7 +201,7 @@ def detectInteractions(macro_folder, docking_folder):
                         interaction = detectInteractionsForResidues(lig_path, macro_path, contact_states[protein_code])
                         proteins[protein_code] = mergeDicts(proteins[protein_code], interaction)
             
-            if bool(proteins[protein_code]):
+            if not bool(proteins[protein_code]):
                 del proteins[protein_code]
                 del contact_states[protein_code]
 

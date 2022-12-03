@@ -10,7 +10,9 @@ from MoleculesPreparation.structuresManipulation import extractRemark350Monomeri
 from MoleculesPreparation.structuresSelection import RestApiSelection, downloadPdbs, selectPdbs
 from Utilities.utils import saveDictToExcel, findFile
 
+
 def deleteHeteroatomsChains(pdb_folder, verbose):
+    
     if verbose:
         print("\nCleaning structures from heteroatoms chains...")
     pdb = PandasPdb()
@@ -36,6 +38,8 @@ def deleteHeteroatomsChains(pdb_folder, verbose):
                 "@" + pdb_file.path.split(os.sep)[-1] + ": detected invalid hetatm chains"
             )
             print(invalid_hetatm_chains)
+        
+
         # for each record in HETATM dataframe of a given pdb, drop records in which chain_id is set to a chain in invalid_hetatm_chains
         for row in range(0, len(pdb.df["HETATM"].index)):
             if pdb.df["HETATM"]["chain_id"][row] not in invalid_hetatm_chains:
@@ -62,6 +66,7 @@ def deleteHeteroatomsChains(pdb_folder, verbose):
 
 # margin in angstroms to have some space between the max and min atom coordinates for the ligand
 def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose):
+
     ppdb = PandasPdb()
 
     if verbose:
@@ -86,7 +91,7 @@ def createGridboxes(pdb_folder, gridbox_output_folder, margin, verbose):
 
                 
 def createGridbox(ppdb, protein_path, gridbox_folder, margin):
-    
+
     # extract the protein_code from path name
     protein_code = protein_path.split(os.sep)[-1].split(".")[0]
     ppdb.read_pdb(protein_path)
@@ -122,6 +127,7 @@ size_y = {size_y}
 size_z = {size_z}
 
 exhaustiveness = 16"""
+
     # to create the text with the grid box values, first we create the file name with the prot code + extension
     file_name = f"protein_{protein_code}_grid.txt"
     # Then we define the path of the output
@@ -133,6 +139,7 @@ exhaustiveness = 16"""
     return [output_path, protein_code]
 
 def splitRepeatedResidues(pdb_folder, verbose, output_folder=None):
+
     if output_folder is None:
         output_folder = pdb_folder
     if verbose:
@@ -234,7 +241,7 @@ def splitChains(pdb_folder, verbose):
 
             # save new pdb file
             writePDB(filename, new_atoms)
-
+        
         # remove old pdb file
         if verbose:
             print("Deleting " + protein_path)
@@ -252,7 +259,7 @@ def selectReceptors(
         print("PROTEINS FOLDER: " + pdb_folder)
         print("EXCEL FOLDER: " + excel_folder)
         print("\nSelecting proteins...")
-
+    
     proteins_list = RestApiSelection(Config.URL)
 
     # Build a query that select all needed proteins
@@ -313,8 +320,22 @@ def selectReceptors(
         print("Stored into " + os.path.join(excel_folder, "info_proteins.xlsx"))
 
 
+def downloadPdbs(pdbs_list, output_path, verbose):
+    if not verbose:
+        confProDy(verbosity="none")
+
+    # download only pdb files that aren't already downloaded
+    for protein_code in pdbs_list:
+        for root, dirs, files in os.walk(output_path):
+            output_file = os.path.join(output_path, protein_code + ".pdb")
+
+            # fetch the PDB file from rcsb.org
+            fetchPDB(protein_code, folder=output_path, compressed=False)
+            print("\n")
+
 
 def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'):
+
     SCRIPT_FILENAME = "replacePrepareReceptor4.sh"
     script_path = findFile(SCRIPT_FILENAME, os.environ.get("HOME"))
     command = [
@@ -376,6 +397,7 @@ def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'
         #               in the list and no metals.
         #            (default is False which means not to do this)
         #
+        
         command = [
             "prepare_receptor",
             "-r",
@@ -398,3 +420,63 @@ def prepareReceptors(pdb_folder, pdbqt_folder, verbose, charges_to_add='Kollman'
 
     if verbose:
         print("Done.")
+
+
+def checkWarnings(pdb_folder):
+
+    ## pdb example ##
+    ## REMARK 350 BIOMOLECULE: n
+    ## REMARK 350 AUTHOR DETERMINED BIOLOGICAL UNIT: str1
+    ## REMARK 350 SOFTWARE DETERMINED QUATERNARY STRUCTURE: str2
+
+    print("Checking warnings...")
+    # if str1 != str2 put a warning
+    author_determined_biological_unit = None
+    biomolecule = None
+    software_determined_quaternary_structure = None
+
+    for pdb_file in os.scandir(pdb_folder):
+
+        if not pdb_file.is_file() or not pdb_file.path.endswith(".pdb"):
+            continue
+        with open(pdb_file.path, "r") as pdb_reader:
+            for l_no, line in enumerate(pdb_reader):
+
+                if "REMARK" in line:
+                    remark = line.split(" ")[1]
+                    if remark > "350":
+                        break
+
+                if "BIOMOLECULE" in line:
+                    biomolecule = line.rstrip().split(" ")[-1]
+
+                    continue
+
+                if "AUTHOR DETERMINED BIOLOGICAL UNIT" in line:
+                    author_determined_biological_unit = line.rstrip().split(" ")[-1]
+                    continue
+
+                if "SOFTWARE DETERMINED QUATERNARY STRUCTURE" in line:
+                    software_determined_quaternary_structure = line.rstrip().split(" ")[
+                        -1
+                    ]
+
+                if (
+                    software_determined_quaternary_structure is not None
+                    and software_determined_quaternary_structure
+                    != author_determined_biological_unit
+                ):
+                    # put a warning
+                    print(
+                        "\nWARNING: @"
+                        + pdb_file.path.split(os.sep)[-1]
+                        + ":BIOMOLECULE: "
+                        + biomolecule
+                        + "\n"
+                        + "AUTHOR DETERMINED BIOLOGICAL UNIT ("
+                        + author_determined_biological_unit
+                        + ") and SOFTWARE DETERMINED QUATERNARY STRUCTURE ("
+                        + software_determined_quaternary_structure
+                        + ") are not equal!"
+                    )
+                software_determined_quaternary_structure = None
