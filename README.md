@@ -19,6 +19,7 @@ We strongly recommend you to follow the installation instructions of the softwar
 - [_ADFR suite v1.0_]( https://ccsb.scripps.edu/adfr/downloads/)
 - [_AutoDock Vina_](https://vina.scripps.edu/downloads/) (latest stable version)
 - [_GNINA_](https://github.com/gnina/gnina)
+- [Open Babel](type command: sudo snap install openbabel)
 
 **N.B.:** For Linux users, add _MGLTools_ directory's path to your global enviroment variable `$PATH`.
 
