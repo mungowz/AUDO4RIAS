@@ -16,6 +16,7 @@ from tkinter import END
 from subprocess import Popen
 from shlex import split
 from threading import Thread
+import time
 
 
 LARGEFONT =("Verdana", 35)
@@ -196,7 +197,7 @@ class Controller(CTk):
     def run_receptors(self, args):
         Popen(args)
 
-    def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder):
+    def execute_docking(self, gridboxes_folder, proteins_folder, ligands_folder, outputs_folder, software):
 
         command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Docking -e python3 performDocking.py"
 
@@ -224,13 +225,24 @@ class Controller(CTk):
         else:
             ligands_folder = Config.LIGANDS_PDBQT_FOLDER
 
-        if outputs_folder != "":
-            if not exists(outputs_folder) or not isWritable(outputs_folder):
-                showerror("Error", "Specify a valid directory or modify dir permission for outputs folder!")
-                return
-            command += " -o " + outputs_folder
+        if software == "AutoDockVina":
+            if outputs_folder != "":
+                if not exists(outputs_folder) or not isWritable(outputs_folder):
+                    showerror("Error", "Specify a valid directory or modify dir permission for outputs folder!")
+                    return
+                command += " -o " + outputs_folder
+            else:
+                outputs_folder = Config.VINA_DOCKING_FOLDER
+            command += " -s vina"
         else:
-            outputs_folder = Config.VINA_DOCKING_FOLDER
+            if outputs_folder != "":
+                if not exists(outputs_folder) or not isWritable(outputs_folder):
+                    showerror("Error", "Specify a valid directory or modify dir permission for outputs folder!")
+                    return
+                command += " -o " + outputs_folder
+            else:
+                outputs_folder = Config.GNINA_DOCKING_FOLDER
+            command += " -s gnina"
 
         if not checkFilesInFolder(folder=gridboxes_folder, docted_extension=".txt"):
             showerror("Error", "There's no txt file into gridbox folder")
@@ -269,10 +281,12 @@ class Controller(CTk):
         if not checkFilesInFolder(folder=docking_folder, docted_extension=""):
             showerror("Error", "There's no output in docking outputs folder")
             return
-
+            
         args = split(command)
         thread = Thread(target=self.run_analysis, args=[args])
         thread.start()
 
     def run_analysis(self, args):
+
         Popen(args)
+    

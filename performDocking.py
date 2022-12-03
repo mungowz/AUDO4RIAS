@@ -25,6 +25,7 @@ if __name__ == "__main__":
             \t[-p]: define a folder where proteins files are stored\n \
             \t[-l]: define a folder where ligands files are stored\n \
             \t[-o]: define a folder where outputs files have to be or are stored\n \
+            \t[-s]: choose a specific docking software in [Vina, GNINA]\
             \t[-h]: print usage" 
         )
 
@@ -32,7 +33,7 @@ if __name__ == "__main__":
     try:
         opt_list, args = getopt(
             argv[1:],
-            "g:p:l:o:h",
+            "g:p:l:o:s:h",
             []
         )
     except GetoptError as msg:
@@ -51,11 +52,6 @@ if __name__ == "__main__":
     proteins_folder = Config.RECEPTORS_PDBQT_FOLDER
     ligands_folder = Config.LIGANDS_PDBQT_FOLDER
     outputs_folder = Config.VINA_DOCKING_FOLDER
-
-    print("set gridbox folder to ", gridboxes_folder)
-    print("set proteins folder to ", proteins_folder)
-    print("set ligands folder to ", ligands_folder)
-    print("set outputs folder to ", outputs_folder)
 
     for o, a in opt_list:
 
@@ -94,13 +90,25 @@ if __name__ == "__main__":
             # set path to outputs folder = a
             outputs_folder = a
 
+        if o == "-s":
+
+            if a == "vina":
+                software = "vina"
+            elif a == "gnina":
+                software = "gnina"
+            else:
+                print("Invalid input, choose a specific docking software in [Vina, GNINA]")
+                exit(1)
+
         if o == "-h":
             usage()
             exit(0)
 
-    print("set ligands folder to ", ligands_folder)
+    print("set gridbox folder to ", gridboxes_folder)
     print("set proteins folder to ", proteins_folder)
+    print("set ligands folder to ", ligands_folder)
     print("set outputs folder to ", outputs_folder)
+    print("set docking software to", software)
 
     # initialize folders
     if outputs_folder == Config.VINA_DOCKING_FOLDER:
@@ -131,15 +139,25 @@ if __name__ == "__main__":
 
                     output = join(ligands_dir, "out.pdbqt")
                     log = join(ligands_dir, "log.txt")
-                            
-                    command = [
-                        "vina",
-                        "--config", quote(gridbox.path),
-                        "--receptor", quote(protein.path),
-                        "--ligand", quote(ligand.path),
-                        "--out", quote(output),
-                        "--log", quote(log),
-                    ]
+
+                    if software == "vina":   
+                        command = [
+                            "vina",
+                            "--config", quote(gridbox.path),
+                            "--receptor", quote(protein.path),
+                            "--ligand", quote(ligand.path),
+                            "--out", quote(output),
+                            "--log", quote(log)
+                        ]
+                    else:
+                        command = [
+                            "gnina",
+                            "--receptor", quote(protein.path),
+                            "--ligand", quote(ligand.path),
+                            "--autobox_ligand", quote(protein.path),
+                            "--out", quote(output),
+                            "--cnn_verbose"
+                        ]
                     run(command)
     
     et = time.time()

@@ -59,7 +59,7 @@ class Analysis(CTkFrame):
         label_options = CTkLabel(master=frame_left, text="Options:", text_font=("Roboto Medium", -16))
         label_options.grid(row=1, column=0, pady=10, padx=10)
 
-        button_execute = CTkButton(master=frame_left, text="Execute", command=lambda: print(controller.execute_analyses(optionmenu_software.get())))
+        button_execute = CTkButton(master=frame_left, text="Execute", command=lambda: controller.execute_analyses(optionmenu_software.get()))
         button_execute.grid(row=2, column=0, pady=10, padx=20)
 
         button_back = CTkButton(master=frame_left, text="Back", command=lambda: controller.show_frame(computationalDocking.ComputationalDocking))

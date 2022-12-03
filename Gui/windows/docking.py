@@ -64,6 +64,12 @@ class Docking(CTkFrame):
         button_browse_outputs = CTkButton(master = frame_right, height=1, text="Browse folders", command=lambda: controller.browse_folder(entry_outputs))
         button_browse_outputs.place(x=308, y=246)
 
+        label_software = CTkLabel(master=frame_right, text="Select software:")
+        label_software.place(x=0, y=300)
+        optionmenu_software = CTkOptionMenu(master=frame_right, values=["AutoDockVina", "Gnina"])
+        optionmenu_software.place(x=130, y=300)
+
+
         # ============ frame_left ============
 
         frame_left.grid_rowconfigure(0, minsize=10)   
@@ -78,7 +84,8 @@ class Docking(CTkFrame):
                 entry_gridbox.get(),
                 entry_proteins.get(),
                 entry_ligands.get(),
-                entry_outputs.get()
+                entry_outputs.get(),
+                optionmenu_software.get()
             )
         )
         button_execute.grid(row=2, column=0, pady=10, padx=20)

@@ -1,5 +1,4 @@
 #! /bin/python
-from tkinter.messagebox import showinfo
 from config import Config
 import os
 import sys
@@ -71,4 +70,4 @@ if __name__ == "__main__":
 
     elapsed_time = et - st 
 
-    showinfo("Process completed", "Analysis execution has been completed successfully in {:.2f} seconds".format(elapsed_time))
+    print("Process completed, analysis execution has been completed successfully in {:.2f} seconds".format(elapsed_time))
