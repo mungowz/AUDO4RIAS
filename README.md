@@ -4,7 +4,7 @@
 
 ### Clone repository
 
-To install **Computational Docking**, first type this command into your terminal:
+To install **Computational Docking**, type this command into your terminal:
 
 `git clone https://github.com/mungowz/Computational-Docking.git`
 
