@@ -1,12 +1,12 @@
-# Computational-Docking
+# AUtomated DOcking 4 RIsk ASsessment
 
 ## Installation
 
 ### Clone repository
 
-To install **Computational Docking**, type this command into your terminal:
+To install **AUDO4RIAS**, type this command into your terminal:
 
-`git clone https://github.com/mungowz/Computational-Docking.git`
+`git clone https://github.com/mungowz/AUDO4RIAS.git`
 
 The GitHub repository of the project will be cloned into a local directory chosen by user.
 
