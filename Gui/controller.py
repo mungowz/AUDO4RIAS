@@ -263,9 +263,9 @@ class Controller(CTk):
     def run_docking(self, args):
         Popen(args)
 
-    def execute_analyses(self, software):
+    def execute_analysis(self, software):
 
-        command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Docking -e pythonsh detect_interactions.py -s "
+        command = "xterm -fg black -bg white -xrm 'XTerm.vt100.allowTitleOps: false' -T Analysis -e pythonsh detect_interactions.py -s "
 
         if software == "AutoDockVina":
             command += "vina"
