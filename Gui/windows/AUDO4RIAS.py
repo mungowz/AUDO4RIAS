@@ -10,7 +10,7 @@ class AUDO4RIAS(CTkFrame):
     MENU = " Welcome:\n\
        - Select Preparation to prepare ligands and receptors\n\
        - Select Docking to perform docking\n\
-       - Selext Analyses to perform analyses on docking outputs\n\
+       - Selext Analysis to perform analysis on docking outputs\n\
        - Select help to get more information on default parameters and inputs"
 
     def __init__(self, parent, controller):
@@ -44,8 +44,8 @@ class AUDO4RIAS(CTkFrame):
         button_docking = CTkButton(master=frame_left, text="Docking", command=lambda: controller.show_frame(docking.Docking))
         button_docking.grid(row=3, column=0, pady=10, padx=20)
         
-        button_analyses = CTkButton(master=frame_left, text="Analysis", command=lambda: controller.show_frame(analysis.Analysis))
-        button_analyses.grid(row=4, column=0, pady=10, padx=20)
+        button_analysis = CTkButton(master=frame_left, text="Analysis", command=lambda: controller.show_frame(analysis.Analysis))
+        button_analysis.grid(row=4, column=0, pady=10, padx=20)
 
         button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(AUDO4RIAS))
         button_help.grid(row=5, column=0, pady=10, padx=20)

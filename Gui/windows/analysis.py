@@ -5,7 +5,7 @@ from tkinter import LEFT
 
 class Analysis(CTkFrame):
 
-    MENU = "- Select Execute to perform analyses\n\
+    MENU = "- Select Execute to perform analysis\n\
 - Select Back to return to the home page"
 
     def __init__(self, parent, controller):

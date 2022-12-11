@@ -35,7 +35,7 @@ class Controller(CTk):
         self.resizable(False, False)
 
         FRAMES = (AUDO4RIAS.AUDO4RIAS, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking, analysis.Analysis)
-        TITLES = ("AUDO4RIAS", "Preparation", "Ligands", "Receptors", "Docking", "Analyses")
+        TITLES = ("AUDO4RIAS", "Preparation", "Ligands", "Receptors", "Docking", "Analysis")
         DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520", "720x520")
 
         self.container = CTkFrame(self)
