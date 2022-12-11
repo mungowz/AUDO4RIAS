@@ -1,7 +1,7 @@
 from customtkinter import CTkFrame, CTkLabel, CTkButton, CTkOptionMenu, CTkProgressBar
 import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
-import Gui.windows.computationalDocking as computationalDocking
+import Gui.windows.AUDO4RIAS as AUDO4RIAS
 from tkinter import LEFT
 
 
@@ -42,7 +42,7 @@ class Preparation(CTkFrame):
         button_receptors = CTkButton(master=frame_left, text="Receptors", command=lambda: controller.show_frame(receptors.Receptors))
         button_receptors.grid(row=3, column=0, pady=10, padx=20)
 
-        button_back = CTkButton(frame_left, text="Back", command=lambda: controller.show_frame(computationalDocking.ComputationalDocking))
+        button_back = CTkButton(frame_left, text="Back", command=lambda: controller.show_frame(AUDO4RIAS.AUDO4RIAS))
         button_back.grid(row=4, column=0, pady=10, padx=20)
 
         button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(Preparation))

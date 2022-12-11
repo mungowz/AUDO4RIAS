@@ -1,5 +1,5 @@
 from customtkinter import CTk, CTkFrame, set_appearance_mode, set_default_color_theme
-import Gui.windows.computationalDocking as computationalDocking
+import Gui.windows.AUDO4RIAS as AUDO4RIAS
 import Gui.windows.preparation as preparation
 import Gui.windows.ligands as ligands
 import Gui.windows.receptors as receptors
@@ -34,8 +34,8 @@ class Controller(CTk):
         
         self.resizable(False, False)
 
-        FRAMES = (computationalDocking.ComputationalDocking, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking, analysis.Analysis)
-        TITLES = ("Computational Docking", "Preparation", "Ligands", "Receptors", "Docking", "Analyses")
+        FRAMES = (AUDO4RIAS.AUDO4RIAS, preparation.Preparation, ligands.Ligands, receptors.Receptors, docking.Docking, analysis.Analysis)
+        TITLES = ("AUDO4RIAS", "Preparation", "Ligands", "Receptors", "Docking", "Analyses")
         DIMENSIONS = ("720x520", "720x520", "720x520", "720x520", "720x520", "720x520")
 
         self.container = CTkFrame(self)
@@ -54,7 +54,7 @@ class Controller(CTk):
 
             frame.grid(row = 0, column = 0, sticky ="nsew")
 
-        self.show_frame(computationalDocking.ComputationalDocking)
+        self.show_frame(AUDO4RIAS.AUDO4RIAS)
 
     def show_frame(self, cont):
         

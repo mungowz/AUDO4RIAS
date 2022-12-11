@@ -5,7 +5,7 @@ import Gui.windows.analysis as analysis
 from tkinter import LEFT
 
 
-class ComputationalDocking(CTkFrame):
+class AUDO4RIAS(CTkFrame):
 
     MENU = " Welcome:\n\
        - Select Preparation to prepare ligands and receptors\n\
@@ -47,7 +47,7 @@ class ComputationalDocking(CTkFrame):
         button_analyses = CTkButton(master=frame_left, text="Analysis", command=lambda: controller.show_frame(analysis.Analysis))
         button_analyses.grid(row=4, column=0, pady=10, padx=20)
 
-        button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(ComputationalDocking))
+        button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(AUDO4RIAS))
         button_help.grid(row=5, column=0, pady=10, padx=20)
 
         label_mode = CTkLabel(master=frame_left, text="Appearance Mode:")
@@ -71,7 +71,7 @@ class ComputationalDocking(CTkFrame):
         frame_info.rowconfigure(0, weight=1)
         frame_info.columnconfigure(0, weight=1)
         
-        label_menu = CTkLabel(master=frame_info, text= ComputationalDocking.MENU, height=400, corner_radius=6, fg_color=("white", "gray38"), justify=LEFT)
+        label_menu = CTkLabel(master=frame_info, text= AUDO4RIAS.MENU, height=400, corner_radius=6, fg_color=("white", "gray38"), justify=LEFT)
         label_menu.grid(column=0, row=0, sticky="nwe", padx=15, pady=15)
 
         progressbar = CTkProgressBar(master=frame_info)

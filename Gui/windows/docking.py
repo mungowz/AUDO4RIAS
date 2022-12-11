@@ -1,4 +1,4 @@
-import Gui.windows.computationalDocking as computationalDocking
+import Gui.windows.AUDO4RIAS as AUDO4RIAS
 from customtkinter import CTkFrame, CTkLabel, CTkEntry, CTkButton, CTkOptionMenu
 from tkinter import LEFT
 
@@ -90,7 +90,7 @@ class Docking(CTkFrame):
         )
         button_execute.grid(row=2, column=0, pady=10, padx=20)
 
-        button_back = CTkButton(master=frame_left, text="Back", command=lambda: controller.show_frame(computationalDocking.ComputationalDocking))
+        button_back = CTkButton(master=frame_left, text="Back", command=lambda: controller.show_frame(AUDO4RIAS.AUDO4RIAS))
         button_back.grid(row=3, column=0, pady=10, padx=20)
 
         button_help = CTkButton(master=frame_left, text="Help", command=lambda: controller.help(Docking))

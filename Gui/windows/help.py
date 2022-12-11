@@ -6,20 +6,20 @@ class Help(CTkFrame):
         
     MENU = "DEFAULT OPTIONS\n\n\
         - Ligands:\n\
-        • Input file: Computational-Docking/data/files/ligands.txt\n\
-        • Excel folder: Computational-Docking/output/excel_files/\n\
-        • Sdf folder: Computational-Docking/data/ligands/sdf/\n\
-        • Pdb folder: Computational-Docking/data/ligands/pdb/\n\
-        • Pdbqt folder: Computational-Docking/data/ligands/pdbqt/\n\n\
+        • Input file: AUDO4RIAS/data/files/ligands.txt\n\
+        • Excel folder: AUDO4RIAS/output/excel_files/\n\
+        • Sdf folder: AUDO4RIAS/data/ligands/sdf/\n\
+        • Pdb folder: AUDO4RIAS/data/ligands/pdb/\n\
+        • Pdbqt folder: AUDO4RIAS/data/ligands/pdbqt/\n\n\
         - Receptors:\n\
-        • Excel folder: Computational-Docking/output/excel_files/\n\
-        • Pdb folder: Computational-Docking/data/proteins/pdb/\n\
-        • Pdbqt folder: Computational-Docking/data/proteins/pdbqt/\n\
+        • Excel folder: AUDO4RIAS/output/excel_files/\n\
+        • Pdb folder: AUDO4RIAS/data/proteins/pdb/\n\
+        • Pdbqt folder: AUDO4RIAS/data/proteins/pdbqt/\n\
         • Margin: 3\n\n\
         - Docking:\n\
-        • Ligands folder: Computational-Docking/data/ligands/pdbqt/\n\
-        • Proteins folder: Computational-Docking/data/proteins/pdbqt/\n\
-        • Gridboxes folder: Computational-Docking/data/proteins/gridbox/\n\n\
+        • Ligands folder: AUDO4RIAS/data/ligands/pdbqt/\n\
+        • Proteins folder: AUDO4RIAS/data/proteins/pdbqt/\n\
+        • Gridboxes folder: AUDO4RIAS/data/proteins/gridbox/\n\n\
 INPUTS\n\n\
         • Ligands: ligands input consists of a .txt file where all the names of the ligands\n\
         are listed one below the other.\n\
