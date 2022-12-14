@@ -1,7 +1,7 @@
 attrs==22.1.0
 biopandas==0.4.1
 biopython==1.76
-certifi==2022.9.24
+certifi==2022.12.7
 charset-normalizer==2.1.1
 customtkinter==4.6.3
 darkdetect==0.7.1
