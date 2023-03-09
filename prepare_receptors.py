@@ -23,7 +23,8 @@ if __name__ == "__main__":
             \t[-E]: define a folder where excel files has to be stored or are stored\n \
             \t[-p]: define a folder where pdbqt files has to be stored or are stored\n \
             \t[-P]: define a folder where pdb files has to be stored or are stored\n \
-            \t[-k]: keep pdb files stored into pdb_folder(must be specified after [-P] | [--keep-pdb-files])\
+            \t[-k]: keep pdb files stored into pdb_folder(must be specified after \
+            \t[-P] | [--keep-pdb-files])\
             \t[-m]: define margin in angstroms to create protein gridbox for docking (default is 3)\
             \t[-h]: print usage"
         )
@@ -114,6 +115,8 @@ if __name__ == "__main__":
         Path(Config.RECEPTORS_PDBQT_FOLDER).mkdir(parents=True, exist_ok=True)
     if gridbox_output_folder == Config.GRIDBOX_FOLDER:
         Path(Config.GRIDBOX_FOLDER).mkdir(parents=True, exist_ok=True)
+    if excel_folder == Config.EXCEL_FOLDER:
+        Path(Config.EXCEL_FOLDER).mkdir(parents=True, exist_ok=True)
 
     removeFiles(pdbqt_folder, ".pdbqt")
     removeFiles(gridbox_output_folder, ".txt")
