@@ -24,8 +24,8 @@ We strongly recommend you to follow the installation instructions of the softwar
 - _XTerm_: `sudo apt-get install xterm`
 
 Using Python3.8+ version,
-- [_Tkinter_]: `sudo apt-get install python3.8-tk`
-- [_pip_]: `sudo apt-get install python3-pip`
+- _Tkinter_: `sudo apt-get install python3.8-tk`
+- _pip_: `sudo apt-get install python3-pip`
 
 
 
