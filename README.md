@@ -20,7 +20,6 @@ We strongly recommend you to follow the installation instructions of the softwar
 - [_AutoDock Vina_](https://vina.scripps.edu/downloads/) (version 1.1.2)
 - [_GNINA_](https://github.com/gnina/gnina)
 - [_Open Babel_](https://snapcraft.io/install/openbabel/ubuntu)
-- _PyQt5_: `sudo apt-get install qt5-default`
 - _XTerm_: `sudo apt-get install xterm`
 
 Using Python3.8+ version,
