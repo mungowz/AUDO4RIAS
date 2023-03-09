@@ -41,8 +41,8 @@ if [ "$VERBOSE" = true ]; then
 fi
 
 # set binaries to PATH, now can use prepare_receptor and prepare_ligand
-export PATH="${ADFR}/bin:$PATH"
-source $HOME/.bashrc
+# export PATH="${ADFR}/bin:$PATH"
+# source $HOME/.bashrc
 
 # set execution flag to "prepare_receptor4.py" 
 if [ "$VERBOSE" = true ]; then

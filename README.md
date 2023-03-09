@@ -19,9 +19,21 @@ We strongly recommend you to follow the installation instructions of the softwar
 - [_ADFR suite v1.0_]( https://ccsb.scripps.edu/adfr/downloads/)
 - [_AutoDock Vina_](https://vina.scripps.edu/downloads/) (version 1.1.2)
 - [_GNINA_](https://github.com/gnina/gnina)
-- [Open Babel](https://snapcraft.io/install/openbabel/ubuntu)
+- [_Open Babel_](https://snapcraft.io/install/openbabel/ubuntu)
+- [_PyQt5_]: `sudo apt-get install qt5-default`
+- [_XTerm_]: `sudo apt-get install xterm`
 
-**N.B.:** For Linux users, add _MGLTools_ directory's path to your global enviroment variable `$PATH`.
+Using Python3.8+ version,
+- [_Tkinter_]: `sudo apt-get install python3.8-tk`
+- [_pip_]: `sudo apt-get install python3-pip`
+
+
+
+**N.B.:** For Linux users, **bin directories of MGLTools, ADFRsuite and AutoDock Vina**, which are placed in the corresponding installation directories, **must** be added to your global enviroment variable **`$PATH`**.
+So, modify `\home\<username>\.bashrc` file adding at the corresponding paths for these directories.
+Once updated `.bashrc` file, type this command for applying the changes:
+
+`source \home\<username>\.bashrc`
 
 ### Internal dependencies
 Internal dependencies, which correspond to python packages and libraries, can be installed by typing this command into your terminal:
