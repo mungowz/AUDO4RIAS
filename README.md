@@ -30,7 +30,9 @@ Using Python3.8+ version,
 
 
 **N.B.:** For Linux users, **bin directories of MGLTools, ADFRsuite and AutoDock Vina**, which are placed in the corresponding installation directories, **must** be added to your global enviroment variable **`$PATH`**.
+
 So, modify `\home\<username>\.bashrc` file adding at the corresponding paths for these directories.
+
 Once updated `.bashrc` file, type this command for applying the changes:
 
 `source \home\<username>\.bashrc`
