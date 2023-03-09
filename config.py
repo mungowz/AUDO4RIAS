@@ -15,3 +15,4 @@ class Config(object):
     LIGANDS_PDBQT_FOLDER = os.path.join(basedir, "data" + os.sep + "ligands" + os.sep + "pdbqt")
     VINA_DOCKING_FOLDER = os.path.join(basedir, "output" + os.sep + "docking" + os.sep + "vina")
     GNINA_DOCKING_FOLDER = os.path.join(basedir, "output" + os.sep + "docking" + os.sep + "gnina")
+    PYTHONSH_PATH = basedir + "/pythonsh"
