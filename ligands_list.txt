@@ -1,0 +1,297 @@
+(E,E)-7,9-Dodecadien-1-yl acetate
+(E,E)-8,10-Dodecadien-1-ol
+(3E,8Z,11Z)-Tetradeca-3,8,11-trienyl acetate
+3E,8Z-Tetradecadienyl acetate
+(E)-11-Tetradecen-1-yl acetate
+(E)-5-Decen-1-ol
+(E)-5-Decen-1-yl acetate
+(E)-8-Dodecen-1-yl acetate
+(Z,E)-7,11-Hexadecadien-1-yl acetate
+(Z,E)-Tetradeca-9,11-dienyl acetate
+(Z,E)-9,12-Tetradecadien-1-yl acetate
+(Z)-11-Hexadecen-1-ol
+(Z)-11-Hexadecen-1-yl acetate
+(Z)-11-Hexadecenal
+(Z)-11-Tetradecen-1-yl acetate
+(Z)-13-Octadecenal
+(Z)-7-Tetradecenal
+(Z)-8-Dodecen-1-ol
+(Z)-8-Dodecen-1-yl acetate
+(Z)-8-Tetradecen-1-ol
+z-8-Tetradecenyl acetate
+(Z)-9-Dodecen-1-yl acetate
+(Z)-9-Hexadecenal
+(Z)-9-Tetradecen-1-yl acetate
+1-Decanol
+1-methylcyclopropene
+1-Naphthylacetamide
+1-Naphthylacetic acid
+1,4-Dimethylnaphthalene
+2-Phenylphenol
+2,4-D
+Methyl 2,5-dichlorobenzoate
+24-Epibrassinolide
+4-(2,4-Dichlorophenoxy)butanoic acid
+6-Benzyladenine
+8-Hydroxyquinoline
+Acequinocyl
+Acetamiprid
+Acetic acid
+Acibenzolar-S-methyl
+Aclonifen
+Acrinathrin
+Ametoctradin
+Amidosulfuron
+Aminopyralid
+Amisulbrom
+Azimsulfuron
+Azoxystrobin
+Beflubutamid
+Benalaxyl-M
+Benfluralin
+Bensulfuron
+Bentazone
+Benthiavalicarb
+Benzoic acid
+Benzovindiflupyr
+Bifenazate
+Bifenox
+Bispyribac
+Bixafen
+Boscalid
+Bromuconazole
+Bupirimate
+Buprofezin
+Capric acid
+Caprylic acid
+Captan
+Carfentrazone-ethyl
+Carvone
+Chlorantraniliprole
+Chlormequat
+Chlorotoluron
+Chromafenozide
+Clethodim
+Clodinafop
+Clofentezine
+Clomazone
+Clopyralid
+Cyantraniliprole
+Cyazofamid
+Cycloxydim
+Cyflufenamid
+Cyflumetofen
+Cyhalofop-butyl
+Cymoxanil
+Cypermethrin
+Cyprodinil
+Daminozide
+Dazomet
+Deltamethrin
+Dicamba
+Dichlorprop-P
+Diclofop
+Difenoconazole
+Diflufenican
+Dimethachlor
+Dimethenamid-P
+Dimethomorph
+Dimoxystrobin
+Dithianon
+Dodecan-1-ol
+Dodecyl acetate
+Dodemorph
+Dodine
+Esfenvalerate
+Ethephon
+Ethofumesate
+Ethylene
+Etofenprox
+Etoxazole
+Eugenol
+Fenazaquin
+Fenhexamid
+Fenoxaprop-P
+Fenpicoxamid
+Fenpropidin
+Fenpyrazamine
+Fenpyroximate
+Flazasulfuron
+Flonicamid
+Florasulam
+Florpyrauxifen-benzyl
+Fluazifop-P
+Fluazinam
+Flubendiamide
+Fludioxonil
+Flufenacet
+Flumetralin
+Flumioxazin
+Fluometuron
+Fluopicolide
+Fluopyram
+Fluoxastrobin
+Flupyradifurone
+Fluquinconazole
+Flurochloridone
+Fluroxypyr
+Flutianil
+Flutolanil
+Fluxapyroxad
+Folpet
+Foramsulfuron
+Forchlorfenuron
+Formetanate
+Fosetyl
+Fosthiazate
+Gamma-cyhalothrin
+Garlic extract
+Geraniol
+Gibberellic acid
+Gibberellins
+Glyphosate
+Halauxifen-methyl
+Halosulfuron-methyl
+Hexythiazox
+Hymexazol
+Imazalil
+Imazamox
+Indolylbutyric acid
+Indoxacarb
+Iodosulfuron
+Ipconazole
+Iprovalicarb
+Isofetamid
+Isopyrazam
+Isoxaben
+Isoxaflutole
+Kresoxim-methyl
+L-Ascorbic acid
+lambda-Cyhalothrin
+Laminarin
+Lauric acid
+Lavandulyl senecioate
+Lenacil
+Malathion
+Maleic hydrazide
+Mandestrobin
+Mandipropamid
+MCPA
+MCPB
+Mecoprop-P
+Mefentrifluconazole
+Mepanipyrim
+Mepiquat
+Meptyldinocap
+Mesosulfuron
+Mesotrione
+Metaflumizone
+Metalaxyl
+Metalaxyl-M
+Metaldehyde
+Metam
+Metamitron
+Metazachlor
+Metconazole
+Methoxyfenozide
+Methyl decanoate
+Methyl octanoate
+Zineb
+Metobromuron
+Metrafenone
+Metribuzin
+Metsulfuron-methyl
+Milbemectin
+Tetradecyl acetate
+Napropamide
+Nicosulfuron
+Oleic acid
+Orange oil
+Oxamyl
+Oxathiapiprolin
+Oxyfluorfen
+Paclobutrazol
+Pelargonic acid
+Penconazole
+Pendimethalin
+Penflufen
+Penoxsulam
+Penthiopyrad
+Pethoxamid
+Phenmedipham
+Phosmet
+Phosphane
+Picloram
+Picolinafen
+Pinoxaden
+Pirimicarb
+Pirimiphos-methyl
+Potassium bicarbonate
+Prochloraz
+Prohexadione
+Propamocarb
+Propaquizafop
+Propoxycarbazone
+Propyzamide
+Proquinazid
+Prosulfocarb
+Prosulfuron
+Prothioconazole
+Pyraclostrobin
+Pyraflufen-ethyl
+Pyridaben
+Pyridalyl
+Pyridate
+Pyrimethanil
+Pyriofenone
+Pyriproxyfen
+Pyroxsulam
+Quinmerac
+Quizalofop-P
+Quizalofop-P-ethyl
+Quizalofop-P-tefuryl
+Rescalure
+Rimsulfuron
+(2Z,4E)-5-[(1S)-1-Hydroxy-2,6,6-trimethyl-4-oxocyclohex-2-en-1-yl]-3-methylpenta-2,4-dienoic acid
+S-Metolachlor
+Sedaxane
+1-(4-Chlorophenyl)-5-(2-methoxyethoxy)-4-oxo-1,4-dihydrocinnoline-3-carboxylic acid
+Sodium 2-methoxy-5-nitrophenolate
+Sodium 2-nitrophenolate
+Sodium 4-nitrophenolate
+Spiromesifen
+Spirotetramat
+Spiroxamine
+Sulcotrione
+Sulfosulfuron
+Sulfoxaflor
+Sulfuryl fluoride
+tau-Fluvalinate
+Tebuconazole
+Tebufenozide
+Tebufenpyrad
+Tefluthrin
+Tembotrione
+Terbuthylazine
+Tetraconazole
+Tetradecan-1-ol
+Thiabendazole
+Thiencarbazone-methyl
+Thifensulfuron-methyl
+Thymol
+Tolclofos-methyl
+Tri-allate
+Tribenuron
+Triclopyr
+Trifloxystrobin
+Triflusulfuron
+Trinexapac
+Triticonazole
+Tritosulfuron
+Urea
+Valifenalate
+Ziram
+Zoxamide
+Quartz sand
+Silthiofam
+
